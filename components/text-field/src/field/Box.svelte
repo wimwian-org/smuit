@@ -16,7 +16,14 @@
     let { children }: { children: Snippet } = $props();
     const ctx = getFieldContext();
     const styles = $derived(
-        textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, elevation: ctx.elevation, disabled: ctx.disabled }),
+        textField({
+            variant: ctx.variant,
+            size: ctx.size,
+            tint: ctx.tint,
+            elevation: ctx.elevation,
+            multiline: ctx.multiline,
+            disabled: ctx.disabled,
+        }),
     );
 </script>
 
@@ -29,6 +36,7 @@
     data-disabled={ctx.disabled || undefined}
     data-readonly={ctx.readonly || undefined}
     data-elevation={ctx.elevation || undefined}
+    data-multiline={ctx.multiline || undefined}
     data-hide-label={ctx.hideLabel || undefined}
     data-has-leading={ctx.hasLeading || undefined}
 >

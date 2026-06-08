@@ -22,6 +22,8 @@ export interface FieldContext {
     readonly disabled: boolean;
     readonly readonly: boolean;
     readonly elevation: boolean;
+    /** Multi-line (textarea) mode — switches the field to top-aligned geometry. */
+    readonly multiline: boolean;
     readonly hideLabel: boolean;
     readonly maxlength: number | undefined;
     /** Whether a leading adornment is present (shifts the label start). */

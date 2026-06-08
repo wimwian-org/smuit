@@ -6,7 +6,7 @@
 <script lang="ts">
     import { flagContrast } from '$lib/contrast';
     import { ripple, rippleVariants } from '@smuit/ripple';
-    import { TextField } from '@smuit/text-field';
+    import { TextField, TextArea } from '@smuit/text-field';
 
     type PaletteName = 'mono' | 'primary' | 'secondary' | 'tertiary' | 'error' | 'warning' | 'success';
 
@@ -327,16 +327,7 @@
                 </select>
             </label>
 
-            <label class="field">
-                <span class="lbl">Bio</span>
-                <textarea
-                    class="form-control"
-                    rows="3"
-                    bind:value={fBio}
-                    placeholder="A few words about you…"
-                    style="resize: vertical"
-                ></textarea>
-            </label>
+            <TextArea label="Bio" bind:value={fBio} rows={3} placeholder="A few words about you…" fullWidth />
 
             <fieldset class="field" style="border: none; padding: 0; margin: 0">
                 <span class="lbl">Plan</span>

@@ -43,6 +43,12 @@ test('fullWidth stretches the root', () => {
     expect(textField({ fullWidth: false }).root()).toContain('w-auto');
 });
 
+test('multiline top-aligns the control (items-start wins over items-center/end)', () => {
+    expect(textField({ multiline: true }).container()).toContain('items-start');
+    expect(textField({ multiline: true, variant: 'filled' }).container()).toContain('items-start');
+    expect(textField({ multiline: false }).container()).not.toContain('items-start');
+});
+
 test('elevation adds a resting shadow that deepens and lifts on focus', () => {
     const s = textField({ elevation: true });
     expect(s.container()).toContain('shadow-sm');

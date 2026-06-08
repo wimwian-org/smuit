@@ -4,7 +4,14 @@
  * Licensed under the MIT License.
  */
 export { default as TextField } from './TextField.svelte';
+export { default as TextArea } from './TextArea.svelte';
 export * as Field from './field';
 export { textField, type TextFieldVariants } from './text-field.variants';
-export type { Props as TextFieldProps, TextFieldVariant, TextFieldSize, TextFieldTint } from './types';
+export type {
+    Props as TextFieldProps,
+    TextAreaProps,
+    TextFieldVariant,
+    TextFieldSize,
+    TextFieldTint,
+} from './types';
 export type { FieldContext } from './field/field-context';

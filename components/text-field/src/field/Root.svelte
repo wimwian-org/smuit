@@ -31,6 +31,7 @@
         tint?: TextFieldTint;
         fullWidth?: boolean;
         elevation?: boolean;
+        multiline?: boolean;
         disabled?: boolean;
         readonly?: boolean;
         hideLabel?: boolean;
@@ -47,6 +48,7 @@
         tint = 'primary',
         fullWidth = false,
         elevation = false,
+        multiline = false,
         disabled = false,
         readonly: readonlyProp = false,
         hideLabel = false,
@@ -87,6 +89,9 @@
         },
         get elevation() {
             return elevation;
+        },
+        get multiline() {
+            return multiline;
         },
         get hideLabel() {
             return hideLabel;

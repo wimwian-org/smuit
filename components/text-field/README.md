@@ -69,8 +69,24 @@ context to the parts beneath it.
 
 Parts: **`Field.Root`** (shell + context), **`Field.Box`** (the surface), **`Field.Label`**,
 **`Field.Adornment`** (`side="leading" | "trailing" | "prefix" | "suffix"`), **`Field.Input`**,
-**`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**. The same parts
-back the forthcoming `TextArea`.
+**`Field.Textarea`**, **`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**.
+The same parts back `<TextArea>`.
+
+### Multi-line — `<TextArea>`
+
+The multi-line sibling, built from the same parts with a textarea control (top-aligned geometry).
+`rows` sets the initial height; `autosize` grows it with content (via `field-sizing`). No
+prefix/suffix or icon adornments (not meaningful for multi-line entry).
+
+```svelte
+<script>
+    import { TextArea } from '@smuit/text-field';
+    let bio = $state('');
+</script>
+
+<TextArea label="Bio" bind:value={bio} rows={4} maxlength={280} supportingText="A short bio." />
+<TextArea label="Notes" variant="filled" autosize placeholder="Grows as you type…" />
+```
 
 ## Props
 
@@ -108,19 +124,19 @@ pass straight through to the underlying element.
 
 This is the **v1 (MVP)** release defined by the [design spec](./text-field-design.md).
 
-**Ships now:** filled · outlined variants; single-line `type="text"`; floating label + hidden-label
-mode; placeholder and supporting text; prefix/suffix text and leading/trailing icon slots;
-character counter with `maxlength` (display + soft cap, _not_ validation); small + medium density,
-full-width; enabled / hover / focused / populated / read-only / disabled states; bound and
-uncontrolled value with `input` / `change` / `focus` / `blur`; tint + light/dark theming; and
-label ↔ input ↔ supporting-text accessibility wiring.
+**Ships now:** a composable `Field.*` part set with `<TextField>` and `<TextArea>` wrappers; filled ·
+outlined variants; single-line `type="text"`; **multiline (`<TextArea>`: rows, resize, autosize)**;
+floating label + hidden-label mode; placeholder and supporting text; prefix/suffix text and
+leading/trailing icon slots; character counter with `maxlength` (display + soft cap, _not_
+validation); small + medium density, full-width, elevation; enabled / hover / focused / populated /
+read-only / disabled states; bound and uncontrolled value with `input` / `change` / `focus` /
+`blur`; tint + light/dark theming; and label ↔ control ↔ supporting-text accessibility wiring.
 
-**Deferred to a later release:** the legacy _standard_ variant; multiline / `textarea`
-(`rows`, autosize); non-text input types (email, password, number, search, tel, url, `inputmode`,
-`pattern`); the **validation & error system** (`error` flag, error text, the required asterisk /
-`no-asterisk`, constraint validation, custom validity, the `invalid` event) — note `maxlength`
-ships here only as the counter's soft cap, not as validation; select mode; a dedicated number
-field; and input masking. These layer onto this base in a future version.
+**Deferred to a later release:** the legacy _standard_ variant; non-text input types (email,
+password, number, search, tel, url, `inputmode`, `pattern`); the **validation & error system**
+(`error` flag, error text, the required asterisk / `no-asterisk`, constraint validation, custom
+validity, the `invalid` event) — note `maxlength` ships only as the counter's soft cap, not as
+validation; select mode; a dedicated number field; and input masking.
 
 ## Accessibility
 

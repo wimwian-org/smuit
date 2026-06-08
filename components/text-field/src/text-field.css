@@ -60,10 +60,16 @@
     .tf-container[data-has-leading] {
         --tf-label-left: calc(var(--tf-pad-x) + 1.75rem);
     }
-    /* Filled: the input is bottom-aligned (items-end), leaving the top of the
-       fill free for the floated label. */
-    .tf-container[data-variant='filled'] {
+    /* Filled (single-line): the input is bottom-aligned (items-end), leaving the
+       top of the fill free for the floated label. */
+    .tf-container[data-variant='filled']:not([data-multiline]) {
         padding-bottom: 0.45rem;
+    }
+    /* Multiline (textarea): top-aligned, height driven by the textarea's rows,
+       with room above for the floated label. */
+    .tf-container[data-multiline] {
+        min-height: 0;
+        padding-block: 1.5rem 0.625rem;
     }
     /* Filled active indicator — a 2px accent bar that grows from the centre on
        focus (a ::after bar, so box-shadow stays free for `elevation`). */
@@ -108,9 +114,9 @@
         padding-inline: 0.25rem;
         background: var(--tf-notch-bg, var(--page-bg));
     }
-    /* Filled: the input is bottom-aligned, so the resting label sits over it
-       (also bottom-aligned) and the floated label rises to the top of the fill. */
-    .tf-container[data-variant='filled'] .tf-label {
+    /* Filled (single-line): the input is bottom-aligned, so the resting label
+       sits over it; the floated label rises to the top of the fill. */
+    .tf-container[data-variant='filled']:not([data-multiline]) .tf-label {
         top: auto;
         bottom: 0.45rem;
         transform: translateY(0);
@@ -119,6 +125,13 @@
         top: 0.4rem;
         bottom: auto;
         transform: scale(0.8);
+    }
+    /* Multiline resting: the label sits over the textarea's first line; it floats
+       to the top (outlined notch / top of fill) via the variant rules above. */
+    .tf-container[data-multiline] .tf-label {
+        top: 2rem;
+        bottom: auto;
+        transform: translateY(-50%);
     }
     .tf-container[data-disabled] .tf-label {
         color: var(--tf-label-disabled-color);
