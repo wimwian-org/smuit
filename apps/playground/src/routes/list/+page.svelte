@@ -144,9 +144,9 @@
         </div>
     </section>
 
-    <!-- ── Tints (focus an interactive row to see the accent) ───────── -->
+    <!-- ── Tints — colour the fill, hover/press, and focus ──────────── -->
     <section>
-        <h2 class="demo-h2">Tints <span class="demo-hint">— tab to a row to see the focus accent</span></h2>
+        <h2 class="demo-h2">Tints <span class="demo-hint">— tinted fill at rest; hover or focus to deepen it</span></h2>
         <div class="demo-grid">
             {#each tints as t (t)}
                 <div>

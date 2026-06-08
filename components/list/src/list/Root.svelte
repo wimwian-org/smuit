@@ -21,7 +21,7 @@
 
     let {
         variant = 'baseline',
-        tint = 'primary',
+        tint = 'neutral',
         divider = false,
         class: className = '',
         ref = $bindable(null),

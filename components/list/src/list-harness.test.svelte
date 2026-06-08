@@ -13,7 +13,7 @@
 
     let {
         variant = 'baseline',
-        tint = 'primary',
+        tint = 'neutral',
         divider = false,
         onclick,
     }: {

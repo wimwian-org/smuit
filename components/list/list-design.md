@@ -156,20 +156,26 @@ Material Web expresses these as `--md-list-item-*` tokens over the MD palette. T
 equivalents resolve through the flat theme's surface/content tokens so the list flips with
 light/dark and retints automatically.
 
-| Concept                    | Material Web token (reference) | smuit token (suggested)                         |
-| -------------------------- | ------------------------------ | ----------------------------------------------- |
-| Row fill (Expressive)      | `container-color`              | `--color-g-100` (`bg-g-100`)                    |
-| Headline text              | `label-text-color`             | `--color-g-900` (`text-g-900`)                  |
-| Supporting / trailing text | `supporting-text-color`        | muted `--color-g-600`                           |
-| Leading / trailing icon    | `leading-icon-color`           | `--color-g-600`                                 |
-| Divider (Baseline)         | `divider-color`                | `--surface-border` / `border-g-200`             |
-| Hover state layer          | `hover-state-layer-color`      | `--color-g-150` (`hover:bg-g-150`)              |
-| Pressed state layer        | `pressed-state-layer-color`    | `--color-g-200` (`active:bg-g-200`)             |
-| Focus ring                 | focus indicator                | `--list-accent` (per-tint `--surface-*-accent`) |
-| Disabled                   | reduced-opacity tokens         | dimmed `--color-g-400`, `pointer-events: none`  |
+All tint-aware surfaces derive from a single `--list-accent` token (set per `[data-tint]`), so the
+tint colours the resting fill, the hover/pressed state layers, and the focus outline together.
 
-The focus accent defaults to the **primary** palette accent; the `tint` prop repoints it
-(secondary / tertiary / neutral).
+| Concept                    | Material Web token (reference) | smuit token (suggested)                                                |
+| -------------------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| Tint accent                | (palette primary)              | `--list-accent` (neutral → `--color-g-700`; else `--surface-*-accent`) |
+| Row fill (Expressive)      | `container-color`              | `--list-rest` = `color-mix(accent 8%, --color-g-100)`                  |
+| Row fill (Baseline)        | (transparent)                  | `--list-rest` = `transparent`                                          |
+| Headline text              | `label-text-color`             | `--color-g-900` (`text-g-900`)                                         |
+| Supporting / trailing text | `supporting-text-color`        | muted `--color-g-600`                                                  |
+| Leading / trailing icon    | `leading-icon-color`           | `--color-g-600`                                                        |
+| Divider (Baseline)         | `divider-color`                | `--surface-border` / `border-g-200`                                    |
+| Hover state layer          | `hover-state-layer-color`      | `--list-hover` = `color-mix(accent 12–16%, rest base)`                 |
+| Pressed state layer        | `pressed-state-layer-color`    | `--list-press` = `color-mix(accent 22–26%, rest base)`                 |
+| Focus outline              | focus indicator                | `--list-accent`                                                        |
+| Disabled                   | reduced-opacity tokens         | dimmed `--color-g-400`, `pointer-events: none`                         |
+
+The tint defaults to **neutral** (a theme-flipping grey, so un-tinted lists stay neutral); the
+`tint` prop repoints `--list-accent` to a palette accent (primary / secondary / tertiary), which
+tints the fill, state layers, and focus outline together.
 
 > **Dark mode is automatic.** The `--color-g-*` / `--surface-*` tokens flip via the `--L`/`--D`
 > space-toggle bound to `html[data-theme]`. No `.dark` selector, no `prefers-color-scheme`.

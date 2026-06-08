@@ -13,23 +13,21 @@ test('root slot carries the base list classes', () => {
     expect(root()).toContain('flex-col');
 });
 
-test('defaults to the baseline (transparent) variant', () => {
-    expect(list().item()).toContain('bg-transparent');
+test('rows take their resting fill from the --list-rest token (set per variant×tint in CSS)', () => {
+    // Fill is CSS-driven, so the class is the same regardless of variant.
+    expect(list().item()).toContain('bg-[var(--list-rest)]');
+    expect(list({ variant: 'expressive' }).item()).toContain('bg-[var(--list-rest)]');
 });
 
-test('expressive variant applies the tonal fill', () => {
-    expect(list({ variant: 'expressive' }).item()).toContain('bg-g-100');
-});
-
-test('interactive rows get the hover + pressed state layers and a pointer cursor', () => {
+test('interactive rows get the tinted hover + pressed state layers and a pointer cursor', () => {
     const item = list({ interactive: true }).item();
     expect(item).toContain('cursor-pointer');
-    expect(item).toContain('hover:bg-g-150');
-    expect(item).toContain('active:bg-g-200');
+    expect(item).toContain('hover:bg-[var(--list-hover)]');
+    expect(item).toContain('active:bg-[var(--list-press)]');
 });
 
 test('non-interactive rows have no state layer', () => {
-    expect(list({ interactive: false }).item()).not.toContain('hover:bg-g-150');
+    expect(list({ interactive: false }).item()).not.toContain('hover:bg-[var(--list-hover)]');
 });
 
 test('disabled dims the row and removes pointer events', () => {

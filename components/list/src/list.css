@@ -19,27 +19,38 @@
         --list-pad-x: 1rem;
         --list-radius: 1rem; /* outer corners of an Expressive group */
         --list-radius-inner: 0.25rem; /* inner / middle corners */
-        /* Focus outline colour. Driven by the per-tint semantic surface tokens
-           (not the `--color-c-*` content scale), so the tint works under both
-           the runtime and the flat theme. Default = primary. */
-        --list-accent: var(--surface-primary-accent);
+        /* Tint accent — drives the focus outline, the resting fill (Expressive),
+           and the hover/pressed state layers. Theme-independent semantic tokens
+           (not the `--color-c-*` content scale) so it works under both the
+           runtime and the flat theme. Default = neutral grey; the `tint` prop
+           repoints it to a palette accent. */
+        --list-accent: var(--color-g-700);
+        /* Resting fill + state layers, derived from the accent. Baseline rows
+           rest transparent and show a translucent tint on hover/press. */
+        --list-rest: transparent;
+        --list-hover: color-mix(in srgb, var(--list-accent) 12%, transparent);
+        --list-press: color-mix(in srgb, var(--list-accent) 22%, transparent);
     }
 
-    /* ── Tint → focus accent (theme-independent semantic tokens) ─────── */
+    /* ── Tint → accent (theme-independent semantic tokens) ───────────── */
+    .list[data-tint='primary'] {
+        --list-accent: var(--surface-primary-accent);
+    }
     .list[data-tint='secondary'] {
         --list-accent: var(--surface-secondary-accent);
     }
     .list[data-tint='tertiary'] {
         --list-accent: var(--surface-tertiary-accent);
     }
-    /* Neutral: a theme-flipping grey from the ground scale. */
-    .list[data-tint='neutral'] {
-        --list-accent: var(--color-g-700);
-    }
+    /* Neutral keeps the default `--list-accent` (a theme-flipping grey). */
 
-    /* Expressive: a small vertical gap separates the filled rows. */
+    /* Expressive: a small gap separates the rows, which carry a soft tinted
+       fill that deepens on hover/press (vs. baseline's transparent rest). */
     .list[data-variant='expressive'] {
         gap: 0.25rem;
+        --list-rest: color-mix(in srgb, var(--list-accent) 8%, var(--color-g-100));
+        --list-hover: color-mix(in srgb, var(--list-accent) 16%, var(--color-g-100));
+        --list-press: color-mix(in srgb, var(--list-accent) 26%, var(--color-g-100));
     }
 
     /* ── Row geometry ───────────────────────────────────────────────── */

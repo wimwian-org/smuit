@@ -55,13 +55,13 @@ props — `href` → `<a>` (link), `onclick`/`type="button"` → `<button>`, oth
 
 ### `List.Root`
 
-| Prop      | Type                                                  | Default      | Description                                  |
-| --------- | ----------------------------------------------------- | ------------ | -------------------------------------------- |
-| `variant` | `'baseline' \| 'expressive'`                          | `'baseline'` | M3 design style.                             |
-| `tint`    | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'primary'`  | Focus-accent palette for interactive rows.   |
-| `divider` | `boolean`                                             | `false`      | Draw a divider between rows (baseline only). |
-| `ref`     | `HTMLUListElement \| null`                            | `null`       | `bind:ref` to the underlying `<ul>`.         |
-| `class`   | `string`                                              | —            | Extra classes merged onto the root.          |
+| Prop      | Type                                                  | Default      | Description                                                       |
+| --------- | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
+| `variant` | `'baseline' \| 'expressive'`                          | `'baseline'` | M3 design style.                                                  |
+| `tint`    | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'neutral'`  | Tint — colours the fill, hover/pressed layers, and focus outline. |
+| `divider` | `boolean`                                             | `false`      | Draw a divider between rows (baseline only).                      |
+| `ref`     | `HTMLUListElement \| null`                            | `null`       | `bind:ref` to the underlying `<ul>`.                              |
+| `class`   | `string`                                              | —            | Extra classes merged onto the root.                               |
 
 All other native `<ul>` attributes pass straight through.
 
