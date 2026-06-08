@@ -90,6 +90,13 @@ export const textField = tv({
             true: { container: 'shadow-sm focus-within:-translate-y-0.5 focus-within:shadow-lg' },
             false: {},
         },
+        // Multiline (textarea): top-align the control; the rest of the geometry
+        // (padding, label resting position) lives in text-field.css. Declared
+        // last so items-start wins the twMerge over items-center/items-end.
+        multiline: {
+            true: { container: 'items-start' },
+            false: {},
+        },
     },
     defaultVariants: {
         variant: 'outlined',
@@ -98,6 +105,7 @@ export const textField = tv({
         fullWidth: false,
         disabled: false,
         elevation: false,
+        multiline: false,
     },
 });
 

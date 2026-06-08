@@ -4,11 +4,12 @@
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { TextField, Field } from '@smuit/text-field';
+    import { TextField, TextArea, Field } from '@smuit/text-field';
 
     let bound = $state('Ada Lovelace');
     let counted = $state('Hello');
     let composed = $state('');
+    let bio = $state('Mathematician & first programmer.');
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
 </script>
@@ -96,6 +97,18 @@
         <div class="demo-grid">
             <TextField label="Outlined" elevation />
             <TextField label="Filled" variant="filled" elevation />
+        </div>
+    </section>
+
+    <!-- ── TextArea (multiline) ─────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">TextArea <span class="demo-hint">— multiline sibling, same parts</span></h2>
+        <div class="demo-grid">
+            <TextArea label="Bio" bind:value={bio} rows={3} maxlength={160} supportingText="A few words about you." />
+            <TextArea label="Notes (filled)" variant="filled" rows={3} placeholder="Type a few lines…" />
+        </div>
+        <div style="margin-top: 1rem">
+            <TextArea label="Autosize" autosize rows={2} fullWidth placeholder="Grows as you type…" />
         </div>
     </section>
 
