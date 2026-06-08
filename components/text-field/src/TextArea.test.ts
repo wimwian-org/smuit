@@ -77,6 +77,27 @@ test('honours disabled and readonly', async () => {
     expect(textarea().disabled).toBe(false);
 });
 
+test('supports the error / required validation surface', async () => {
+    const oninvalid = vi.fn();
+    render(TextArea, { label: 'Bio', required: true, error: true, errorText: 'Required', supportingText: 'Help', oninvalid });
+    const root = document.querySelector('.tf') as HTMLElement;
+    expect(root.dataset.error).toBe('true');
+    expect(textarea().required).toBe(true);
+    expect(textarea().getAttribute('aria-invalid')).toBe('true');
+    expect(document.querySelector('[data-slot="asterisk"]')).toBeTruthy();
+    expect(document.querySelector('[data-slot="supporting"]')?.textContent?.trim()).toBe('Required');
+
+    textarea().dispatchEvent(new Event('invalid'));
+    expect(oninvalid).toHaveBeenCalled();
+    await page.getByRole('textbox', { name: 'Bio' }).fill('a bio');
+    await vi.waitFor(() => expect(root.dataset.error).toBe('true')); // manual error stays until cleared by consumer
+});
+
+test('shows the caption from errorText alone (no supporting text / counter)', () => {
+    render(TextArea, { label: 'Bio', error: true, errorText: 'Required' });
+    expect(document.querySelector('[data-slot="supporting"]')?.textContent?.trim()).toBe('Required');
+});
+
 test('binds ref to the underlying textarea', () => {
     let ref: HTMLTextAreaElement | null = null;
     render(TextArea, {

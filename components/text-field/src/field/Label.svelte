@@ -17,4 +17,8 @@
     const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
 </script>
 
-<label class={styles.label()} class:sr-only={ctx.hideLabel} data-slot="label" for={ctx.inputId}>{@render children()}</label>
+<label class={styles.label()} class:sr-only={ctx.hideLabel} data-slot="label" for={ctx.inputId}
+    >{@render children()}{#if ctx.required && !ctx.noAsterisk}<span data-slot="asterisk" aria-hidden="true">*</span
+        >{/if}</label
+>
+

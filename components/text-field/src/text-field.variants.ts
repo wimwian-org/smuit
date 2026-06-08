@@ -97,6 +97,16 @@ export const textField = tv({
             true: { container: 'items-start' },
             false: {},
         },
+        // Error: the resting border + supporting text turn the fixed error
+        // colour. The focus accent + label colours flip via --tf-accent under
+        // `.tf[data-error]` in text-field.css.
+        error: {
+            true: {
+                container: 'border-[var(--surface-error-accent)] hover:border-[var(--surface-error-accent)]',
+                supporting: 'text-[var(--surface-error-fg)]',
+            },
+            false: {},
+        },
     },
     defaultVariants: {
         variant: 'outlined',
@@ -106,6 +116,7 @@ export const textField = tv({
         disabled: false,
         elevation: false,
         multiline: false,
+        error: false,
     },
 });
 

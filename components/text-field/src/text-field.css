@@ -46,6 +46,13 @@
         --tf-accent: var(--color-g-700);
         --tf-label-float-color: var(--color-g-700);
     }
+    /* Error: a fixed error colour for the accent + label, regardless of tint.
+       Declared after the tints so it wins for a tinted field in the error state. */
+    .tf[data-error] {
+        --tf-accent: var(--surface-error-accent);
+        --tf-label-color: var(--surface-error-accent);
+        --tf-label-float-color: var(--surface-error-accent);
+    }
 
     /* ── Container geometry ─────────────────────────────────────────── */
     .tf-container {
@@ -135,6 +142,11 @@
     }
     .tf-container[data-disabled] .tf-label {
         color: var(--tf-label-disabled-color);
+    }
+    /* Required asterisk — always the fixed error colour. */
+    .tf-label [data-slot='asterisk'] {
+        margin-inline-start: 0.125rem;
+        color: var(--surface-error-accent);
     }
 
     /* ── Placeholder — only once the label has floated ──────────────── */

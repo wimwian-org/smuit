@@ -27,15 +27,15 @@
         autosize = false,
         onfocus,
         onblur,
+        oninput,
+        oninvalid,
         ref = $bindable<HTMLTextAreaElement | null>(null),
         ...restProps
     }: TextareaProps = $props();
 
     const ctx = getFieldContext();
     const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
-    const cls = $derived(
-        twMerge(styles.input(), 'resize-y', autosize && 'resize-none [field-sizing:content]'),
-    );
+    const cls = $derived(twMerge(styles.input(), 'resize-y', autosize && 'resize-none [field-sizing:content]'));
 
     function handleFocus(event: FocusEvent & { currentTarget: HTMLTextAreaElement }) {
         ctx.setFocused(true);
@@ -45,6 +45,14 @@
         ctx.setFocused(false);
         onblur?.(event);
     }
+    function handleInput(event: Event & { currentTarget: HTMLTextAreaElement }) {
+        ctx.setInvalid(false);
+        oninput?.(event as Parameters<NonNullable<typeof oninput>>[0]);
+    }
+    function handleInvalid(event: Event & { currentTarget: HTMLTextAreaElement }) {
+        ctx.setInvalid(true);
+        oninvalid?.(event as Parameters<NonNullable<typeof oninvalid>>[0]);
+    }
 </script>
 
 <textarea
@@ -52,6 +60,7 @@
     bind:value={ctx.value}
     disabled={ctx.disabled}
     readonly={ctx.readonly}
+    required={ctx.required}
     maxlength={ctx.maxlength}
     {placeholder}
     {rows}
@@ -60,6 +69,9 @@
     class={cls}
     data-slot="input"
     aria-describedby={ctx.describedBy}
+    aria-invalid={ctx.error || undefined}
     onfocus={handleFocus}
     onblur={handleBlur}
+    oninput={handleInput}
+    oninvalid={handleInvalid}
 ></textarea>

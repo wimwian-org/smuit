@@ -180,6 +180,46 @@ test('merges a consumer class onto the root', () => {
     expect((document.querySelector('.tf') as HTMLElement).className).toContain('my-custom-field');
 });
 
+// ── validation & error ────────────────────────────────────────────────────────
+test('error prop paints the error state and sets aria-invalid', () => {
+    render(TextField, { label: 'Email', error: true, value: 'x' });
+    expect((document.querySelector('.tf') as HTMLElement).dataset.error).toBe('true');
+    expect((document.querySelector('input') as HTMLInputElement).getAttribute('aria-invalid')).toBe('true');
+    expect(container().className).toContain('border-[var(--surface-error-accent)]');
+});
+
+test('errorText replaces the supporting text in error; an empty errorText keeps it', () => {
+    render(TextField, { label: 'Email', supportingText: 'Help', error: true, errorText: 'Required field' });
+    expect(document.querySelector('[data-slot="supporting"]')?.textContent?.trim()).toBe('Required field');
+
+    document.body.innerHTML = '';
+    render(TextField, { label: 'Email', supportingText: 'Help', error: true });
+    expect(document.querySelector('[data-slot="supporting"]')?.textContent?.trim()).toBe('Help');
+});
+
+test('required renders an asterisk + native attribute; noAsterisk suppresses the glyph only', () => {
+    render(TextField, { label: 'Name', required: true });
+    expect(document.querySelector('[data-slot="asterisk"]')).toBeTruthy();
+    expect((document.querySelector('input') as HTMLInputElement).required).toBe(true);
+
+    document.body.innerHTML = '';
+    render(TextField, { label: 'Name', required: true, noAsterisk: true });
+    expect(document.querySelector('[data-slot="asterisk"]')).toBeNull();
+    expect((document.querySelector('input') as HTMLInputElement).required).toBe(true);
+});
+
+test('a reported constraint failure sets the error state and forwards oninvalid; editing clears it', async () => {
+    const oninvalid = vi.fn();
+    render(TextField, { label: 'Email', required: true, oninvalid });
+    const root = document.querySelector('.tf') as HTMLElement;
+    (document.querySelector('input') as HTMLInputElement).dispatchEvent(new Event('invalid'));
+    await vi.waitFor(() => expect(root.dataset.error).toBe('true'));
+    expect(oninvalid).toHaveBeenCalled();
+
+    await page.getByRole('textbox', { name: 'Email' }).fill('ada@x.io');
+    await vi.waitFor(() => expect(root.dataset.error).toBeUndefined());
+});
+
 // ── composable parts (compound API) ───────────────────────────────────────────
 test('composes via the Field.* parts directly', async () => {
     render(CompoundHarness, {});

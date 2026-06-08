@@ -31,6 +31,10 @@
         elevation = false,
         disabled = false,
         readonly = false,
+        error = false,
+        errorText,
+        required = false,
+        noAsterisk = false,
         placeholder,
         maxlength,
         id,
@@ -41,7 +45,7 @@
         ...restProps
     }: Props = $props();
 
-    const hasBottom = $derived(!!supportingText || maxlength != null);
+    const hasBottom = $derived(!!supportingText || maxlength != null || (error && !!errorText));
 </script>
 
 <Field.Root
@@ -52,6 +56,10 @@
     {elevation}
     {disabled}
     {readonly}
+    {error}
+    {errorText}
+    {required}
+    {noAsterisk}
     {hideLabel}
     {maxlength}
     {id}

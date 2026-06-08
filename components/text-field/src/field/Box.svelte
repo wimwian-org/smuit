@@ -23,6 +23,7 @@
             elevation: ctx.elevation,
             multiline: ctx.multiline,
             disabled: ctx.disabled,
+            error: ctx.error,
         }),
     );
 </script>
