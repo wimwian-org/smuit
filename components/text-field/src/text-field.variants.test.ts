@@ -22,6 +22,15 @@ test('filled variant swaps in the tonal-fill container surface', () => {
     expect(s.container()).not.toContain('rounded-md');
 });
 
+test('standard variant is underline-only (no fill, frame, or horizontal padding)', () => {
+    const c = textField({ variant: 'standard' }).container();
+    expect(c).toContain('border-b');
+    expect(c).toContain('items-end');
+    expect(c).not.toContain('bg-g-100');
+    expect(c).not.toContain('rounded');
+    expect(c).not.toContain('px-3.5');
+});
+
 test('small size shrinks the text utilities', () => {
     const s = textField({ size: 'sm' });
     expect(s.input()).toContain('text-sm');

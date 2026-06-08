@@ -36,6 +36,7 @@
         <div class="demo-grid">
             <TextField label="Outlined" supportingText="Default treatment." />
             <TextField label="Filled" variant="filled" supportingText="Tonal-fill treatment." />
+            <TextField label="Standard" variant="standard" supportingText="Legacy underline." />
         </div>
     </section>
 

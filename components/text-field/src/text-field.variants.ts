@@ -48,6 +48,11 @@ export const textField = tv({
                 container:
                     'rounded-md border border-g-300 px-3.5 hover:border-g-500 focus-within:border-[var(--tf-accent)] focus-within:ring-2 focus-within:ring-[var(--tf-accent)]',
             },
+            // Legacy underline-only — no fill or frame. Shares the filled bottom
+            // indicator + bottom-aligned label (see text-field.css :is() rules).
+            standard: {
+                container: 'items-end border-b border-g-400 hover:border-g-500',
+            },
         },
         size: {
             sm: { input: 'text-sm', prefix: 'text-sm', suffix: 'text-sm' },

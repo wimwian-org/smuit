@@ -93,7 +93,7 @@ prefix/suffix or icon adornments (not meaningful for multi-line entry).
 | Prop             | Type                                                  | Default      | Description                                                      |
 | ---------------- | ----------------------------------------------------- | ------------ | ---------------------------------------------------------------- |
 | `label`          | `string`                                              | —            | Field label and accessible name. **Required.**                   |
-| `variant`        | `'filled' \| 'outlined'`                              | `'outlined'` | Container treatment.                                             |
+| `variant`        | `'filled' \| 'outlined' \| 'standard'`                | `'outlined'` | Container treatment (`standard` = legacy underline).            |
 | `size`           | `'sm' \| 'md'`                                        | `'md'`       | Density.                                                         |
 | `tint`           | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'primary'`  | Focus-accent palette (retints `--color-c-*`).                    |
 | `value`          | `string`                                              | `''`         | Two-way bindable value.                                          |
@@ -129,7 +129,7 @@ pass straight through to the underlying element.
 This is the **v1 (MVP)** release defined by the [design spec](./text-field-design.md).
 
 **Ships now:** a composable `Field.*` part set with `<TextField>` and `<TextArea>` wrappers; filled ·
-outlined variants; single-line `type="text"`; **multiline (`<TextArea>`: rows, resize, autosize)**;
+outlined · standard variants; single-line `type="text"`; **multiline (`<TextArea>`: rows, resize, autosize)**;
 floating label + hidden-label mode; placeholder and supporting text; prefix/suffix text and
 leading/trailing icon slots; character counter with `maxlength` (display + soft cap, _not_
 validation); small + medium density, full-width, elevation; enabled / hover / focused / populated /
@@ -142,9 +142,8 @@ the `invalid` event, `aria-invalid`); and label ↔ control ↔ supporting-text 
 > native control via `bind:ref` (`ref.checkValidity()` / `ref.reportValidity()` /
 > `ref.setCustomValidity()`); reporting/submitting a failure flips the field into the error state.
 
-**Deferred to a later release:** the legacy _standard_ variant; non-text input types (email,
-password, number, search, tel, url, `inputmode`, `pattern`); select mode; a dedicated number
-field; and input masking.
+**Deferred to a later release:** non-text input types (email, password, number, search, tel, url,
+`inputmode`, `pattern`); select mode; a dedicated number field; and input masking.
 
 ## Accessibility
 
