@@ -89,6 +89,15 @@
         </div>
     </section>
 
+    <!-- ── Elevation ────────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Elevation <span class="demo-hint">— focus to lift &amp; deepen the shadow</span></h2>
+        <div class="demo-grid">
+            <TextField label="Outlined" elevation />
+            <TextField label="Filled" variant="filled" elevation />
+        </div>
+    </section>
+
     <!-- ── Controlled ───────────────────────────────────────────────── -->
     <section>
         <h2 class="demo-h2">Controlled value</h2>

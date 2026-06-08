@@ -43,6 +43,14 @@ test('fullWidth stretches the root', () => {
     expect(textField({ fullWidth: false }).root()).toContain('w-auto');
 });
 
+test('elevation adds a resting shadow that deepens and lifts on focus', () => {
+    const s = textField({ elevation: true });
+    expect(s.container()).toContain('shadow-sm');
+    expect(s.container()).toContain('focus-within:shadow-lg');
+    expect(s.container()).toContain('focus-within:-translate-y-0.5');
+    expect(textField({ elevation: false }).container()).not.toContain('shadow-sm');
+});
+
 test('disabled dims the surface and content with tokens, not raw opacity', () => {
     const s = textField({ disabled: true });
     expect(s.container()).toContain('pointer-events-none');

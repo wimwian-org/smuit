@@ -56,12 +56,19 @@ pnpm add @smuit/text-field
 | `trailingIcon`   | `Snippet`                                             | —            | Trailing icon / action slot.                                     |
 | `maxlength`      | `number`                                              | —            | Enables the character counter and soft-caps typed input.         |
 | `fullWidth`      | `boolean`                                             | `false`      | Stretch to fill the available inline width.                      |
+| `elevation`      | `boolean`                                             | `false`      | Resting shadow that deepens and lifts 2px on focus.              |
 | `disabled`       | `boolean`                                             | `false`      | Non-interactive; excluded from submission.                       |
 | `readonly`       | `boolean`                                             | `false`      | Not editable, but selectable and focusable.                      |
 | `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                          |
 
 All other native `<input>` attributes (`name`, `id`, `autocomplete`, `oninput`, `onchange`, …)
 pass straight through to the underlying element.
+
+### CSS custom properties
+
+| Variable        | Default       | Description                                                                                              |
+| --------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
+| `--tf-notch-bg` | `--page-bg`   | Backdrop the **outlined** floated label paints over the top border. Set it on an ancestor when the field sits on a non-page surface (e.g. a tinted card) so the notch matches that surface. |
 
 ## Scope
 

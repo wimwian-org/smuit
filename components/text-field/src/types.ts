@@ -49,6 +49,8 @@ export type Props = Omit<HTMLInputAttributes, 'size' | 'value' | 'prefix' | 'typ
     trailingIcon?: Snippet;
     /** Stretch to fill the available inline width. @default false */
     fullWidth?: boolean;
+    /** Raise the field with a resting shadow that deepens and lifts on focus. @default false */
+    elevation?: boolean;
     /** `bind:ref` to the underlying `<input>` element. @default null */
     ref?: HTMLInputElement | null;
     /** Extra classes merged onto the root (via tailwind-merge). */
