@@ -1,0 +1,105 @@
+/*
+ * @smuit/text-field
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+@reference "@smuit/theme";
+
+/*
+ * Geometry + state that tailwind-variants can't express cleanly: the container
+ * height, the floating-label motion (container-relative so the vertical maths
+ * stays simple), the outlined notch, the placeholder reveal, and icon sizing.
+ * Every value reads one of the component tokens declared on `.tf`, which in turn
+ * read the smuit `--color-*` / `--page-*` design tokens — no literals.
+ */
+@layer components {
+    .tf {
+        /* Tokens-first — everything below resolves through these. */
+        --tf-pad-x: 0.875rem;
+        --tf-height: 3.5rem;
+        --tf-label-rest: 1rem;
+        /* Focus accent — content scale by default, so primary/secondary/tertiary
+           tints follow the active `--color-c-*`; neutralised below. */
+        --tf-accent: var(--color-c-500);
+        --tf-label-color: var(--color-g-600);
+        --tf-label-float-color: var(--color-c-600);
+        --tf-label-disabled-color: var(--color-g-400);
+        --tf-placeholder-color: var(--color-g-400);
+        --tf-notch-bg: var(--page-bg);
+    }
+
+    /* Neutral tint: repoint the accent at the ground scale so the focus ring and
+       floated label read grey instead of the primary content colour. */
+    .tf[data-tint='neutral'] {
+        --tf-accent: var(--color-g-700);
+        --tf-label-float-color: var(--color-g-700);
+    }
+
+    /* ── Container geometry ─────────────────────────────────────────── */
+    .tf-container {
+        min-height: var(--tf-height);
+        --tf-label-left: var(--tf-pad-x);
+    }
+    .tf-container[data-size='sm'] {
+        --tf-height: 3rem;
+        --tf-label-rest: 0.875rem;
+    }
+    /* Shift the label start past a leading icon (icon box + container gap). */
+    .tf-container[data-has-leading] {
+        --tf-label-left: calc(var(--tf-pad-x) + 1.75rem);
+    }
+
+    /* ── Floating label (container-relative) ────────────────────────── */
+    .tf-label {
+        top: 50%;
+        left: var(--tf-label-left);
+        transform: translateY(-50%);
+        transform-origin: left center;
+        font-size: var(--tf-label-rest);
+        line-height: 1;
+        color: var(--tf-label-color);
+    }
+    .tf-container[data-floated='true'] .tf-label {
+        color: var(--tf-label-float-color);
+    }
+    /* Outlined: the floated label rides the top border, with a notch backdrop. */
+    .tf-container[data-variant='outlined'][data-floated='true']:not([data-hide-label]) .tf-label {
+        top: 0;
+        left: calc(var(--tf-label-left) - 0.25rem);
+        transform: translateY(-50%) scale(0.8);
+        padding-inline: 0.25rem;
+        background: var(--tf-notch-bg);
+    }
+    /* Filled: the floated label rises within the fill. */
+    .tf-container[data-variant='filled'][data-floated='true']:not([data-hide-label]) .tf-label {
+        top: 0.4rem;
+        transform: translateY(0) scale(0.8);
+    }
+    .tf-container[data-disabled] .tf-label {
+        color: var(--tf-label-disabled-color);
+    }
+
+    /* ── Placeholder — only once the label has floated ──────────────── */
+    .tf-input::placeholder {
+        color: transparent;
+    }
+    .tf-container[data-floated='true'] .tf-input::placeholder {
+        color: var(--tf-placeholder-color);
+    }
+
+    /* ── Slotted icon / action sizing ───────────────────────────────── */
+    .tf-leading :where(svg),
+    .tf-trailing :where(svg) {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    .tf-container[data-size='sm'] .tf-leading :where(svg),
+    .tf-container[data-size='sm'] .tf-trailing :where(svg) {
+        width: 1.125rem;
+        height: 1.125rem;
+    }
+    .tf-trailing :where(button) {
+        display: inline-flex;
+        cursor: pointer;
+    }
+}

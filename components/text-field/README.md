@@ -1,0 +1,105 @@
+# @smuit/text-field
+
+Material Design 3–style **single-line text field** for Svelte 5, built on the smuit design
+tokens. A labelled native `<input>` dressed as a **filled** or **outlined** field, with a
+floating label, supporting text, prefix/suffix decorations, leading/trailing icon slots, and a
+character counter — themed and dark-mode aware out of the box.
+
+> Built from the [text-field design spec](./text-field-design.md). The field wraps a native
+> `<input>` directly (there is no headless primitive for a plain text input); accessibility comes
+> from the platform control plus explicit label ↔ input ↔ supporting-text wiring.
+
+## Install
+
+```sh
+pnpm add @smuit/text-field
+```
+
+`@smuit/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies.
+
+## Usage
+
+```svelte
+<script>
+    import { TextField } from '@smuit/text-field';
+
+    let email = $state('');
+</script>
+
+<TextField label="Email" bind:value={email} placeholder="you@example.com" supportingText="We never share it." />
+
+<!-- filled, small, with decorations and a counter -->
+<TextField label="Amount" variant="filled" size="sm" prefix="$" suffix=".00" maxlength={10} />
+
+<!-- leading / trailing icon slots -->
+<TextField label="Search">
+    {#snippet leadingIcon()}<SearchIcon />{/snippet}
+    {#snippet trailingIcon()}<button type="button" aria-label="Clear">×</button>{/snippet}
+</TextField>
+```
+
+## Props
+
+| Prop             | Type                                                  | Default      | Description                                                      |
+| ---------------- | ----------------------------------------------------- | ------------ | ---------------------------------------------------------------- |
+| `label`          | `string`                                              | —            | Field label and accessible name. **Required.**                   |
+| `variant`        | `'filled' \| 'outlined'`                              | `'outlined'` | Container treatment.                                             |
+| `size`           | `'sm' \| 'md'`                                        | `'md'`       | Density.                                                         |
+| `tint`           | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'primary'`  | Focus-accent palette (retints `--color-c-*`).                    |
+| `value`          | `string`                                              | `''`         | Two-way bindable value.                                          |
+| `hideLabel`      | `boolean`                                             | `false`      | Visually hide the label (kept for screen readers).               |
+| `placeholder`    | `string`                                              | —            | Hint shown while empty and focused.                              |
+| `supportingText` | `string`                                              | —            | Static guidance below the field.                                 |
+| `prefix`         | `string`                                              | —            | Static text before the value (e.g. `$`); revealed once floated.  |
+| `suffix`         | `string`                                              | —            | Static text after the value (e.g. `.00`); revealed once floated. |
+| `leadingIcon`    | `Snippet`                                             | —            | Leading icon slot.                                               |
+| `trailingIcon`   | `Snippet`                                             | —            | Trailing icon / action slot.                                     |
+| `maxlength`      | `number`                                              | —            | Enables the character counter and soft-caps typed input.         |
+| `fullWidth`      | `boolean`                                             | `false`      | Stretch to fill the available inline width.                      |
+| `disabled`       | `boolean`                                             | `false`      | Non-interactive; excluded from submission.                       |
+| `readonly`       | `boolean`                                             | `false`      | Not editable, but selectable and focusable.                      |
+| `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                          |
+
+All other native `<input>` attributes (`name`, `id`, `autocomplete`, `oninput`, `onchange`, …)
+pass straight through to the underlying element.
+
+## Scope
+
+This is the **v1 (MVP)** release defined by the [design spec](./text-field-design.md).
+
+**Ships now:** filled · outlined variants; single-line `type="text"`; floating label + hidden-label
+mode; placeholder and supporting text; prefix/suffix text and leading/trailing icon slots;
+character counter with `maxlength` (display + soft cap, _not_ validation); small + medium density,
+full-width; enabled / hover / focused / populated / read-only / disabled states; bound and
+uncontrolled value with `input` / `change` / `focus` / `blur`; tint + light/dark theming; and
+label ↔ input ↔ supporting-text accessibility wiring.
+
+**Deferred to a later release:** the legacy _standard_ variant; multiline / `textarea`
+(`rows`, autosize); non-text input types (email, password, number, search, tel, url, `inputmode`,
+`pattern`); the **validation & error system** (`error` flag, error text, the required asterisk /
+`no-asterisk`, constraint validation, custom validity, the `invalid` event) — note `maxlength`
+ships here only as the counter's soft cap, not as validation; select mode; a dedicated number
+field; and input masking. These layer onto this base in a future version.
+
+## Accessibility
+
+- The visible `label` is programmatically associated with the `<input>` via `for`/`id`, and
+  supporting text is referenced through `aria-describedby`.
+- `hideLabel` keeps the label available to screen readers (visually hidden, not removed).
+- Read-only stays in the tab order and is announced as editable-but-read-only; disabled leaves the
+  tab order and is excluded from submission.
+- The focus indicator meets AA contrast in both light and dark via the `--color-c-*` accent.
+
+## Acknowledgements
+
+The design spec this component implements was synthesised from two references:
+
+- [**MUI** Text Field](https://mui.com/material-ui/react-text-field/) (React).
+- [**Material Web** text field](https://github.com/material-components/material-web/blob/main/docs/components/text-field.md).
+
+`@smuit/text-field` is an **independent implementation** on smuit's own design tokens and Svelte 5
+conventions. It does not depend on, bundle, or copy code from either project — they informed the
+anatomy, behaviour, and accessibility model only (with Material Web taking precedence where the two
+disagreed).
+
+MIT © Anand Panchapakesan
