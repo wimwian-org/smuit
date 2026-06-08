@@ -155,12 +155,33 @@
         color: var(--surface-error-accent);
     }
 
+    /* ── Autosize textarea ──────────────────────────────────────────── */
+    /* Grows with content; `--tf-rows` (set per instance) is the floor. overflow
+       is hidden because field-sizing handles growth — no scrollbar. Falls back
+       to a fixed, manually-unsizable textarea where field-sizing is unsupported. */
+    .tf-autosize {
+        resize: none;
+    }
+    @supports (field-sizing: content) {
+        .tf-autosize {
+            field-sizing: content;
+            overflow: hidden;
+            min-height: calc(var(--tf-rows, 2) * 1lh);
+        }
+    }
+
     /* ── Placeholder — only once the label has floated ──────────────── */
     .tf-input::placeholder {
         color: transparent;
     }
     .tf-container[data-floated='true'] .tf-input::placeholder {
         color: var(--tf-placeholder-color);
+    }
+
+    /* ── Autosuggest options — hover / active highlight ─────────────── */
+    .tf-option:hover,
+    .tf-option[aria-selected='true'] {
+        background: var(--color-g-100);
     }
 
     /* ── Slotted icon / action sizing ───────────────────────────────── */

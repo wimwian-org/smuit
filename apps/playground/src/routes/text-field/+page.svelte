@@ -10,6 +10,8 @@
     let counted = $state('Hello');
     let composed = $state('');
     let bio = $state('Mathematician & first programmer.');
+    let fruit = $state('');
+    const fruits = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Date', 'Fig', 'Grape'];
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
 </script>
@@ -109,6 +111,21 @@
             <TextField label="Outlined error" error errorText="Enter a valid value." value="nope" />
             <TextField label="Filled error" variant="filled" error errorText="Invalid value." value="x" />
             <TextField label="No asterisk" required noAsterisk supportingText="Required, glyph suppressed." />
+        </div>
+    </section>
+
+    <!-- ── Autosuggest ──────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Autosuggest <span class="demo-hint">— focus to open · ↑ ↓ navigate · Enter pick · Esc close</span>
+        </h2>
+        <div class="demo-grid">
+            <TextField
+                label="Fruit"
+                bind:value={fruit}
+                suggestions={fruits}
+                supportingText="Choose from the short list."
+            />
         </div>
     </section>
 

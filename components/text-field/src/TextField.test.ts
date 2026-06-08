@@ -151,14 +151,18 @@ test('forwards the native change event on commit', async () => {
     expect(onchange).toHaveBeenCalled();
 });
 
-test('forwards native input events and attributes through restProps', async () => {
+test('forwards native input events / keydown / attributes through restProps', async () => {
     const oninput = vi.fn();
-    render(TextField, { label: 'Name', oninput, name: 'fullname', autocomplete: 'name' });
+    const onkeydown = vi.fn();
+    render(TextField, { label: 'Name', oninput, onkeydown, name: 'fullname', autocomplete: 'name' });
     const input = document.querySelector('input') as HTMLInputElement;
     expect(input.getAttribute('name')).toBe('fullname');
     expect(input.getAttribute('autocomplete')).toBe('name');
+    expect(input.getAttribute('role')).toBeNull(); // no combobox role without suggestions
     await page.getByRole('textbox', { name: 'Name' }).fill('Grace');
     expect(oninput).toHaveBeenCalled();
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+    expect(onkeydown).toHaveBeenCalled();
 });
 
 test('binds ref to the underlying input element', () => {
@@ -218,6 +222,77 @@ test('a reported constraint failure sets the error state and forwards oninvalid;
 
     await page.getByRole('textbox', { name: 'Email' }).fill('ada@x.io');
     await vi.waitFor(() => expect(root.dataset.error).toBeUndefined());
+});
+
+// ── autosuggest (combobox) ─────────────────────────────────────────────────────
+const FRUITS = ['Apple', 'Banana', 'Cherry'];
+const optionEls = () => [...document.querySelectorAll('[role="option"]')] as HTMLElement[];
+const keydown = (input: HTMLElement, key: string) =>
+    input.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+test('throws when suggestions exceed the build-time MAX_SUGGESTIONS cap', () => {
+    const tooMany = Array.from({ length: 11 }, (_, i) => `opt-${i}`);
+    expect(() => render(TextField, { label: 'F', suggestions: tooMany })).toThrow(/MAX_SUGGESTIONS/);
+});
+
+test('opens the suggestion listbox on focus with combobox ARIA', async () => {
+    render(TextField, { label: 'Fruit', suggestions: FRUITS });
+    const input = document.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('role')).toBe('combobox');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    input.focus();
+    await vi.waitFor(() => expect(input.getAttribute('aria-expanded')).toBe('true'));
+    const list = document.querySelector('[role="listbox"]') as HTMLElement;
+    expect(list.id).toBe(input.getAttribute('aria-controls'));
+    expect(optionEls().length).toBe(3);
+});
+
+test('selects a suggestion by pointer without losing focus', async () => {
+    render(TextField, { label: 'Fruit', suggestions: FRUITS });
+    const input = document.querySelector('input') as HTMLInputElement;
+    input.focus();
+    await vi.waitFor(() => expect(optionEls().length).toBe(3));
+    optionEls()[1].dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    optionEls()[1].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => {
+        expect(input.value).toBe('Banana');
+        expect(document.querySelector('[role="listbox"]')).toBeNull();
+    });
+});
+
+test('keyboard: Down/Up navigate (wrapping), Enter selects, Escape closes', async () => {
+    render(TextField, { label: 'Fruit', suggestions: FRUITS });
+    const input = document.querySelector('input') as HTMLInputElement;
+    input.focus();
+    await vi.waitFor(() => expect(optionEls().length).toBe(3));
+
+    keydown(input, 'ArrowDown'); // -1 -> 0
+    keydown(input, 'ArrowDown'); // 0 -> 1
+    await vi.waitFor(() => expect(input.getAttribute('aria-activedescendant')).toBe(optionEls()[1].id));
+    keydown(input, 'Enter');
+    await vi.waitFor(() => expect(input.value).toBe('Banana'));
+
+    // list closed after select; ArrowUp reopens and lands on the last option
+    keydown(input, 'ArrowUp'); // -1 -> last (2)
+    await vi.waitFor(() => {
+        expect(document.querySelector('[role="listbox"]')).toBeTruthy();
+        expect(input.getAttribute('aria-activedescendant')).toBe(optionEls()[2].id);
+    });
+    keydown(input, 'ArrowUp'); // 2 -> 1
+    await vi.waitFor(() => expect(input.getAttribute('aria-activedescendant')).toBe(optionEls()[1].id));
+    keydown(input, 'Escape');
+    await vi.waitFor(() => expect(document.querySelector('[role="listbox"]')).toBeNull());
+});
+
+test('Enter with no active option does not select, and other keys pass through', async () => {
+    render(TextField, { label: 'Fruit', suggestions: FRUITS });
+    const input = document.querySelector('input') as HTMLInputElement;
+    input.focus();
+    await vi.waitFor(() => expect(optionEls().length).toBe(3));
+    keydown(input, 'Enter'); // open but activeIndex < 0 → no selection
+    keydown(input, 'a'); // unhandled key → falls through
+    expect(input.value).toBe('');
+    expect(document.querySelector('[role="listbox"]')).toBeTruthy();
 });
 
 // ── composable parts (compound API) ───────────────────────────────────────────

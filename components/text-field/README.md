@@ -69,8 +69,21 @@ context to the parts beneath it.
 
 Parts: **`Field.Root`** (shell + context), **`Field.Box`** (the surface), **`Field.Label`**,
 **`Field.Adornment`** (`side="leading" | "trailing" | "prefix" | "suffix"`), **`Field.Input`**,
-**`Field.Textarea`**, **`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**.
-The same parts back `<TextArea>`.
+**`Field.Textarea`**, **`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**,
+**`Field.Suggestions`** (the autosuggest listbox). The same parts back `<TextArea>`.
+
+### Autosuggest
+
+Pass `suggestions` to turn the field into a combobox: on focus it opens a listbox of the **full
+list** (the consumer pre-filters), navigable with **↑/↓**, committed with **Enter** or a click, and
+dismissed with **Esc** — ARIA `combobox`/`listbox`/`option` with `aria-activedescendant`. It's a
+deliberate small-list affordance: passing more than `MAX_SUGGESTIONS` (a build-time constant,
+default 10 — exported from the package; not a per-instance prop) **throws** (use a Select or search
+for long lists).
+
+```svelte
+<TextField label="Fruit" bind:value={fruit} suggestions={['Apple', 'Banana', 'Cherry']} />
+```
 
 ### Multi-line — `<TextArea>`
 
@@ -113,6 +126,7 @@ prefix/suffix or icon adornments (not meaningful for multi-line entry).
 | `errorText`      | `string`                                              | —            | Shown while in error; replaces the supporting text (empty keeps it). |
 | `required`       | `boolean`                                             | `false`      | Required; renders an asterisk and sets the native attribute.      |
 | `noAsterisk`     | `boolean`                                             | `false`      | Suppress the asterisk while keeping `required` semantics.         |
+| `suggestions`    | `string[]`                                            | `[]`         | Autosuggest values shown in a listbox on focus (capped by `MAX_SUGGESTIONS`). |
 | `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                          |
 
 All other native `<input>` attributes (`name`, `id`, `autocomplete`, `oninput`, `onchange`, …)
@@ -133,8 +147,9 @@ outlined · standard variants; single-line `type="text"`; **multiline (`<TextAre
 floating label + hidden-label mode; placeholder and supporting text; prefix/suffix text and
 leading/trailing icon slots; character counter with `maxlength` (display + soft cap, _not_
 validation); small + medium density, full-width, elevation; enabled / hover / focused / populated /
-read-only / disabled states; bound and uncontrolled value with `input` / `change` / `focus` /
-`blur`; tint + light/dark theming; the **validation & error system** (`error` flag, `errorText`
+read-only / disabled states; **autosuggest (combobox: listbox on focus, ↑/↓/Enter/Esc, capped by
+`maxSuggestions`)**; bound and uncontrolled value with `input` / `change` / `focus` / `blur`; tint +
+light/dark theming; the **validation & error system** (`error` flag, `errorText`
 with the replacement rule, `required` + `noAsterisk`, native constraint validation reflected from
 the `invalid` event, `aria-invalid`); and label ↔ control ↔ supporting-text accessibility wiring.
 

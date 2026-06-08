@@ -35,6 +35,7 @@
         errorText,
         required = false,
         noAsterisk = false,
+        suggestions = [],
         placeholder,
         maxlength,
         id,
@@ -62,6 +63,7 @@
     {noAsterisk}
     {hideLabel}
     {maxlength}
+    {suggestions}
     {id}
     class={className}
     bind:value
@@ -74,6 +76,7 @@
         {#if suffix}<Field.Adornment side="suffix">{suffix}</Field.Adornment>{/if}
         {#if trailingIcon}<Field.Adornment side="trailing">{@render trailingIcon()}</Field.Adornment>{/if}
     </Field.Box>
+    <Field.Suggestions />
     {#if hasBottom}
         <Field.Caption>
             <Field.Supporting>{supportingText}</Field.Supporting>

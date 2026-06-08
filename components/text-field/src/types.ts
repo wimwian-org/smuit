@@ -57,6 +57,9 @@ export type Props = Omit<HTMLInputAttributes, 'size' | 'value' | 'prefix' | 'typ
     errorText?: string;
     /** Suppress the required asterisk while keeping `required` semantics. @default false */
     noAsterisk?: boolean;
+    /** Autosuggest values shown in a listbox on focus (the consumer pre-filters).
+     *  Capped by the build-time `MAX_SUGGESTIONS` constant — exceeding it throws. */
+    suggestions?: string[];
     /** `bind:ref` to the underlying `<input>` element. @default null */
     ref?: HTMLInputElement | null;
     /** Extra classes merged onto the root (via tailwind-merge). */

@@ -12,4 +12,5 @@ export { default as Textarea } from './Textarea.svelte';
 export { default as Caption } from './Caption.svelte';
 export { default as Supporting } from './Supporting.svelte';
 export { default as Counter } from './Counter.svelte';
+export { default as Suggestions } from './Suggestions.svelte';
 export { getFieldContext, setFieldContext, type FieldContext } from './field-context';

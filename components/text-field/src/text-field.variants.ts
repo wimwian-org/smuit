@@ -22,7 +22,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
  */
 export const textField = tv({
     slots: {
-        root: 'tf flex flex-col gap-1.5 text-left',
+        root: 'tf relative flex flex-col gap-1.5 text-left',
         container:
             'tf-container relative flex w-full items-center gap-2 transition-[background-color,border-color,box-shadow,transform] duration-150',
         label: 'tf-label pointer-events-none absolute max-w-full origin-left truncate transition-all duration-150 ease-out',
@@ -34,6 +34,8 @@ export const textField = tv({
         bottom: 'tf-bottom flex items-start justify-between gap-3 px-1',
         supporting: 'tf-supporting text-xs text-g-600',
         counter: 'tf-counter shrink-0 text-xs text-g-600 tabular-nums',
+        popup: 'tf-popup absolute inset-x-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-g-300 bg-[var(--page-bg)] py-1 shadow-lg',
+        option: 'tf-option cursor-pointer truncate px-3 py-2 text-base text-g-900',
     },
     variants: {
         variant: {

@@ -35,7 +35,9 @@
 
     const ctx = getFieldContext();
     const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
-    const cls = $derived(twMerge(styles.input(), 'resize-y', autosize && 'resize-none [field-sizing:content]'));
+    // `tf-autosize` (CSS) owns field-sizing + a rows-based min-height + overflow:
+    // hidden so it grows cleanly with no scrollbar. Otherwise: manual vertical resize.
+    const cls = $derived(twMerge(styles.input(), autosize ? 'tf-autosize' : 'resize-y'));
 
     function handleFocus(event: FocusEvent & { currentTarget: HTMLTextAreaElement }) {
         ctx.setFocused(true);
@@ -67,6 +69,7 @@
     {...restProps}
     id={ctx.inputId}
     class={cls}
+    style:--tf-rows={rows}
     data-slot="input"
     aria-describedby={ctx.describedBy}
     aria-invalid={ctx.error || undefined}
