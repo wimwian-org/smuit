@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@smuit/ripple": "workspace:*",
+        "@smuit/text-field": "workspace:*",
         "@smuit/theme": "workspace:*"
     }
 }

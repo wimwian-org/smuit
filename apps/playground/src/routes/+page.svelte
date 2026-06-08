@@ -145,6 +145,20 @@
     </div>
 </nav>
 
+<!-- ── Components index ───────────────────────────────────────────── -->
+<nav aria-label="Component demos" style="margin-bottom: 2.5rem">
+    <p
+        style="color: var(--page-fg); opacity: 0.5; font-size: var(--text-label-sm); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem"
+    >
+        Components
+    </p>
+    <a
+        href="/text-field"
+        style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border: 1px solid var(--canvas-border); border-radius: 0.5rem; color: var(--page-fg); text-decoration: none; font-size: var(--text-body-sm); font-weight: 500"
+        >Text Field <span style="opacity: 0.5">· v1</span></a
+    >
+</nav>
+
 <!-- ── Content zone — flat-theme tokens ───────────────────────────── -->
 <div style="display: flex; flex-direction: column; gap: 2.5rem">
     <!-- ── Hero ───────────────────────────────────────────────────── -->
