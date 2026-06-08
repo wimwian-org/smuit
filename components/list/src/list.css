@@ -1,0 +1,102 @@
+/*
+ * @smuit/list
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+@reference "@smuit/theme";
+
+/*
+ * Geometry + state that tailwind-variants can't express cleanly: the row
+ * heights per `lines`, the Expressive gap and **position-based corner shape**
+ * (derived from DOM order via :first/:last/:only-child — no JS), the baseline
+ * divider, the focus-visible outline, and icon sizing. Every value reads one of
+ * the component tokens declared on `.list`, which in turn read the smuit
+ * `--color-*` / `--surface-*` design tokens — no literals.
+ */
+@layer components {
+    .list {
+        /* Tokens-first — everything below resolves through these. */
+        --list-pad-x: 1rem;
+        --list-radius: 1rem; /* outer corners of an Expressive group */
+        --list-radius-inner: 0.25rem; /* inner / middle corners */
+        /* Focus outline colour. Driven by the per-tint semantic surface tokens
+           (not the `--color-c-*` content scale), so the tint works under both
+           the runtime and the flat theme. Default = primary. */
+        --list-accent: var(--surface-primary-accent);
+    }
+
+    /* ── Tint → focus accent (theme-independent semantic tokens) ─────── */
+    .list[data-tint='secondary'] {
+        --list-accent: var(--surface-secondary-accent);
+    }
+    .list[data-tint='tertiary'] {
+        --list-accent: var(--surface-tertiary-accent);
+    }
+    /* Neutral: a theme-flipping grey from the ground scale. */
+    .list[data-tint='neutral'] {
+        --list-accent: var(--color-g-700);
+    }
+
+    /* Expressive: a small vertical gap separates the filled rows. */
+    .list[data-variant='expressive'] {
+        gap: 0.25rem;
+    }
+
+    /* ── Row geometry ───────────────────────────────────────────────── */
+    .list-item {
+        min-height: 3.5rem;
+        padding-inline: var(--list-pad-x);
+        padding-block: 0.5rem;
+        /* Reset the native <a>/<button> chrome so all three row tags match. */
+        color: inherit;
+        font: inherit;
+        text-align: inherit;
+        text-decoration: none;
+        border: 0;
+        appearance: none;
+    }
+    .list-item[data-lines='two'] {
+        min-height: 4.5rem;
+    }
+
+    /* ── Expressive position-based shape (DOM order, no JS) ──────────── */
+    .list[data-variant='expressive'] .list-item {
+        border-radius: var(--list-radius-inner);
+    }
+    .list[data-variant='expressive'] .list-row:first-child .list-item {
+        border-start-start-radius: var(--list-radius);
+        border-start-end-radius: var(--list-radius);
+    }
+    .list[data-variant='expressive'] .list-row:last-child .list-item {
+        border-end-start-radius: var(--list-radius);
+        border-end-end-radius: var(--list-radius);
+    }
+    .list[data-variant='expressive'] .list-row:only-child .list-item {
+        border-radius: var(--list-radius);
+    }
+
+    /* ── Baseline divider between rows ──────────────────────────────── */
+    .list[data-variant='baseline'][data-divider] .list-row:not(:last-child) {
+        border-bottom: 1px solid var(--surface-border);
+    }
+
+    /* ── Focus ring for interactive rows ────────────────────────────── */
+    /* No utility sets `outline` at rest, so this @layer rule wins cleanly. */
+    .list-item[data-interactive] {
+        outline: none;
+    }
+    .list-item[data-interactive]:focus-visible {
+        outline: 2px solid var(--list-accent);
+        outline-offset: -2px;
+    }
+
+    /* ── Leading / trailing icon sizing ─────────────────────────────── */
+    .list-leading :where(svg) {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    .list-trailing :where(svg) {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}

@@ -25,6 +25,7 @@
         "vite": "^8.0.14"
     },
     "dependencies": {
+        "@smuit/list": "workspace:*",
         "@smuit/ripple": "workspace:*",
         "@smuit/text-field": "workspace:*",
         "@smuit/theme": "workspace:*"
