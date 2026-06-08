@@ -489,6 +489,8 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
         gap: 1.1rem;
+        /* Line the two fields up by their input line, not the box top. */
+        align-items: baseline;
     }
     .field {
         display: flex;
