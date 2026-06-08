@@ -12,6 +12,14 @@
 @import 'tailwindcss';
 @import '@smuit/theme/flat';
 
+/*
+ * Scan the workspace component packages so Tailwind emits the utility classes
+ * their tailwind-variants configs reference (bg-g-100, border-c-500, …). Linked
+ * packages under node_modules fall outside Tailwind's default content detection,
+ * so without this the component demos render unstyled.
+ */
+@source '../../../components/*/src/**/*.{svelte,ts}';
+
 @layer base {
     html {
         font-family: var(--font-sans);

@@ -51,6 +51,8 @@ export type Props = Omit<HTMLInputAttributes, 'size' | 'value' | 'prefix' | 'typ
     fullWidth?: boolean;
     /** `bind:ref` to the underlying `<input>` element. @default null */
     ref?: HTMLInputElement | null;
+    /** Extra classes merged onto the root (via tailwind-merge). */
+    class?: string;
 };
 
 // Deferred (next): the legacy `standard` variant; multiline (`textarea`, rows,

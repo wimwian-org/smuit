@@ -50,11 +50,10 @@ test('small size sets the size hook and the small text utility', () => {
     expect((document.querySelector('input') as HTMLElement).className).toContain('text-sm');
 });
 
-test('tint applies the retinting utility on the root and the data hook', () => {
+test('tint sets the data-tint hook on the root', () => {
     render(TextField, { label: 'City', tint: 'secondary' });
     const root = document.querySelector('.tf') as HTMLElement;
     expect(root.dataset.tint).toBe('secondary');
-    expect(root.className).toContain('secondary');
 });
 
 // ── value, counter, decorations ───────────────────────────────────────────────

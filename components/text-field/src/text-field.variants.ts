@@ -51,16 +51,17 @@ export const textField = tv({
             sm: { input: 'text-sm', prefix: 'text-sm', suffix: 'text-sm' },
             md: {},
         },
+        // Tint carries no class: the field's only tinted surface is the focus
+        // accent + floated label, which text-field.css drives through
+        // `--tf-accent` per `[data-tint]` using the semantic surface tokens.
+        // This keeps tint working under both the runtime and flat themes,
+        // which name their tint utilities differently (`.secondary` vs
+        // `.tint-secondary`).
         tint: {
-            // `neutral` carries no palette utility: the field's accent is routed
-            // through `--tf-accent`, which text-field.css repoints to the ground
-            // scale for `[data-tint='neutral']`. (The `mono` tint utility only
-            // resets `--color-g-*`, which is already neutral, so it can't
-            // neutralise the `--color-c-*` accent on its own.)
             neutral: {},
             primary: {},
-            secondary: { root: 'secondary' },
-            tertiary: { root: 'tertiary' },
+            secondary: {},
+            tertiary: {},
         },
         fullWidth: {
             true: { root: 'w-full' },
