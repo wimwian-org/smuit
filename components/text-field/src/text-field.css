@@ -58,6 +58,11 @@
     .tf-container[data-has-leading] {
         --tf-label-left: calc(var(--tf-pad-x) + 1.75rem);
     }
+    /* Filled: the input is bottom-aligned (items-end), leaving the top of the
+       fill free for the floated label. */
+    .tf-container[data-variant='filled'] {
+        padding-bottom: 0.45rem;
+    }
 
     /* ── Floating label (container-relative) ────────────────────────── */
     .tf-label {
@@ -72,18 +77,26 @@
     .tf-container[data-floated='true'] .tf-label {
         color: var(--tf-label-float-color);
     }
-    /* Outlined: the floated label rides the top border, with a notch backdrop. */
+    /* Outlined: the floated label rides the top border, with a notch backdrop
+       (nudged 2px above the centre line so it sits cleanly on the stroke). */
     .tf-container[data-variant='outlined'][data-floated='true']:not([data-hide-label]) .tf-label {
         top: 0;
         left: calc(var(--tf-label-left) - 0.25rem);
-        transform: translateY(-50%) scale(0.8);
+        transform: translateY(calc(-50% - 2px)) scale(0.8);
         padding-inline: 0.25rem;
         background: var(--tf-notch-bg);
     }
-    /* Filled: the floated label rises within the fill. */
+    /* Filled: the input is bottom-aligned, so the resting label sits over it
+       (also bottom-aligned) and the floated label rises to the top of the fill. */
+    .tf-container[data-variant='filled'] .tf-label {
+        top: auto;
+        bottom: 0.45rem;
+        transform: translateY(0);
+    }
     .tf-container[data-variant='filled'][data-floated='true']:not([data-hide-label]) .tf-label {
         top: 0.4rem;
-        transform: translateY(0) scale(0.8);
+        bottom: auto;
+        transform: scale(0.8);
     }
     .tf-container[data-disabled] .tf-label {
         color: var(--tf-label-disabled-color);

@@ -39,8 +39,10 @@ export const textField = tv({
     variants: {
         variant: {
             filled: {
+                // items-end: bottom-align the input so the floated label has
+                // clear room above it (MD filled behaviour). Geometry in CSS.
                 container:
-                    'rounded-t-md border-b border-g-400 bg-g-100 px-3.5 hover:bg-g-150 focus-within:border-[var(--tf-accent)] focus-within:shadow-[inset_0_-2px_0_0_var(--tf-accent)]',
+                    'items-end rounded-t-md border-b border-g-400 bg-g-100 px-3.5 hover:bg-g-150 focus-within:border-[var(--tf-accent)] focus-within:shadow-[inset_0_-2px_0_0_var(--tf-accent)]',
             },
             outlined: {
                 container:
