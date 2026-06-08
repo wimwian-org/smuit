@@ -4,10 +4,11 @@
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { TextField } from '@smuit/text-field';
+    import { TextField, Field } from '@smuit/text-field';
 
     let bound = $state('Ada Lovelace');
     let counted = $state('Hello');
+    let composed = $state('');
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
 </script>
@@ -96,6 +97,22 @@
             <TextField label="Outlined" elevation />
             <TextField label="Filled" variant="filled" elevation />
         </div>
+    </section>
+
+    <!-- ── Composition (Field.* parts) ──────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Composition <span class="demo-hint">— built from the Field.* parts directly</span></h2>
+        <Field.Root bind:value={composed} variant="filled" maxlength={120} fullWidth>
+            <Field.Box>
+                <Field.Label>Message</Field.Label>
+                <Field.Adornment side="leading">{@render search()}</Field.Adornment>
+                <Field.Input placeholder="Compose with Field.Root / Box / Label / Adornment / Input…" />
+            </Field.Box>
+            <Field.Caption>
+                <Field.Supporting>Same parts that back &lt;TextField&gt;.</Field.Supporting>
+                <Field.Counter />
+            </Field.Caption>
+        </Field.Root>
     </section>
 
     <!-- ── Controlled ───────────────────────────────────────────────── -->
