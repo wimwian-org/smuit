@@ -26,6 +26,13 @@ export interface FieldContext {
     readonly multiline: boolean;
     readonly hideLabel: boolean;
     readonly maxlength: number | undefined;
+    /** In the error state — a manual `error` flag, or a reported constraint failure. */
+    readonly error: boolean;
+    /** Error message that replaces the supporting text while in error (if non-empty). */
+    readonly errorText: string | undefined;
+    readonly required: boolean;
+    /** Suppress the required asterisk while keeping the semantics. */
+    readonly noAsterisk: boolean;
     /** Whether a leading adornment is present (shifts the label start). */
     readonly hasLeading: boolean;
     /** Two-way bound value (the control writes, parts read). */
@@ -40,6 +47,8 @@ export interface FieldContext {
     setFocused(value: boolean): void;
     setLeading(value: boolean): void;
     setSupporting(value: boolean): void;
+    /** The control reports/clears a constraint-validation failure. */
+    setInvalid(value: boolean): void;
 }
 
 const KEY = Symbol('smuit-field');

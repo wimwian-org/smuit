@@ -35,6 +35,10 @@
         disabled?: boolean;
         readonly?: boolean;
         hideLabel?: boolean;
+        error?: boolean;
+        errorText?: string;
+        required?: boolean;
+        noAsterisk?: boolean;
         maxlength?: number;
         id?: string;
         value?: string;
@@ -52,6 +56,10 @@
         disabled = false,
         readonly: readonlyProp = false,
         hideLabel = false,
+        error: errorProp = false,
+        errorText,
+        required = false,
+        noAsterisk = false,
         maxlength,
         id,
         value = $bindable(''),
@@ -64,6 +72,7 @@
     let focused = $state(false);
     let hasLeading = $state(false);
     let hasSupporting = $state(false);
+    let invalid = $state(false);
 
     const ctx: FieldContext = {
         get inputId() {
@@ -96,6 +105,18 @@
         get hideLabel() {
             return hideLabel;
         },
+        get error() {
+            return errorProp || invalid;
+        },
+        get errorText() {
+            return errorText;
+        },
+        get required() {
+            return required;
+        },
+        get noAsterisk() {
+            return noAsterisk;
+        },
         get maxlength() {
             return maxlength;
         },
@@ -126,12 +147,15 @@
         setSupporting(v) {
             hasSupporting = v;
         },
+        setInvalid(v) {
+            invalid = v;
+        },
     };
     setFieldContext(ctx);
 
     const styles = $derived(textField({ variant, size, tint, fullWidth, elevation, disabled }));
 </script>
 
-<div class={twMerge(styles.root(), className)} data-tint={tint}>
+<div class={twMerge(styles.root(), className)} data-tint={tint} data-error={ctx.error || undefined}>
     {@render children()}
 </div>

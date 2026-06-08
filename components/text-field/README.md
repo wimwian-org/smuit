@@ -109,6 +109,10 @@ prefix/suffix or icon adornments (not meaningful for multi-line entry).
 | `elevation`      | `boolean`                                             | `false`      | Resting shadow that deepens and lifts 2px on focus.              |
 | `disabled`       | `boolean`                                             | `false`      | Non-interactive; excluded from submission.                       |
 | `readonly`       | `boolean`                                             | `false`      | Not editable, but selectable and focusable.                      |
+| `error`          | `boolean`                                             | `false`      | Paint the error state (also set by a reported constraint failure). |
+| `errorText`      | `string`                                              | —            | Shown while in error; replaces the supporting text (empty keeps it). |
+| `required`       | `boolean`                                             | `false`      | Required; renders an asterisk and sets the native attribute.      |
+| `noAsterisk`     | `boolean`                                             | `false`      | Suppress the asterisk while keeping `required` semantics.         |
 | `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                          |
 
 All other native `<input>` attributes (`name`, `id`, `autocomplete`, `oninput`, `onchange`, …)
@@ -130,13 +134,17 @@ floating label + hidden-label mode; placeholder and supporting text; prefix/suff
 leading/trailing icon slots; character counter with `maxlength` (display + soft cap, _not_
 validation); small + medium density, full-width, elevation; enabled / hover / focused / populated /
 read-only / disabled states; bound and uncontrolled value with `input` / `change` / `focus` /
-`blur`; tint + light/dark theming; and label ↔ control ↔ supporting-text accessibility wiring.
+`blur`; tint + light/dark theming; the **validation & error system** (`error` flag, `errorText`
+with the replacement rule, `required` + `noAsterisk`, native constraint validation reflected from
+the `invalid` event, `aria-invalid`); and label ↔ control ↔ supporting-text accessibility wiring.
+
+> Constraint validation, custom validity, and the validity properties are reached through the
+> native control via `bind:ref` (`ref.checkValidity()` / `ref.reportValidity()` /
+> `ref.setCustomValidity()`); reporting/submitting a failure flips the field into the error state.
 
 **Deferred to a later release:** the legacy _standard_ variant; non-text input types (email,
-password, number, search, tel, url, `inputmode`, `pattern`); the **validation & error system**
-(`error` flag, error text, the required asterisk / `no-asterisk`, constraint validation, custom
-validity, the `invalid` event) — note `maxlength` ships only as the counter's soft cap, not as
-validation; select mode; a dedicated number field; and input masking.
+password, number, search, tel, url, `inputmode`, `pattern`); select mode; a dedicated number
+field; and input masking.
 
 ## Accessibility
 

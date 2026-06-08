@@ -21,6 +21,8 @@
         placeholder,
         onfocus,
         onblur,
+        oninput,
+        oninvalid,
         ref = $bindable<HTMLInputElement | null>(null),
         ...restProps
     }: InputProps = $props();
@@ -36,6 +38,14 @@
         ctx.setFocused(false);
         onblur?.(event);
     }
+    function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
+        ctx.setInvalid(false); // editing clears a reported constraint error
+        oninput?.(event as Parameters<NonNullable<typeof oninput>>[0]);
+    }
+    function handleInvalid(event: Event & { currentTarget: HTMLInputElement }) {
+        ctx.setInvalid(true); // a reported/submitted constraint failure
+        oninvalid?.(event as Parameters<NonNullable<typeof oninvalid>>[0]);
+    }
 </script>
 
 <input
@@ -43,6 +53,7 @@
     bind:value={ctx.value}
     disabled={ctx.disabled}
     readonly={ctx.readonly}
+    required={ctx.required}
     maxlength={ctx.maxlength}
     {placeholder}
     {...restProps}
@@ -51,6 +62,9 @@
     class={styles.input()}
     data-slot="input"
     aria-describedby={ctx.describedBy}
+    aria-invalid={ctx.error || undefined}
     onfocus={handleFocus}
     onblur={handleBlur}
+    oninput={handleInput}
+    oninvalid={handleInvalid}
 />

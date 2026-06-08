@@ -51,6 +51,12 @@ export type Props = Omit<HTMLInputAttributes, 'size' | 'value' | 'prefix' | 'typ
     fullWidth?: boolean;
     /** Raise the field with a resting shadow that deepens and lifts on focus. @default false */
     elevation?: boolean;
+    /** Manually paint the error state (also set by a reported constraint failure). @default false */
+    error?: boolean;
+    /** Message shown while in error; replaces the supporting text (empty keeps it). */
+    errorText?: string;
+    /** Suppress the required asterisk while keeping `required` semantics. @default false */
+    noAsterisk?: boolean;
     /** `bind:ref` to the underlying `<input>` element. @default null */
     ref?: HTMLInputElement | null;
     /** Extra classes merged onto the root (via tailwind-merge). */
@@ -86,6 +92,12 @@ export type TextAreaProps = Omit<HTMLTextareaAttributes, 'value' | 'cols'> & {
     fullWidth?: boolean;
     /** Resting shadow that deepens and lifts on focus. @default false */
     elevation?: boolean;
+    /** Manually paint the error state (also set by a reported constraint failure). @default false */
+    error?: boolean;
+    /** Message shown while in error; replaces the supporting text (empty keeps it). */
+    errorText?: string;
+    /** Suppress the required asterisk while keeping `required` semantics. @default false */
+    noAsterisk?: boolean;
     /** `bind:ref` to the underlying `<textarea>` element. @default null */
     ref?: HTMLTextAreaElement | null;
     /** Extra classes merged onto the root (via tailwind-merge). */
@@ -93,8 +105,5 @@ export type TextAreaProps = Omit<HTMLTextareaAttributes, 'value' | 'cols'> & {
 };
 
 // Deferred (next): the legacy `standard` variant; non-text input `type`s
-// (email/password/number/search/tel/url, `inputmode`, `pattern`); the validation
-// & error system (`error` flag, `errorText`, the required asterisk + `noAsterisk`,
-// constraint validation, `setCustomValidity`, the `invalid` event) — `maxlength`
-// ships only as the counter's soft cap, not as validation; select mode; a
+// (email/password/number/search/tel/url, `inputmode`, `pattern`); select mode; a
 // dedicated number field; and input masking.

@@ -100,6 +100,17 @@
         </div>
     </section>
 
+    <!-- ── Validation & error ───────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Validation &amp; error</h2>
+        <div class="demo-grid">
+            <TextField label="Required" required supportingText="We need this one." />
+            <TextField label="Outlined error" error errorText="Enter a valid value." value="nope" />
+            <TextField label="Filled error" variant="filled" error errorText="Invalid value." value="x" />
+            <TextField label="No asterisk" required noAsterisk supportingText="Required, glyph suppressed." />
+        </div>
+    </section>
+
     <!-- ── TextArea (multiline) ─────────────────────────────────────── -->
     <section>
         <h2 class="demo-h2">TextArea <span class="demo-hint">— multiline sibling, same parts</span></h2>
