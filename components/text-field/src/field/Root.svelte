@@ -22,6 +22,7 @@
     import { textField } from '../text-field.variants';
     import { twMerge } from 'tailwind-merge';
     import { setFieldContext, type FieldContext } from './field-context';
+    import { MAX_SUGGESTIONS } from '../config';
     import type { Snippet } from 'svelte';
     import type { TextFieldVariant, TextFieldSize, TextFieldTint } from '../types';
 
@@ -40,6 +41,8 @@
         required?: boolean;
         noAsterisk?: boolean;
         maxlength?: number;
+        /** Autosuggest values shown on focus (capped by the build-time MAX_SUGGESTIONS). */
+        suggestions?: string[];
         id?: string;
         value?: string;
         class?: string;
@@ -61,11 +64,19 @@
         required = false,
         noAsterisk = false,
         maxlength,
+        suggestions = [],
         id,
         value = $bindable(''),
         class: className = '',
         children,
     }: RootProps = $props();
+
+    if (suggestions.length > MAX_SUGGESTIONS) {
+        throw new Error(
+            `@smuit/text-field: ${suggestions.length} suggestions exceeds the build-time cap MAX_SUGGESTIONS ` +
+                `(${MAX_SUGGESTIONS}). Autosuggest is for short lists — use a Select or search for long ones.`,
+        );
+    }
 
     uid += 1;
     const autoId = `smuit-text-field-${uid}`;
@@ -73,6 +84,8 @@
     let hasLeading = $state(false);
     let hasSupporting = $state(false);
     let invalid = $state(false);
+    let open = $state(false);
+    let activeIndex = $state(-1);
 
     const ctx: FieldContext = {
         get inputId() {
@@ -149,6 +162,47 @@
         },
         setInvalid(v) {
             invalid = v;
+        },
+        get suggestions() {
+            return suggestions;
+        },
+        get hasSuggestions() {
+            return suggestions.length > 0;
+        },
+        get open() {
+            return open && suggestions.length > 0;
+        },
+        get activeIndex() {
+            return activeIndex;
+        },
+        get listId() {
+            return `${this.inputId}-listbox`;
+        },
+        optionId(i) {
+            return `${this.inputId}-opt-${i}`;
+        },
+        openList() {
+            if (suggestions.length) open = true;
+        },
+        closeList() {
+            open = false;
+            activeIndex = -1;
+        },
+        move(delta) {
+            open = true;
+            const n = suggestions.length;
+            activeIndex = activeIndex < 0 ? (delta > 0 ? 0 : n - 1) : (activeIndex + delta + n) % n;
+        },
+        select(i) {
+            value = suggestions[i];
+            open = false;
+            activeIndex = -1;
+        },
+        selectActive() {
+            this.select(activeIndex);
+        },
+        setActive(i) {
+            activeIndex = i;
         },
     };
     setFieldContext(ctx);

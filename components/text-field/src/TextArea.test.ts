@@ -30,12 +30,12 @@ test('defaults to 3 rows and a vertical-resize control', () => {
     expect(textarea().className).toContain('resize-y');
 });
 
-test('autosize swaps to content sizing and disables manual resize', () => {
-    render(TextArea, { label: 'Auto', autosize: true });
-    const cls = textarea().className;
-    expect(cls).toContain('resize-none');
-    expect(cls).toContain('field-sizing:content');
-    expect(cls).not.toContain('resize-y');
+test('autosize swaps to content sizing (tf-autosize) and exposes the rows floor', () => {
+    render(TextArea, { label: 'Auto', autosize: true, rows: 2 });
+    const ta = textarea();
+    expect(ta.className).toContain('tf-autosize');
+    expect(ta.className).not.toContain('resize-y');
+    expect(ta.style.getPropertyValue('--tf-rows')).toBe('2');
 });
 
 test('reflects a bound value and floats the label when populated', () => {

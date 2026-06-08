@@ -49,6 +49,28 @@ export interface FieldContext {
     setSupporting(value: boolean): void;
     /** The control reports/clears a constraint-validation failure. */
     setInvalid(value: boolean): void;
+
+    // ── Autosuggest (combobox) ────────────────────────────────────────────────
+    /** Suggestion values shown on focus (the full list; the consumer pre-filters). */
+    readonly suggestions: string[];
+    readonly hasSuggestions: boolean;
+    /** The suggestion list is open. */
+    readonly open: boolean;
+    /** Index of the active (highlighted) option, or -1. */
+    readonly activeIndex: number;
+    /** `id` of the listbox (for `aria-controls`). */
+    readonly listId: string;
+    /** `id` of option `index` (for `aria-activedescendant`). */
+    optionId(index: number): string;
+    openList(): void;
+    closeList(): void;
+    /** Move the active option by `delta`, opening + wrapping as needed. */
+    move(delta: number): void;
+    /** Commit suggestion `index` as the value and close. */
+    select(index: number): void;
+    /** Commit the active option (if any). */
+    selectActive(): void;
+    setActive(index: number): void;
 }
 
 const KEY = Symbol('smuit-field');
