@@ -24,7 +24,7 @@ export const textField = tv({
     slots: {
         root: 'tf flex flex-col gap-1.5 text-left',
         container:
-            'tf-container relative flex w-full items-center gap-2 transition-[background-color,border-color,box-shadow] duration-150',
+            'tf-container relative flex w-full items-center gap-2 transition-[background-color,border-color,box-shadow,transform] duration-150',
         field: 'tf-field relative flex min-w-0 flex-1 items-center gap-1',
         label: 'tf-label pointer-events-none absolute max-w-full origin-left truncate transition-all duration-150 ease-out',
         input: 'tf-input w-full min-w-0 border-0 bg-transparent p-0 text-base text-g-900 outline-none',
@@ -40,9 +40,10 @@ export const textField = tv({
         variant: {
             filled: {
                 // items-end: bottom-align the input so the floated label has
-                // clear room above it (MD filled behaviour). Geometry in CSS.
-                container:
-                    'items-end rounded-t-md border-b border-g-400 bg-g-100 px-3.5 hover:bg-g-150 focus-within:border-[var(--tf-accent)] focus-within:shadow-[inset_0_-2px_0_0_var(--tf-accent)]',
+                // clear room above it (MD filled behaviour). The focus active
+                // indicator is the ::after bar in CSS (leaves box-shadow free
+                // for `elevation`). Geometry in CSS.
+                container: 'items-end rounded-t-md border-b border-g-400 bg-g-100 px-3.5 hover:bg-g-150',
             },
             outlined: {
                 container:
@@ -82,6 +83,14 @@ export const textField = tv({
             },
             false: {},
         },
+        // Elevation: a resting drop shadow that deepens and lifts 2px on focus.
+        // Drop shadow lives in --tw-shadow; the outlined focus ring lives in
+        // --tw-ring-shadow and the filled indicator is the ::after bar, so they
+        // compose rather than clobber the box-shadow.
+        elevation: {
+            true: { container: 'shadow-sm focus-within:-translate-y-0.5 focus-within:shadow-lg' },
+            false: {},
+        },
     },
     defaultVariants: {
         variant: 'outlined',
@@ -89,6 +98,7 @@ export const textField = tv({
         tint: 'primary',
         fullWidth: false,
         disabled: false,
+        elevation: false,
     },
 });
 

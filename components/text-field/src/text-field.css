@@ -27,7 +27,9 @@
         --tf-label-float-color: var(--surface-primary-accent);
         --tf-label-disabled-color: var(--color-g-400);
         --tf-placeholder-color: var(--color-g-400);
-        --tf-notch-bg: var(--page-bg);
+        /* --tf-notch-bg: the backdrop the outlined floated label paints over the
+           top border. NOT declared here so an ancestor can set it to its own
+           surface (e.g. a tinted card); the notch rule falls back to --page-bg. */
     }
 
     /* ── Tint → focus accent (theme-independent semantic tokens) ─────── */
@@ -63,6 +65,21 @@
     .tf-container[data-variant='filled'] {
         padding-bottom: 0.45rem;
     }
+    /* Filled active indicator — a 2px accent bar that grows from the centre on
+       focus (a ::after bar, so box-shadow stays free for `elevation`). */
+    .tf-container[data-variant='filled']::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        bottom: -1px;
+        height: 2px;
+        background: var(--tf-accent);
+        transform: scaleX(0);
+        transition: transform 0.15s ease-out;
+    }
+    .tf-container[data-variant='filled']:focus-within::after {
+        transform: scaleX(1);
+    }
 
     /* ── Floating label (container-relative) ────────────────────────── */
     .tf-label {
@@ -76,6 +93,11 @@
     }
     .tf-container[data-floated='true'] .tf-label {
         color: var(--tf-label-float-color);
+        /* The lifted label alone reads as a small-caps, semibold field caption.
+           (The placeholder is the input's ::placeholder — unaffected.) */
+        font-weight: 600;
+        text-transform: capitalize;
+        font-variant-caps: small-caps;
     }
     /* Outlined: the floated label rides the top border, with a notch backdrop
        (nudged 2px above the centre line so it sits cleanly on the stroke). */
@@ -84,7 +106,7 @@
         left: calc(var(--tf-label-left) - 0.25rem);
         transform: translateY(calc(-50% - 2px)) scale(0.8);
         padding-inline: 0.25rem;
-        background: var(--tf-notch-bg);
+        background: var(--tf-notch-bg, var(--page-bg));
     }
     /* Filled: the input is bottom-aligned, so the resting label sits over it
        (also bottom-aligned) and the floated label rises to the top of the fill. */

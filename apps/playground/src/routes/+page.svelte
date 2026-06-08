@@ -6,6 +6,7 @@
 <script lang="ts">
     import { flagContrast } from '$lib/contrast';
     import { ripple, rippleVariants } from '@smuit/ripple';
+    import { TextField } from '@smuit/text-field';
 
     type PaletteName = 'mono' | 'primary' | 'secondary' | 'tertiary' | 'error' | 'warning' | 'success';
 
@@ -303,6 +304,7 @@
             style="
                 --fa: {sAccent}; --fg: {sFg}; --bd: {sBorder}; --muted: {sBgMuted};
                 --solid: {sSolid}; --solid-hover: {sSolidHover}; --solid-fg: {sSolidFg};
+                --tf-notch-bg: {sBg};
                 background: {sBg};
                 border: 1px solid {sBorder};
                 border-radius: 1rem;
@@ -311,14 +313,8 @@
             "
         >
             <div class="grid2">
-                <label class="field">
-                    <span class="lbl">Full name</span>
-                    <input class="form-control" type="text" bind:value={fName} placeholder="Jane Doe" />
-                </label>
-                <label class="field">
-                    <span class="lbl">Email</span>
-                    <input class="form-control" type="email" bind:value={fEmail} placeholder="you@example.com" />
-                </label>
+                <TextField label="Full name" placeholder="Jane Doe" bind:value={fName} fullWidth elevation />
+                <TextField label="Email" placeholder="you@example.com" bind:value={fEmail} fullWidth elevation />
             </div>
 
             <label class="field">

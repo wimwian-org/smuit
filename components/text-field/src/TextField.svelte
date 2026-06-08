@@ -38,6 +38,7 @@
         leadingIcon,
         trailingIcon,
         fullWidth = false,
+        elevation = false,
         disabled = false,
         readonly = false,
         placeholder,
@@ -64,7 +65,7 @@
     const hasBottom = $derived(!!supportingText || hasCounter);
     const counterLabel = $derived(`${value.length} / ${maxlength}`);
 
-    const styles = $derived(textField({ variant, size, tint, fullWidth, disabled }));
+    const styles = $derived(textField({ variant, size, tint, fullWidth, elevation, disabled }));
 
     function handleFocus(event: FocusEvent & { currentTarget: HTMLInputElement }) {
         focused = true;
@@ -85,6 +86,7 @@
         data-floated={floated}
         data-disabled={disabled || undefined}
         data-readonly={readonly || undefined}
+        data-elevation={elevation || undefined}
         data-hide-label={hideLabel || undefined}
         data-has-leading={leadingIcon ? true : undefined}
     >
