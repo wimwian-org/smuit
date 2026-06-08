@@ -8,6 +8,7 @@ import { page } from '@vitest/browser/context';
 import { render } from 'vitest-browser-svelte';
 import { createRawSnippet } from 'svelte';
 import TextField from './TextField.svelte';
+import CompoundHarness from './field-compound.test.svelte';
 
 afterEach(() => {
     document.body.innerHTML = '';
@@ -177,4 +178,22 @@ test('binds ref to the underlying input element', () => {
 test('merges a consumer class onto the root', () => {
     render(TextField, { label: 'Styled', class: 'my-custom-field' });
     expect((document.querySelector('.tf') as HTMLElement).className).toContain('my-custom-field');
+});
+
+// ── composable parts (compound API) ───────────────────────────────────────────
+test('composes via the Field.* parts directly', async () => {
+    render(CompoundHarness, {});
+    await expect.element(page.getByRole('textbox', { name: 'Email' })).toBeInTheDocument();
+    const input = document.querySelector('input') as HTMLInputElement;
+    const support = document.querySelector('[data-slot="supporting"]') as HTMLElement;
+    // label↔input wiring, supporting describedby, leading + counter parts present
+    expect(input.getAttribute('aria-describedby')).toBe(support.id);
+    expect(document.querySelector('[data-slot="leading"]')?.textContent).toContain('@');
+    expect(container().dataset.hasLeading).toBe('true');
+    expect(document.querySelector('[data-slot="counter"]')?.textContent?.replace(/\s+/g, ' ')).toContain('0 / 10');
+
+    await page.getByRole('textbox', { name: 'Email' }).fill('ada@x.io');
+    await vi.waitFor(() =>
+        expect(document.querySelector('[data-slot="counter"]')?.textContent?.replace(/\s+/g, ' ')).toContain('8 / 10'),
+    );
 });

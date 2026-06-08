@@ -38,6 +38,40 @@ pnpm add @smuit/text-field
 </TextField>
 ```
 
+### Composition — the `Field.*` parts
+
+`<TextField>` is a convenience wrapper over a set of composable parts. Reach for the parts
+directly when you need full control over the layout. A `Field.Root` owns the shared state (id
+wiring, value, disabled/readonly, size/variant/tint, focus + float, counter) and publishes it via
+context to the parts beneath it.
+
+```svelte
+<script>
+    import { Field } from '@smuit/text-field';
+    let email = $state('');
+</script>
+
+<Field.Root bind:value={email} variant="filled" maxlength={120}>
+    <Field.Box>
+        <Field.Label>Email</Field.Label>
+        <Field.Adornment side="leading"><MailIcon /></Field.Adornment>
+        <Field.Input placeholder="you@example.com" />
+        <Field.Adornment side="trailing">
+            <button type="button" aria-label="Clear">×</button>
+        </Field.Adornment>
+    </Field.Box>
+    <Field.Caption>
+        <Field.Supporting>We never share it.</Field.Supporting>
+        <Field.Counter />
+    </Field.Caption>
+</Field.Root>
+```
+
+Parts: **`Field.Root`** (shell + context), **`Field.Box`** (the surface), **`Field.Label`**,
+**`Field.Adornment`** (`side="leading" | "trailing" | "prefix" | "suffix"`), **`Field.Input`**,
+**`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**. The same parts
+back the forthcoming `TextArea`.
+
 ## Props
 
 | Prop             | Type                                                  | Default      | Description                                                      |

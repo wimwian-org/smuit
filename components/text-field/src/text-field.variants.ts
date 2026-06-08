@@ -25,9 +25,8 @@ export const textField = tv({
         root: 'tf flex flex-col gap-1.5 text-left',
         container:
             'tf-container relative flex w-full items-center gap-2 transition-[background-color,border-color,box-shadow,transform] duration-150',
-        field: 'tf-field relative flex min-w-0 flex-1 items-center gap-1',
         label: 'tf-label pointer-events-none absolute max-w-full origin-left truncate transition-all duration-150 ease-out',
-        input: 'tf-input w-full min-w-0 border-0 bg-transparent p-0 text-base text-g-900 outline-none',
+        input: 'tf-input min-w-0 flex-1 border-0 bg-transparent p-0 text-base text-g-900 outline-none',
         leading: 'tf-leading flex shrink-0 items-center text-g-600',
         trailing: 'tf-trailing flex shrink-0 items-center text-g-600',
         prefix: 'tf-prefix shrink-0 select-none text-base text-g-500',
