@@ -104,6 +104,5 @@ export type TextAreaProps = Omit<HTMLTextareaAttributes, 'value' | 'cols'> & {
     class?: string;
 };
 
-// Deferred (next): the legacy `standard` variant; non-text input `type`s
-// (email/password/number/search/tel/url, `inputmode`, `pattern`); select mode; a
-// dedicated number field; and input masking.
+// Deferred (next): non-text input `type`s (email/password/number/search/tel/url,
+// `inputmode`, `pattern`); select mode; a dedicated number field; and input masking.

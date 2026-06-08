@@ -67,9 +67,14 @@
     .tf-container[data-has-leading] {
         --tf-label-left: calc(var(--tf-pad-x) + 1.75rem);
     }
-    /* Filled (single-line): the input is bottom-aligned (items-end), leaving the
-       top of the fill free for the floated label. */
-    .tf-container[data-variant='filled']:not([data-multiline]) {
+    /* Standard (legacy underline): no horizontal padding, so the underline spans
+       the full width. Shares the bottom-aligned + indicator mechanics below. */
+    .tf-container[data-variant='standard'] {
+        --tf-pad-x: 0;
+    }
+    /* Filled / standard (single-line): the input is bottom-aligned (items-end),
+       leaving the top free for the floated label. */
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) {
         padding-bottom: 0.45rem;
     }
     /* Multiline (textarea): top-aligned, height driven by the textarea's rows,
@@ -78,9 +83,9 @@
         min-height: 0;
         padding-block: 1.5rem 0.625rem;
     }
-    /* Filled active indicator — a 2px accent bar that grows from the centre on
-       focus (a ::after bar, so box-shadow stays free for `elevation`). */
-    .tf-container[data-variant='filled']::after {
+    /* Filled / standard active indicator — a 2px accent bar that grows from the
+       centre on focus (a ::after bar, so box-shadow stays free for `elevation`). */
+    .tf-container:is([data-variant='filled'], [data-variant='standard'])::after {
         content: '';
         position: absolute;
         inset-inline: 0;
@@ -90,7 +95,7 @@
         transform: scaleX(0);
         transition: transform 0.15s ease-out;
     }
-    .tf-container[data-variant='filled']:focus-within::after {
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):focus-within::after {
         transform: scaleX(1);
     }
 
@@ -121,14 +126,15 @@
         padding-inline: 0.25rem;
         background: var(--tf-notch-bg, var(--page-bg));
     }
-    /* Filled (single-line): the input is bottom-aligned, so the resting label
-       sits over it; the floated label rises to the top of the fill. */
-    .tf-container[data-variant='filled']:not([data-multiline]) .tf-label {
+    /* Filled / standard (single-line): the input is bottom-aligned, so the
+       resting label sits over it; the floated label rises to the top. */
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) .tf-label {
         top: auto;
         bottom: 0.45rem;
         transform: translateY(0);
     }
-    .tf-container[data-variant='filled'][data-floated='true']:not([data-hide-label]) .tf-label {
+    .tf-container:is([data-variant='filled'], [data-variant='standard'])[data-floated='true']:not([data-hide-label])
+        .tf-label {
         top: 0.4rem;
         bottom: auto;
         transform: scale(0.8);
