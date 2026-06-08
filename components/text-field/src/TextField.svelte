@@ -56,12 +56,13 @@
     const supportId = $derived(`${inputId}-support`);
 
     let focused = $state(false);
-    const populated = $derived((value ?? '').length > 0);
+    const populated = $derived(value.length > 0);
     // The label floats when the field is focused, holds a value, or has no
     // visible label of its own (hidden-label mode shows the placeholder instead).
     const floated = $derived(hideLabel || focused || populated);
     const hasCounter = $derived(maxlength != null);
     const hasBottom = $derived(!!supportingText || hasCounter);
+    const counterLabel = $derived(`${value.length} / ${maxlength}`);
 
     const styles = $derived(textField({ variant, size, tint, fullWidth, disabled }));
 
@@ -75,7 +76,7 @@
     }
 </script>
 
-<div class={twMerge(styles.root(), String(className ?? ''))} data-tint={tint}>
+<div class={twMerge(styles.root(), className)} data-tint={tint}>
     <div
         class={styles.container()}
         data-slot="container"
@@ -129,9 +130,7 @@
         <div class={styles.bottom()} data-slot="bottom">
             <span class={styles.supporting()} data-slot="supporting" id={supportId}>{supportingText ?? ''}</span>
             {#if hasCounter}
-                <span class={styles.counter()} data-slot="counter" aria-hidden="true"
-                    >{(value ?? '').length} / {maxlength}</span
-                >
+                <span class={styles.counter()} data-slot="counter" aria-hidden="true">{counterLabel}</span>
             {/if}
         </div>
     {/if}

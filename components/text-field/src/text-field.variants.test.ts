@@ -29,16 +29,12 @@ test('small size shrinks the text utilities', () => {
     expect(s.suffix()).toContain('text-sm');
 });
 
-test('tint maps to the retinting utility on the root', () => {
-    expect(textField({ tint: 'secondary' }).root()).toContain('secondary');
-    expect(textField({ tint: 'tertiary' }).root()).toContain('tertiary');
-    // primary and neutral carry no palette class: primary is the default
-    // `--color-c-*`, and neutral is repointed to the ground scale in CSS.
-    for (const tint of ['primary', 'neutral'] as const) {
-        const root = textField({ tint }).root();
-        expect(root).not.toContain('secondary');
-        expect(root).not.toContain('tertiary');
-        expect(root).not.toContain('mono');
+test('tint is class-free on the root (driven by data-tint + CSS tokens)', () => {
+    // The accent is set per [data-tint] via --tf-accent in CSS, so no tint
+    // changes the root class string.
+    const base = textField({ tint: 'primary' }).root();
+    for (const tint of ['neutral', 'secondary', 'tertiary'] as const) {
+        expect(textField({ tint }).root()).toBe(base);
     }
 });
 

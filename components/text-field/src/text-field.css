@@ -18,18 +18,28 @@
         --tf-pad-x: 0.875rem;
         --tf-height: 3.5rem;
         --tf-label-rest: 1rem;
-        /* Focus accent — content scale by default, so primary/secondary/tertiary
-           tints follow the active `--color-c-*`; neutralised below. */
-        --tf-accent: var(--color-c-500);
+        /* Focus accent + floated-label colour. Driven by the per-tint semantic
+           surface tokens below (not the `--color-c-*` content scale), so the
+           tint works under both the runtime and the flat theme without relying
+           on a tint utility class. Default = primary. */
+        --tf-accent: var(--surface-primary-accent);
         --tf-label-color: var(--color-g-600);
-        --tf-label-float-color: var(--color-c-600);
+        --tf-label-float-color: var(--surface-primary-accent);
         --tf-label-disabled-color: var(--color-g-400);
         --tf-placeholder-color: var(--color-g-400);
         --tf-notch-bg: var(--page-bg);
     }
 
-    /* Neutral tint: repoint the accent at the ground scale so the focus ring and
-       floated label read grey instead of the primary content colour. */
+    /* ── Tint → focus accent (theme-independent semantic tokens) ─────── */
+    .tf[data-tint='secondary'] {
+        --tf-accent: var(--surface-secondary-accent);
+        --tf-label-float-color: var(--surface-secondary-accent);
+    }
+    .tf[data-tint='tertiary'] {
+        --tf-accent: var(--surface-tertiary-accent);
+        --tf-label-float-color: var(--surface-tertiary-accent);
+    }
+    /* Neutral: a theme-flipping grey from the ground scale. */
     .tf[data-tint='neutral'] {
         --tf-accent: var(--color-g-700);
         --tf-label-float-color: var(--color-g-700);
