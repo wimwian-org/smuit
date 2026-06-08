@@ -183,6 +183,8 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         gap: 1.5rem 1.25rem;
-        align-items: start;
+        /* Line fields up by their input line (≈ the underline), so rows with
+           mixed sizes or supporting text don't align on the box top. */
+        align-items: baseline;
     }
 </style>
