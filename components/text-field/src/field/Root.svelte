@@ -71,6 +71,8 @@
         children,
     }: RootProps = $props();
 
+    // Init-time guard against static misuse; an initial read is intentional.
+    // svelte-ignore state_referenced_locally
     if (suggestions.length > MAX_SUGGESTIONS) {
         throw new Error(
             `@smuit/text-field: ${suggestions.length} suggestions exceeds the build-time cap MAX_SUGGESTIONS ` +
