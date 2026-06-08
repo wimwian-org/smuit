@@ -24,7 +24,7 @@ export type ListItemType = 'text' | 'button' | 'link';
 export type ListRootProps = Omit<HTMLAttributes<HTMLUListElement>, 'children'> & {
     /** Visual treatment (M3 design style). @default "baseline" */
     variant?: ListVariant;
-    /** Focus-accent palette for interactive rows. @default "primary" */
+    /** Tint palette — fills, hover/pressed state layers, and focus outline. @default "neutral" */
     tint?: ListTint;
     /** Draw a divider between rows (baseline only). @default false */
     divider?: boolean;

@@ -25,7 +25,7 @@ test('renders a ul with role=list and the baseline defaults', async () => {
     await expect.element(page.getByRole('list')).toBeInTheDocument();
     const el = ul();
     expect(el.dataset.variant).toBe('baseline');
-    expect(el.dataset.tint).toBe('primary');
+    expect(el.dataset.tint).toBe('neutral');
     expect(el.className).toContain('list');
 });
 
@@ -36,15 +36,18 @@ test('renders one listitem per List.Item', () => {
 });
 
 // ── variant axis ──────────────────────────────────────────────────────────────
-test('expressive variant sets the hook and applies the tonal-fill row class', () => {
+// The resting fill is CSS-driven (--list-rest, set per variant×tint in list.css);
+// the row class is the same in both variants — the variant is carried as a data hook.
+test('expressive variant sets the data hook and the rows take their fill from --list-rest', () => {
     render(Harness, { variant: 'expressive' });
     expect(ul().dataset.variant).toBe('expressive');
-    expect(rowByText('Headline one').className).toContain('bg-g-100');
+    expect(rowByText('Headline one').className).toContain('bg-[var(--list-rest)]');
 });
 
-test('baseline rows are transparent', () => {
+test('baseline variant sets the data hook and the rows take their fill from --list-rest', () => {
     render(Harness, {});
-    expect(rowByText('Headline one').className).toContain('bg-transparent');
+    expect(ul().dataset.variant).toBe('baseline');
+    expect(rowByText('Headline one').className).toContain('bg-[var(--list-rest)]');
 });
 
 test('divider sets the data hook on the container', () => {
@@ -89,7 +92,7 @@ test('href renders a link row marked interactive', async () => {
     expect(el.tagName).toBe('A');
     expect(el.getAttribute('href')).toBe('/somewhere');
     expect(el.dataset.interactive).toBe('true');
-    expect(el.className).toContain('hover:bg-g-150');
+    expect(el.className).toContain('hover:bg-[var(--list-hover)]');
 });
 
 test('type=button renders a button row and forwards onclick', async () => {

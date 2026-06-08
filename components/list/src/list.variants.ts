@@ -24,7 +24,7 @@ export const list = tv({
     slots: {
         root: 'list m-0 flex w-full list-none flex-col p-0',
         row: 'list-row',
-        item: 'list-item relative flex w-full items-center gap-3 text-left transition-colors duration-150',
+        item: 'list-item relative flex w-full items-center gap-3 bg-[var(--list-rest)] text-left transition-colors duration-150',
         leading: 'list-leading flex shrink-0 items-center text-g-600',
         text: 'list-text flex min-w-0 flex-1 flex-col justify-center gap-0.5',
         headline: 'list-headline truncate text-base text-g-900',
@@ -33,10 +33,12 @@ export const list = tv({
     },
     variants: {
         variant: {
-            // Flat, transparent rows; the optional divider lives in list.css.
-            baseline: { item: 'bg-transparent' },
-            // Tonal-fill rows; the gap + position-based rounding live in list.css.
-            expressive: { item: 'bg-g-100' },
+            // Both variants take their resting fill from `--list-rest` (set per
+            // variant×tint in list.css): baseline rests transparent, expressive
+            // carries a soft tinted fill. Gap + position-based rounding also live
+            // in list.css, keyed off the data-variant hook.
+            baseline: {},
+            expressive: {},
         },
         // Row height + supporting line; min-heights are keyed off data-lines in CSS.
         lines: {
@@ -45,10 +47,11 @@ export const list = tv({
         },
         // Interactive rows (button / link): the hover + pressed state layers must
         // be utilities (the resting fill is a utility, and a CSS @layer rule can't
-        // override it on hover). The focus-visible outline is in CSS (no utility
-        // sets `outline` at rest, so the cascade is clear there).
+        // override it on hover). They read the tinted `--list-hover` / `--list-press`
+        // (set per variant×tint in list.css). The focus-visible outline is in CSS
+        // (no utility sets `outline` at rest, so the cascade is clear there).
         interactive: {
-            true: { item: 'cursor-pointer hover:bg-g-150 active:bg-g-200' },
+            true: { item: 'cursor-pointer hover:bg-[var(--list-hover)] active:bg-[var(--list-press)]' },
             false: {},
         },
         disabled: {
@@ -61,10 +64,10 @@ export const list = tv({
             },
             false: {},
         },
-        // Tint carries no class: the only tinted surface is the focus-visible
-        // outline, which list.css drives through `--list-accent` per `[data-tint]`
-        // using the semantic surface tokens (works under both the runtime and flat
-        // themes, which name their tint utilities differently).
+        // Tint carries no class: list.css drives `--list-accent` per `[data-tint]`
+        // (from the semantic surface tokens), which feeds the resting fill, the
+        // hover/pressed state layers, and the focus outline. Works under both the
+        // runtime and flat themes, which name their tint utilities differently.
         tint: {
             neutral: {},
             primary: {},
@@ -77,7 +80,7 @@ export const list = tv({
         lines: 'one',
         interactive: false,
         disabled: false,
-        tint: 'primary',
+        tint: 'neutral',
     },
 });
 
