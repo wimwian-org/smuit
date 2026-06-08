@@ -68,10 +68,10 @@
         <h2 class="demo-h2">Decorations</h2>
         <div class="demo-grid">
             <TextField label="Amount" prefix="$" suffix=".00" supportingText="Prefix & suffix reveal on focus." />
-            <TextField label="Search" variant="filled">
+            <TextField label="Search" variant="filled" supportingText="Leading icon.">
                 {#snippet leadingIcon()}{@render search()}{/snippet}
             </TextField>
-            <TextField label="Password-style action">
+            <TextField label="Password-style action" supportingText="Trailing action.">
                 {#snippet trailingIcon()}
                     <button type="button" aria-label="Toggle">👁</button>
                 {/snippet}
@@ -134,7 +134,13 @@
         <h2 class="demo-h2">TextArea <span class="demo-hint">— multiline sibling, same parts</span></h2>
         <div class="demo-grid">
             <TextArea label="Bio" bind:value={bio} rows={3} maxlength={160} supportingText="A few words about you." />
-            <TextArea label="Notes (filled)" variant="filled" rows={3} placeholder="Type a few lines…" />
+            <TextArea
+                label="Notes (filled)"
+                variant="filled"
+                rows={3}
+                placeholder="Type a few lines…"
+                supportingText="Filled, resizable."
+            />
         </div>
         <div style="margin-top: 1rem">
             <TextArea label="Autosize" autosize rows={2} fullWidth placeholder="Grows as you type…" />
@@ -183,8 +189,10 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         gap: 1.5rem 1.25rem;
-        /* Line fields up by their input line (≈ the underline), so rows with
-           mixed sizes or supporting text don't align on the box top. */
-        align-items: baseline;
+        /* Line fields up by the bottom of the field box (the underline), so rows
+           with mixed box heights (sm/md) align on the indicator, not the top.
+           Keep each row's supporting-text presence uniform so the box bottoms
+           coincide with the underlines. */
+        align-items: end;
     }
 </style>
