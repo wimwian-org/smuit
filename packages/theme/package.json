@@ -1,0 +1,58 @@
+{
+    "name": "@smuit/theme",
+    "version": "0.1.0",
+    "description": "Material Design 3 design tokens, oklch palettes, and Tailwind CSS v4 theme for smuit components",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "default": "./src/index.css"
+        },
+        "./tailwind": "./src/tailwind.css",
+        "./tokens": "./src/tokens.css",
+        "./tints": "./src/tints.css",
+        "./typography": "./src/typography.css",
+        "./flat": "./src/theme/output.css",
+        "./package.json": "./package.json"
+    },
+    "scripts": {
+        "build:theme": "node src/theme/build-theme.ts"
+    },
+    "files": [
+        "src",
+        "LICENSE",
+        "README.md",
+        "CHANGELOG.md"
+    ],
+    "keywords": [
+        "material-design",
+        "material-design-3",
+        "design-tokens",
+        "tailwindcss",
+        "oklch",
+        "css",
+        "svelte"
+    ],
+    "author": "Anand Panchapakesan",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/smuit/smuit.git",
+        "directory": "packages/theme"
+    },
+    "devDependencies": {
+        "tailwindcss": "^4.3.0"
+    },
+    "peerDependencies": {
+        "tailwindcss": "^4.0.0"
+    },
+    "peerDependenciesMeta": {
+        "tailwindcss": {
+            "optional": true
+        }
+    }
+}

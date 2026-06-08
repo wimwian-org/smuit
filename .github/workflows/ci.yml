@@ -1,0 +1,35 @@
+name: CI
+
+on:
+    push:
+        branches: [master, dev]
+    pull_request:
+        branches: [master, dev]
+
+jobs:
+    verify:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.tool-versions'
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+
+            # Guard: the generated flat theme must match input.css. Catches a
+            # stale build or a hand-edit to the GENERATED output.css.
+            - name: Theme is up to date
+              run: pnpm check:theme
+
+            - name: Unit tests (node)
+              run: pnpm test --run
+
+            - name: Playground builds
+              run: pnpm --filter @smuit/playground build

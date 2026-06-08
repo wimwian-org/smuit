@@ -1,0 +1,31 @@
+{
+    "name": "@smuit/playground",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Interactive component sandbox for smuit development",
+    "type": "module",
+    "scripts": {
+        "theme": "node ../../packages/theme/src/theme/build-theme.ts",
+        "dev": "pnpm run theme && rm -rf node_modules/.vite && vite dev --force",
+        "build": "pnpm run theme && vite build",
+        "preview": "vite preview",
+        "check": "pnpm run theme && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "lint": "eslint .",
+        "format": "prettier --write ."
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-static": "^3.0.0",
+        "@sveltejs/kit": "^2.61.1",
+        "@sveltejs/vite-plugin-svelte": "^7.1.2",
+        "@tailwindcss/vite": "^4.3.0",
+        "svelte": "^5.55.10",
+        "svelte-check": "^4.4.8",
+        "tailwindcss": "^4.3.0",
+        "typescript": "^6.0.3",
+        "vite": "^8.0.14"
+    },
+    "dependencies": {
+        "@smuit/ripple": "workspace:*",
+        "@smuit/theme": "workspace:*"
+    }
+}

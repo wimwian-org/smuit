@@ -1,0 +1,83 @@
+/*
+ * @smuit/theme — flat theme source
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+/*
+ * Author the design here, then regenerate the distributable flat stylesheet:
+ *
+ *   pnpm --filter @smuit/theme build:theme
+ *
+ * The generator (build-theme.ts) bakes every tonal step, scale, surface token,
+ * and the type / elevation / shadow ramps into concrete values — no runtime
+ * color-mix(), contrast-color(), or light-dark(). Light is the default; dark is
+ * emitted both as a [data-theme='dark'] override AND a prefers-color-scheme
+ * fallback.
+ *
+ * Edit THIS file. Never edit output.css by hand; it is generated and the build
+ * is idempotent.
+ *
+ * Colour roles:
+ *   mono      — neutral / grayscale            (21 steps, 50…950)
+ *   primary   — brand                          (21 steps, 50…950)
+ *   secondary — tonal accent                   (21 steps, 50…950)
+ *   tertiary  — complementary accent           (21 steps, 50…950)
+ *   error     — destructive / invalid  (RAG)   (9 steps, 100…900)
+ *   warning   — caution                (RAG)   (9 steps, 100…900)
+ *   success   — positive / confirm     (RAG)   (9 steps, 100…900)
+ */
+@theme {
+    /* ── Base hues ───────────────────────────────────────────────── */
+    --color-mono: oklch(0.5 0 0);
+    --color-primary: oklch(0.65 0.23 34);
+    --color-secondary: oklch(0.421 0.193 328.4);
+    --color-tertiary: oklch(0.68 0.15 237);
+    --color-error: oklch(0.56 0.21 21);
+    --color-warning: oklch(0.93 0.18 103);
+    --color-success: oklch(0.55 0.1 132);
+
+    /* ── Fonts ───────────────────────────────────────────────────── */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', monospace;
+}
+
+/*
+ * ── Generator configuration ──────────────────────────────────────────────────
+ * Read by build-theme.ts to compute the type / elevation / shadow variants.
+ * These custom properties are configuration only; they are NOT copied into
+ * output.css.
+ *
+ * Every variant is symmetric around `md`. The step count chooses the label set:
+ *   3 → sm · md · lg
+ *   5 → xs · sm · md · lg · xl
+ *   7 → 2xs · xs · sm · md · lg · xl · 2xl
+ */
+:root {
+    /* ── Type variants ────────────────────────────────────────────────────────
+     * One named variant per typographic role. Each generates
+     * --text-<role>-<label> (+ --…--line-height) → text-<role>-<label> utilities.
+     *
+     *   --type-<role>: <steps> <midpoint> [ratio];
+     *     steps     3 | 5 | 7
+     *     midpoint  font size at md (px, rem, or unitless = px)
+     *     ratio     optional per-variant modular ratio (defaults to --font-ratio)
+     *
+     * The midpoint can differ per role (title 24, heading 20, body 16, code 14…).
+     */
+    --type-display: 3 36px;
+    --type-title: 3 24px;
+    --type-heading: 5 20px;
+    --type-body: 5 16px;
+    --type-label: 3 14px;
+    --type-code: 3 14px;
+
+    --font-ratio: 1.2; /* default modular ratio between adjacent steps */
+    --line-height-md: 1.5; /* unitless line-height at md (tightens as size grows) */
+
+    /* ── Elevation + shadow variant ───────────────────────────────────────────
+     * One shared variant drives both --elevation-<label> (dp) and --shadow-<label>.
+     */
+    --variant-elevation: 7; /* 3 | 5 | 7 */
+    --elevation-md: 14; /* dp at md */
+    --elevation-ratio: 1.8; /* multiplier between adjacent elevation steps */
+}

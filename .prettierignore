@@ -1,0 +1,25 @@
+# Build output
+build/
+dist/
+.svelte-kit/
+
+# Dependencies
+node_modules/
+
+# Lock files
+pnpm-lock.yaml
+
+# Misc
+.idea/
+*.min.js
+
+# Shell scripts (no Prettier parser)
+bin/
+
+# Generated snapshots
+src/routes/coverage.json
+src/routes/git-status.json
+src/routes/metadata.json
+
+# Generated flat theme — produced by build-theme.ts; must match generate() byte-for-byte
+packages/theme/src/theme/output.css

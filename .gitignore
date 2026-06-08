@@ -1,0 +1,27 @@
+node_modules/
+dist/
+build/
+.svelte-kit/
+coverage/
+coverage-browser/
+
+# Generated snapshots
+apps/playground/src/routes/coverage.json
+apps/playground/src/routes/git-status.json
+apps/playground/src/routes/metadata.json
+
+# Editor / OS
+.DS_Store
+*.log
+
+# Env
+.env
+.env.*
+!.env.example
+/.idea/
+
+# Audit output
+audit/
+/.claude/scheduled_tasks.lock
+__screenshots__/
+.vitest-attachments/

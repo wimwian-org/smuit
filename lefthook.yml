@@ -1,0 +1,36 @@
+# https://lefthook.dev/configuration/
+pre-commit:
+    parallel: true
+    jobs:
+        - name: format
+          glob: '*.{js,mjs,cjs,ts,svelte,css,json,md,html}'
+          run: pnpm prettier --write {staged_files}
+          stage_fixed: true
+        - name: lint
+          glob: '*.{js,mjs,cjs,ts,svelte}'
+          run: pnpm eslint {staged_files}
+        - name: theme-up-to-date
+          # Fail the commit if the generated flat theme drifts from input.css
+          # (a stale build, or a hand-edit to the GENERATED output.css).
+          glob: 'packages/theme/src/theme/{input.css,output.css,theme-gen.ts,build-theme.ts}'
+          run: pnpm check:theme
+        - name: branch-prune-reminder
+          skip:
+              - merge
+              - rebase
+          run: node scripts/branch-prune-reminder.mjs
+
+commit-msg:
+    jobs:
+        - name: commitlint
+          run: pnpm commitlint --edit {1}
+
+post-commit:
+    jobs:
+        - name: auto-changeset
+          skip:
+              - merge
+              - rebase
+              - ref: master
+              - ref: dev
+          run: node scripts/auto-changeset.mjs

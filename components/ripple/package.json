@@ -1,0 +1,55 @@
+{
+    "name": "@smuit/ripple",
+    "version": "0.0.0",
+    "description": "Material UI–style touch ripple for Svelte 5 — a use:ripple action and <Ripple> component with xs · sm · md · lg · xl variants.",
+    "type": "module",
+    "files": [
+        "dist",
+        "!dist/**/*.test.*",
+        "!dist/**/*.spec.*"
+    ],
+    "svelte": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "svelte": "./dist/index.js",
+            "default": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "scripts": {
+        "package": "svelte-package -i src -o dist -t",
+        "build": "svelte-package -i src -o dist -t",
+        "prepublishOnly": "svelte-package -i src -o dist -t"
+    },
+    "sideEffects": false,
+    "keywords": [
+        "svelte",
+        "svelte5",
+        "ripple",
+        "material",
+        "material-design",
+        "mui",
+        "animation",
+        "action"
+    ],
+    "author": "Anand Panchapakesan",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/smuit/smuit.git",
+        "directory": "components/ripple"
+    },
+    "peerDependencies": {
+        "svelte": "^5.0.0"
+    },
+    "devDependencies": {
+        "@sveltejs/package": "^2.3.0",
+        "svelte": "^5.55.10"
+    }
+}
