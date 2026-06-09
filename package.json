@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "description": "Material Design 3 components for Svelte",
+    "packageManager": "pnpm@11.4.0",
     "scripts": {
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "check:theme": "node scripts/check-theme.ts",
@@ -32,13 +33,6 @@
     "keywords": [],
     "author": "Anand Panchapakesan",
     "license": "MIT",
-    "devEngines": {
-        "packageManager": {
-            "name": "pnpm",
-            "version": "^11.4.0",
-            "onFail": "download"
-        }
-    },
     "type": "module",
     "devDependencies": {
         "@changesets/changelog-github": "^0.5.0",
