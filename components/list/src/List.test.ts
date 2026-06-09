@@ -4,10 +4,11 @@
  * Licensed under the MIT License.
  */
 import { afterEach, expect, test, vi } from 'vitest';
-import { page } from '@vitest/browser/context';
+import { page, userEvent } from '@vitest/browser/context';
 import { render } from 'vitest-browser-svelte';
 import Harness from './list-harness.test.svelte';
 import RefHarness from './list-ref.test.svelte';
+import SelectHarness from './list-select-harness.test.svelte';
 
 afterEach(() => {
     document.body.innerHTML = '';
@@ -135,4 +136,137 @@ test('binds ref to the underlying row element', () => {
 test('merges a consumer class onto the row', () => {
     render(Harness, {});
     expect(rowByText('Headline one').className).toContain('my-row');
+});
+
+// ── three-line layout ──────────────────────────────────────────────────────────
+test('lines=three opts the row into the clamped three-line layout', () => {
+    render(Harness, { lines: 'three' });
+    const row = rowByText('Headline one');
+    expect(row.dataset.lines).toBe('three');
+});
+
+// ── selection — container semantics ─────────────────────────────────────────────
+const control = (text: string) => rowByText(text).querySelector('[data-slot="control"]') as HTMLElement;
+
+test('a selection model switches the container role from list to listbox', () => {
+    render(SelectHarness, { selection: 'single' });
+    expect(ul().getAttribute('role')).toBe('listbox');
+    expect(ul().dataset.selection).toBe('single');
+    expect(ul().getAttribute('aria-multiselectable')).toBeNull();
+});
+
+test('multiple selection announces aria-multiselectable', () => {
+    render(SelectHarness, { selection: 'multiple', value: [] });
+    expect(ul().getAttribute('aria-multiselectable')).toBe('true');
+});
+
+test('selectable rows are role=option with aria-selected and a trailing control', () => {
+    render(SelectHarness, { selection: 'single' });
+    const ada = rowByText('Ada Lovelace');
+    expect(ada.getAttribute('role')).toBe('option');
+    expect(ada.getAttribute('aria-selected')).toBe('false');
+    expect(control('Ada Lovelace').dataset.control).toBe('radio');
+    expect(control('Ada Lovelace').getAttribute('aria-hidden')).toBe('true');
+});
+
+// ── selection — single ──────────────────────────────────────────────────────────
+test('single selection: clicking selects the option and exposes the choice', async () => {
+    const onValueChange = vi.fn();
+    render(SelectHarness, { selection: 'single', onValueChange });
+
+    await page.getByRole('option', { name: /Ada Lovelace/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith('ada');
+    expect(rowByText('Ada Lovelace').getAttribute('aria-selected')).toBe('true');
+    expect(control('Ada Lovelace').dataset.checked).toBe('true');
+
+    await page.getByRole('option', { name: /Grace Hopper/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith('grace');
+    expect(rowByText('Ada Lovelace').getAttribute('aria-selected')).toBe('false');
+    expect(rowByText('Grace Hopper').getAttribute('aria-selected')).toBe('true');
+});
+
+// ── selection — multiple ────────────────────────────────────────────────────────
+test('multiple selection: clicking toggles membership; control defaults to checkbox', async () => {
+    const onValueChange = vi.fn();
+    render(SelectHarness, { selection: 'multiple', value: [], onValueChange });
+    expect(control('Ada Lovelace').dataset.control).toBe('checkbox');
+
+    await page.getByRole('option', { name: /Ada Lovelace/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith(['ada']);
+    await page.getByRole('option', { name: /Alan Turing/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith(['ada', 'alan']);
+    await page.getByRole('option', { name: /Ada Lovelace/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith(['alan']);
+});
+
+test('control can be overridden on the list (switch)', () => {
+    render(SelectHarness, { selection: 'multiple', value: [], control: 'switch' });
+    expect(control('Ada Lovelace').dataset.control).toBe('switch');
+});
+
+test('a disabled option is announced, not clickable, and out of the roving order', () => {
+    render(SelectHarness, { selection: 'single' });
+    const edsger = rowByText('Edsger Dijkstra');
+    expect(edsger.getAttribute('role')).toBe('option');
+    expect(edsger.getAttribute('aria-disabled')).toBe('true');
+    expect(edsger.hasAttribute('data-roving')).toBe(false);
+});
+
+// ── roving keyboard navigation ──────────────────────────────────────────────────
+test('roving: exactly the first enabled option is tab-reachable', () => {
+    render(SelectHarness, { selection: 'single' });
+    expect(rowByText('Ada Lovelace').getAttribute('tabindex')).toBe('0');
+    expect(rowByText('Grace Hopper').getAttribute('tabindex')).toBe('-1');
+    expect(rowByText('Alan Turing').getAttribute('tabindex')).toBe('-1');
+    expect(rowByText('Edsger Dijkstra').hasAttribute('tabindex')).toBe(false);
+});
+
+test('roving: Arrow / Home / End move focus, skip disabled, and do not wrap', async () => {
+    render(SelectHarness, { selection: 'single' });
+    const ada = rowByText('Ada Lovelace');
+    ada.focus();
+    expect(document.activeElement).toBe(ada);
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(rowByText('Grace Hopper'));
+    await userEvent.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(rowByText('Alan Turing'));
+    // Past the last roving option (Edsger is disabled) → clamp, no wrap.
+    await userEvent.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(rowByText('Alan Turing'));
+
+    await userEvent.keyboard('{Home}');
+    expect(document.activeElement).toBe(ada);
+    await userEvent.keyboard('{End}');
+    expect(document.activeElement).toBe(rowByText('Alan Turing'));
+
+    // tabindex follows focus.
+    expect(rowByText('Alan Turing').getAttribute('tabindex')).toBe('0');
+    expect(ada.getAttribute('tabindex')).toBe('-1');
+});
+
+test('roving: Space toggles the focused option', async () => {
+    const onValueChange = vi.fn();
+    render(SelectHarness, { selection: 'multiple', value: [], onValueChange });
+    rowByText('Ada Lovelace').focus();
+    await userEvent.keyboard(' ');
+    expect(onValueChange).toHaveBeenLastCalledWith(['ada']);
+});
+
+test('opt-in roving works for a plain link/button list without a selection model', () => {
+    render(Harness, {});
+    // Default (no selection, roving off): links/buttons keep native tab order.
+    expect(rowByText('Link item').hasAttribute('data-roving')).toBe(false);
+});
+
+// ── subheaders ──────────────────────────────────────────────────────────────────
+test('subheaders render as presentational, non-item labels; sticky sets the hook', () => {
+    render(SelectHarness, { selection: 'single' });
+    const subs = Array.from(document.querySelectorAll('[data-slot="subheader"]')) as HTMLElement[];
+    expect(subs.length).toBe(2);
+    expect(subs[0].getAttribute('role')).toBe('presentation');
+    expect(subs[0].dataset.sticky).toBeUndefined();
+    expect(subs[1].dataset.sticky).toBe('true');
+    // A subheader is not a listitem / option.
+    expect(subs[0].matches('[data-slot="item"], [role="option"]')).toBe(false);
 });

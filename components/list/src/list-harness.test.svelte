@@ -15,17 +15,19 @@
         variant = 'baseline',
         tint = 'neutral',
         divider = false,
+        lines = undefined,
         onclick,
     }: {
         variant?: ListVariant;
         tint?: ListTint;
         divider?: boolean;
+        lines?: 'one' | 'two' | 'three';
         onclick?: (e: MouseEvent) => void;
     } = $props();
 </script>
 
 <List.Root {variant} {tint} {divider}>
-    <List.Item supporting="Supporting one" class="my-row">
+    <List.Item {lines} supporting="Supporting one" class="my-row">
         {#snippet leading()}<span data-testid="lead">L</span>{/snippet}
         Headline one
         {#snippet trailing()}<span data-testid="trail">T</span>{/snippet}

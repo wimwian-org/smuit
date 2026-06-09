@@ -43,4 +43,21 @@ test('slots expose the semantic class prefixes', () => {
     expect(s.headline()).toContain('list-headline');
     expect(s.supporting()).toContain('list-supporting');
     expect(s.trailing()).toContain('list-trailing');
+    expect(s.control()).toContain('list-control');
+    expect(s.subheader()).toContain('list-subheader');
+});
+
+test('one- and two-line rows truncate the supporting line; three-line wraps it', () => {
+    expect(list({ lines: 'one' }).supporting()).toContain('truncate');
+    expect(list({ lines: 'two' }).supporting()).toContain('truncate');
+    // Three-line clamps (in CSS) instead of truncating, and top-aligns the row.
+    expect(list({ lines: 'three' }).supporting()).not.toContain('truncate');
+    expect(list({ lines: 'three' }).item()).toContain('items-start');
+    expect(list({ lines: 'three' }).text()).toContain('justify-start');
+});
+
+test('the row carries a morph-friendly transition that stands down under reduced motion', () => {
+    const item = list().item();
+    expect(item).toContain('transition-[background-color,border-radius,transform]');
+    expect(item).toContain('motion-reduce:transition-none');
 });

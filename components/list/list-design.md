@@ -15,43 +15,48 @@ on the concrete API surface (slot names, item `type`s, roles). Reconciliation in
 
 ---
 
-## MVP Scope (v1)
+## Scope
 
-The first release is a **two-variant list** — **Baseline** (flat, edge-to-edge rows with optional
+The list is a **two-variant** surface — **Baseline** (flat, edge-to-edge rows with optional
 dividers) and **Expressive** (grouped, filled, position-rounded containers with spacing) — built
-from a composable `List.Root` / `List.Item` pair. Items support a leading slot, a headline,
-optional supporting text (one- and two-line layouts), a trailing slot, and three interactivity
-modes (static text, button, link). Selection, three-line density, roving keyboard navigation, and
-reordering are deferred.
+from a composable `List.Root` / `List.Item` / `List.Subheader` set. Items support a leading slot, a
+headline, optional supporting text (one/two/three-line layouts), a trailing slot, and three
+interactivity modes (static text, button, link). A `selection` model (single/multiple, with
+checkbox / radio / switch controls and `listbox`/`option` semantics), **roving** arrow-key
+navigation, sticky section **subheaders**, and the Expressive **press shape-morph** ship on top of
+that base. Drag-to-reorder and swipe actions remain deferred.
 
-### In scope — v1
+> The original v1 (released as `@smuit/list@0.1.x`) shipped the two variants, one/two-line rows,
+> slots, and static/button/link interactivity. The selection system, three-line density, roving
+> navigation, subheaders, and the Expressive press morph were layered on in a later minor — the
+> tables below mark each accordingly.
 
-| Area              | What ships                                                                                                                                          |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Variants**      | **Baseline** (flat, transparent rows, optional dividers) · **Expressive** (filled, grouped, position-based rounded containers, gaps).               |
-| **Composition**   | Compound `List.Root` (the `<ul role="list">`) + `List.Item` (the `<li>` row), content via snippets.                                                 |
-| **Layout**        | **One-line** and **two-line** items (headline; headline + supporting text).                                                                         |
-| **Slots**         | **Leading** (icon / avatar / image) and **trailing** (icon / text) snippets; headline (children); supporting text.                                  |
-| **Interactivity** | **Static** (`text`, a `<div>` row) · **button** (`onclick` → `<button>`) · **link** (`href` → `<a>`), with hover state-layer + visible focus.       |
-| **States**        | Enabled · hover · focus-visible · disabled.                                                                                                         |
-| **Theming**       | smuit surface/content tokens; tint (neutral/primary/secondary/tertiary) drives the focus accent; light/dark automatic.                              |
-| **A11y**          | `role="list"` on the container (preserved under `display:flex`); native `<li>` items; real `<a>`/`<button>` for interactive rows; visible AA focus. |
+### In scope
+
+| Area              | What ships                                                                                                                                         |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Variants**      | **Baseline** (flat, transparent rows, optional dividers) · **Expressive** (filled, grouped, position-based rounded containers, gaps).              |
+| **Composition**   | Compound `List.Root` (`<ul>`) + `List.Item` (the `<li>` row) + `List.Subheader` (section label), content via snippets.                             |
+| **Layout**        | **One-, two-, and three-line** items (headline; + supporting text; + clamped supporting block).                                                    |
+| **Slots**         | **Leading** (icon / avatar / image) and **trailing** (icon / text / control) snippets; headline (children); supporting text.                       |
+| **Interactivity** | **Static** (`text`, a `<div>` row) · **button** (`onclick` → `<button>`) · **link** (`href` → `<a>`), with hover state-layer + visible focus.      |
+| **Selection**     | `none` / `single` / `multiple`; rows with a `value` become `role="option"` toggles with a **checkbox / radio / switch** control; `bind:value`.     |
+| **Keyboard**      | **Roving** focus (Arrow Up/Down, Home/End — no wrap; Space/Enter toggle), always on under selection, opt-in via `roving` for link/button lists.    |
+| **Sections**      | `List.Subheader`, optionally **sticky**; in Expressive it opens a fresh rounded group.                                                             |
+| **States**        | Enabled · hover · focus-visible · **selected** · **pressed (Expressive morph)** · disabled.                                                        |
+| **Theming**       | smuit surface/content tokens; tint (neutral/primary/secondary/tertiary) drives the fill/state-layers/focus accent; light/dark automatic.           |
+| **A11y**          | `role="list"` (or `role="listbox"` + `option` rows under selection); native `<li>` items; real `<a>`/`<button>`; visible AA focus; reduced-motion. |
 
 ### Deferred — next
 
-| Area                       | Why it waits                                                                                                                  |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| **Selection**              | `selected` state, single/multi-select model, and trailing **checkbox / radio / switch** controls (`aria-selected`/roles).     |
-| **Three-line layout**      | The third text line (clamped supporting block) and its taller density; v1 ships one- and two-line only.                       |
-| **Roving keyboard nav**    | Arrow-key roving focus (`activateNextItem` / `activatePreviousItem`); v1 relies on the native tab order for `<a>`/`<button>`. |
-| **Reordering / swipe**     | Drag-to-reorder and swipe actions.                                                                                            |
-| **Sections / subheaders**  | Sticky section subheaders and grouping component.                                                                             |
-| **Expressive press morph** | The Expressive shape-morph **animation** on press; v1 ships the static position-based corner shapes only.                     |
+| Area                   | Why it waits                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Reordering / swipe** | Drag-to-reorder and swipe actions — a pointer-gesture + DOM-order-mutation system of its own. Still deferred. |
 
-> v1 ships a fully-themed, accessible two-variant list with leading/trailing slots, one/two-line
-> rows, and static/button/link interactivity. Held back is the **selection system**, **three-line
-> density**, **roving keyboard navigation**, and **Expressive motion**; later releases layer those
-> onto this base.
+> The list now ships a fully-themed, accessible two-variant surface with leading/trailing slots,
+> one/two/three-line rows, static/button/link interactivity, single & multiple **selection**,
+> **roving** keyboard navigation, sticky **subheaders**, and the Expressive **press morph**. Only
+> **drag-reorder / swipe** is held back for a later release.
 
 ---
 
@@ -234,22 +239,23 @@ tints the fill, state layers, and focus outline together.
 
 ## 7. Behavioural state matrix
 
-| Dimension       | Values                                       |
-| --------------- | -------------------------------------------- |
-| Variant         | baseline · expressive                        |
-| Layout          | one-line · two-line · (three-line, deferred) |
-| Interactivity   | text · button · link                         |
-| Decoration      | none · leading · trailing · both             |
-| State           | enabled · hover · focus · pressed · disabled |
-| Tint            | neutral · primary · secondary · tertiary     |
-| Position (exp.) | first · middle · last · only                 |
+| Dimension       | Values                                                  |
+| --------------- | ------------------------------------------------------- |
+| Variant         | baseline · expressive                                   |
+| Layout          | one-line · two-line · three-line                        |
+| Interactivity   | text · button · link · option (selectable)              |
+| Selection       | none · single · multiple (checkbox · radio · switch)    |
+| Decoration      | none · leading · trailing · both                        |
+| State           | enabled · hover · focus · selected · pressed · disabled |
+| Tint            | neutral · primary · secondary · tertiary                |
+| Position (exp.) | first · middle · last · only · group (subheader-split)  |
 
 ---
 
 ## 8. Out of scope (this bit)
 
-- **Selection controls.** Checkbox / radio / switch trailing controls and the single/multi-select
-  state model are a later release (they bring `aria-selected`/role changes and a selection context).
+- **Drag-reorder / swipe.** Pointer-gesture reordering and swipe actions (which mutate DOM order)
+  remain a later release.
 - **Menus.** An actionable popover menu is its own component, not a list mode.
 - **Virtualisation.** Large-list windowing is an app/runtime concern, not built in.
 
@@ -257,14 +263,14 @@ tints the fill, state layers, and focus outline together.
 
 ## 9. Source reconciliation
 
-| Topic        | Material Design 3                   | Material Web                                     | Resolution                                                          |
-| ------------ | ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------- |
-| Variant set  | Baseline & Expressive design styles | single list, token-themed                        | **baseline + expressive** as the `variant` axis (M3 visual split).  |
-| Item element | —                                   | `<md-list-item type="text/button/link">`         | **`<div>`/`<button>`/`<a>`** chosen from `type`/`href`/`onclick`.   |
-| Slots        | leading / trailing regions          | `start` / `end` / `headline` / `supporting-text` | **leading / trailing snippets + headline (children) + supporting**. |
-| Line count   | one / two / three-line              | one vs multi-line                                | **one + two-line** in v1; three-line deferred.                      |
-| Keyboard nav | roving focus within the list        | `activateNext/PreviousItem`                      | **deferred**; v1 uses native tab order for interactive rows.        |
-| Selection    | selectable list items               | (host-managed)                                   | **deferred** to a later release.                                    |
+| Topic        | Material Design 3                   | Material Web                                     | Resolution                                                           |
+| ------------ | ----------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
+| Variant set  | Baseline & Expressive design styles | single list, token-themed                        | **baseline + expressive** as the `variant` axis (M3 visual split).   |
+| Item element | —                                   | `<md-list-item type="text/button/link">`         | **`<div>`/`<button>`/`<a>`** chosen from `type`/`href`/`onclick`.    |
+| Slots        | leading / trailing regions          | `start` / `end` / `headline` / `supporting-text` | **leading / trailing snippets + headline (children) + supporting**.  |
+| Line count   | one / two / three-line              | one vs multi-line                                | **one / two / three-line** (three clamps the supporting block).      |
+| Keyboard nav | roving focus within the list        | `activateNext/PreviousItem`                      | **roving** Arrow/Home/End focus (auto under selection; opt-in else). |
+| Selection    | selectable list items               | (host-managed)                                   | **single / multiple** via `selection` + `value`; `option` rows.      |
 
 ## Acknowledgements
 
