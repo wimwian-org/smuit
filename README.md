@@ -73,6 +73,19 @@ pnpm format
 
 ### Consuming a component (downstream)
 
+The packages are published to **GitHub Packages** under the `@wimwian-org` scope. GitHub Packages
+requires authentication even to _install_, so point the scope at the registry and add a token in your
+project's `.npmrc`:
+
+```ini
+# .npmrc
+@wimwian-org:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+`GITHUB_TOKEN` must be a [personal access token](https://github.com/settings/tokens) with the
+`read:packages` scope (export it in your shell/CI, or paste the value inline). Then install normally:
+
 ```bash
 pnpm add @wimwian-org/button @wimwian-org/theme
 ```
