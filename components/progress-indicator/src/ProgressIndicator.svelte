@@ -50,7 +50,10 @@
 
     // Linear buffer (a second determinate channel) — linear + determinate only.
     const hasBuffer = $derived(!isCircular && !isIndeterminate && buffer != null);
-    const bufferClamped = $derived(buffer == null ? 0 : Math.min(Math.max(buffer, 0), max));
+    // bufferFraction is only read (via --progress-buffer) when hasBuffer is true,
+    // i.e. buffer != null — so the non-null assertion is safe and avoids a dead
+    // `buffer == null` guard branch.
+    const bufferClamped = $derived(Math.min(Math.max(buffer!, 0), max));
     const bufferFraction = $derived(max > 0 ? bufferClamped / max : 0);
 
     // Four-colour cycle is only meaningful while animating.
@@ -60,18 +63,28 @@
     // readout, which sits inside the ring).
     const hasValueText = $derived(showValue && !isIndeterminate);
     const hasField = $derived(label ? true : !isCircular && hasValueText);
+    // When the bar stands alone (no field wrapper) the consumer's extra classes
+    // land on the bar itself; inside a field they go on the field instead.
+    const barClass = $derived(hasField ? '' : className);
 
     const styles = $derived(
         progressIndicator({ shape, tint, size, indeterminate: isIndeterminate, fourColor: isFourColor }),
     );
 </script>
 
+<!-- The numeric "42%" readout — shared by the circular centre and the linear
+     caption. Each call site gates it on `hasValueText`. The percent is a single
+     interpolation (`${percent}%`) so the rendered text is always a string. -->
+{#snippet valueReadout()}
+    <span class={styles.value()} data-slot="value">{`${percent}%`}</span>
+{/snippet}
+
 <!-- The role="progressbar" element. restProps spread first so a consumer can pass
      aria-label / id, but can never clobber the role + computed ARIA below it. -->
-{#snippet bar(extraClass: string)}
+{#snippet bar()}
     <div
         bind:this={ref}
-        class={twMerge(styles.root(), extraClass)}
+        class={twMerge(styles.root(), barClass)}
         {...restProps}
         role="progressbar"
         data-slot="track"
@@ -101,7 +114,7 @@
                     stroke-dashoffset={isIndeterminate ? undefined : dashOffset}
                 />
             </svg>
-            {#if hasValueText}<span class={styles.value()} data-slot="value">{percent}%</span>{/if}
+            {#if hasValueText}{@render valueReadout()}{/if}
         {:else}
             {#if hasBuffer}
                 <div class="progress-buffer" data-slot="buffer"></div>
@@ -113,12 +126,9 @@
 {/snippet}
 
 {#if hasField}
-    <div
-        class={twMerge(styles.field(), isCircular ? 'items-center' : 'w-full', String(className ?? ''))}
-        data-slot="field"
-    >
+    <div class={twMerge(styles.field(), isCircular ? 'items-center' : 'w-full', className)} data-slot="field">
         {#if isCircular}
-            {@render bar('')}
+            {@render bar()}
             {#if label}
                 <span class="progress-caption text-label-sm font-medium text-c-700" data-slot="label">
                     {@render label()}
@@ -129,11 +139,11 @@
                 <span
                     >{#if label}{@render label()}{/if}</span
                 >
-                {#if hasValueText}<span class={styles.value()} data-slot="value">{percent}%</span>{/if}
+                {#if hasValueText}{@render valueReadout()}{/if}
             </div>
-            {@render bar('')}
+            {@render bar()}
         {/if}
     </div>
 {:else}
-    {@render bar(String(className ?? ''))}
+    {@render bar()}
 {/if}
