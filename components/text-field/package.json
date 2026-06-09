@@ -1,6 +1,6 @@
 {
     "name": "@wimwian-org/text-field",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Material Design 3–style single-line text field for Svelte 5 — filled · outlined, floating label, prefix/suffix + icons, and a character counter, on smuit design tokens.",
     "type": "module",
     "files": [

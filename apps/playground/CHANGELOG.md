@@ -1,5 +1,12 @@
 # @wimwian-org/playground
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [[`7184402`](https://github.com/wimwian-org/smuit/commit/71844023933b781e157c959e670c4bbab9a7684c)]:
+    - @wimwian-org/text-field@0.4.0
+
 ## 0.1.5
 
 ### Patch Changes

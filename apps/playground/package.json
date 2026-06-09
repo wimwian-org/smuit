@@ -1,6 +1,6 @@
 {
     "name": "@wimwian-org/playground",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "private": true,
     "description": "Interactive component sandbox for smuit development",
     "type": "module",
