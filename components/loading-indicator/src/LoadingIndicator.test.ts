@@ -125,6 +125,31 @@ test('honours prefers-reduced-motion — drops the morph and marks data-reduced'
     expect(shape().querySelector('path')!.getAttribute('d')).toContain('M 12');
 });
 
+test('reacts to a runtime prefers-reduced-motion change — drops the morph live', async () => {
+    const mql: { matches: boolean; listeners: Array<() => void> } = {
+        matches: false,
+        listeners: [],
+    };
+    vi.spyOn(window, 'matchMedia').mockReturnValue({
+        get matches() {
+            return mql.matches;
+        },
+        addEventListener: (_: string, cb: () => void) => mql.listeners.push(cb),
+        removeEventListener: (_: string, cb: () => void) => {
+            mql.listeners = mql.listeners.filter((l) => l !== cb);
+        },
+    } as unknown as MediaQueryList);
+    render(LoadingIndicator, {});
+    // Motion allowed initially → the morph animates.
+    expect(shape().querySelector('animate')).toBeTruthy();
+    expect(root().dataset.reduced).toBeUndefined();
+    // User flips on reduced motion → the $effect's change listener retints `reduced`.
+    mql.matches = true;
+    mql.listeners.forEach((l) => l());
+    await vi.waitFor(() => expect(root().dataset.reduced).toBe('true'));
+    expect(shape().querySelector('animate')).toBeNull();
+});
+
 // ── container shape axis ─────────────────────────────────────────────────────────
 test.each(['rounded', 'squircle', 'cookie'] as const)('containerShape=%s sets the data hook', (containerShape) => {
     render(LoadingIndicator, { variant: 'contained', containerShape });
@@ -185,7 +210,26 @@ test('shapes overrides the curated morph set', () => {
     expect(values.startsWith(A)).toBe(true);
 });
 
+test('a custom sequence that already loops back to the first shape is not re-appended', () => {
+    const A = 'M 12 2 C 17.52 2 22 6.48 22 12 C 22 17.52 17.52 22 12 22 C 6.48 22 2 17.52 2 12 C 2 6.48 6.48 2 12 2 Z';
+    const B = 'M 12 2 C 21.2 2 22 2.8 22 12 C 22 21.2 21.2 22 12 22 C 2.8 22 2 21.2 2 12 C 2 2.8 2.8 2 12 2 Z';
+    // Last keyframe === first → the seam is already closed; values stay as given.
+    render(LoadingIndicator, { shapes: [A, B, A] });
+    const values = shape().querySelector('animate')!.getAttribute('values') ?? '';
+    const frames = values.split(';');
+    expect(frames.length).toBe(3);
+    expect(frames[0]).toBe(A);
+    expect(frames[2]).toBe(A);
+});
+
 test('a single custom shape renders static — no morph', () => {
+    // Force motion-allowed so `!reduced` is true → the `&& morph` arm is what
+    // gates out the <animate> (morph is null for a single shape).
+    vi.spyOn(window, 'matchMedia').mockReturnValue({
+        matches: false,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+    } as unknown as MediaQueryList);
     const ONE =
         'M 12 2 C 17.52 2 22 6.48 22 12 C 22 17.52 17.52 22 12 22 C 6.48 22 2 17.52 2 12 C 2 6.48 6.48 2 12 2 Z';
     render(LoadingIndicator, { shapes: [ONE] });
