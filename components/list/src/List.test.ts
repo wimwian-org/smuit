@@ -9,6 +9,10 @@ import { render } from 'vitest-browser-svelte';
 import Harness from './list-harness.test.svelte';
 import RefHarness from './list-ref.test.svelte';
 import SelectHarness from './list-select-harness.test.svelte';
+import RovingHarness from './list-roving-harness.test.svelte';
+import ContextHarness from './list-context-harness.test.svelte';
+import DisabledHarness from './list-disabled-harness.test.svelte';
+import PreventHarness from './list-prevent-harness.test.svelte';
 
 afterEach(() => {
     document.body.innerHTML = '';
@@ -269,4 +273,115 @@ test('subheaders render as presentational, non-item labels; sticky sets the hook
     expect(subs[1].dataset.sticky).toBe('true');
     // A subheader is not a listitem / option.
     expect(subs[0].matches('[data-slot="item"], [role="option"]')).toBe(false);
+});
+
+// ── opt-in roving (no selection model) ─────────────────────────────────────────
+test('opt-in roving: only the first interactive row is tab-reachable, Arrows move focus', async () => {
+    render(RovingHarness, {});
+    const one = rowByText('Button one');
+    const two = rowByText('Button two');
+    const three = rowByText('Button three');
+    expect(one.getAttribute('tabindex')).toBe('0');
+    expect(two.getAttribute('tabindex')).toBe('-1');
+
+    one.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(two);
+    await userEvent.keyboard('{End}');
+    expect(document.activeElement).toBe(three);
+    // ArrowUp from a focused middle/last row steps back one (no wrap).
+    await userEvent.keyboard('{ArrowUp}');
+    expect(document.activeElement).toBe(two);
+    await userEvent.keyboard('{Home}');
+    expect(document.activeElement).toBe(one);
+});
+
+test('roving orders by DOM position even when a row registers out of order', async () => {
+    // Mount without the first row, then reveal it: it registers with the roving
+    // manager last but sits first in the DOM, so orderedRoving() must re-sort
+    // before navigating — End still lands on the last DOM row.
+    const screen = render(RovingHarness, { showFirst: false });
+    await screen.rerender({ showFirst: true });
+
+    const one = rowByText('Button one');
+    const three = rowByText('Button three');
+    rowByText('Button two').focus();
+    await userEvent.keyboard('{Home}');
+    expect(document.activeElement).toBe(one);
+    await userEvent.keyboard('{End}');
+    expect(document.activeElement).toBe(three);
+});
+
+test('roving ignores keys outside Arrow/Home/End', async () => {
+    render(RovingHarness, {});
+    const one = rowByText('Button one');
+    one.focus();
+    // A non-navigation key is a no-op: focus stays put and nothing is prevented.
+    await userEvent.keyboard('a');
+    expect(document.activeElement).toBe(one);
+});
+
+test('roving: Arrow from outside the roving set lands on an end (no current index)', async () => {
+    render(RovingHarness, {});
+    const ul = document.querySelector('[aria-label="Roving list"]') as HTMLElement;
+    const one = rowByText('Button one');
+    const three = rowByText('Button three');
+
+    // Nothing in the list is focused, so the keydown fires with no current roving
+    // index (cur < 0): ArrowDown → first, ArrowUp → last.
+    (document.activeElement as HTMLElement | null)?.blur();
+    ul.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    await vi.waitFor(() => expect(document.activeElement).toBe(one));
+
+    // Blur back out so the next Arrow again has no current index.
+    one.blur();
+    ul.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+    await vi.waitFor(() => expect(document.activeElement).toBe(three));
+});
+
+test('roving with no interactive rows: Arrow keys are a no-op', () => {
+    render(RovingHarness, { empty: true });
+    const ul = document.querySelector('[aria-label="Roving list"]') as HTMLElement;
+    // Roving is on but nothing registered → orderedRoving() is empty, early return.
+    expect(() => ul.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))).not.toThrow();
+});
+
+// ── multiple selection from a non-array seed ────────────────────────────────────
+test('multiple selection tolerates a non-array initial value when toggling', async () => {
+    const onValueChange = vi.fn();
+    // value is left undefined: the first toggle must coerce it to a fresh array.
+    render(SelectHarness, { selection: 'multiple', onValueChange });
+    await page.getByRole('option', { name: /Ada Lovelace/ }).click();
+    expect(onValueChange).toHaveBeenLastCalledWith(['ada']);
+});
+
+// ── context getter ──────────────────────────────────────────────────────────────
+test('the published ListContext exposes the list divider flag to descendants', () => {
+    let divider: boolean | null = null;
+    render(ContextHarness, { onDivider: (d) => (divider = d) });
+    expect(divider).toBe(true);
+});
+
+// ── disabled link / button rows ─────────────────────────────────────────────────
+test('a disabled link drops its href and leaves the tab order', () => {
+    render(DisabledHarness, {});
+    const link = rowByText('Disabled link');
+    expect(link.tagName).toBe('A');
+    expect(link.hasAttribute('href')).toBe(false);
+    expect(link.getAttribute('aria-disabled')).toBe('true');
+    expect(link.getAttribute('tabindex')).toBe('-1');
+
+    const button = rowByText('Disabled button');
+    expect(button.tagName).toBe('BUTTON');
+    expect((button as HTMLButtonElement).disabled).toBe(true);
+});
+
+// ── consumer-handled keydown ────────────────────────────────────────────────────
+test('an item keydown handler that prevents default stops the option toggle', async () => {
+    const onValueChange = vi.fn();
+    render(PreventHarness, { onValueChange });
+    rowByText('Ada Lovelace').focus();
+    await userEvent.keyboard(' ');
+    // The consumer's onkeydown called preventDefault, so the row bails before toggling.
+    expect(onValueChange).not.toHaveBeenCalled();
 });
