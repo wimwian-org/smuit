@@ -98,3 +98,8 @@ test('a programmatic value change is re-masked', async () => {
         expect(unmaskedOut()).toBe('4155550142');
     });
 });
+
+test('a non-digit mask leaves inputmode unset (only digit-only masks get numeric)', () => {
+    render(MaskedField, { label: 'Code', mask: 'AAA-***' });
+    expect(input().getAttribute('inputmode')).toBeNull();
+});

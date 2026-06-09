@@ -163,4 +163,30 @@ describe('caret anchoring', () => {
         // round-trip: typing a digit that pushes a new group keeps the caret on it
         expect(caretAfterFormat('1,234', significantCountBefore('1234', 4))).toBe(5);
     });
+
+    test('caretAfterFormat clamps to the full length past the last significant char', () => {
+        expect(caretAfterFormat('1,234', 99)).toBe('1,234'.length);
+    });
+
+    test('caret anchoring recognises every hex digit/marker and binary marker as significant', () => {
+        expect(caretAfterFormat('1A', 2, 'hex')).toBe(2); // uppercase A–F
+        expect(caretAfterFormat('af', 2, 'hex')).toBe(2); // lowercase a–f
+        expect(caretAfterFormat('0x1', 2, 'hex')).toBe(2); // lowercase 'x' marker
+        expect(caretAfterFormat('0X1', 2, 'hex')).toBe(2); // uppercase 'X' marker
+        expect(caretAfterFormat('1b0', 3, 'binary')).toBe(3); // lowercase 'b' marker
+        expect(caretAfterFormat('0B1', 2, 'binary')).toBe(2); // uppercase 'B' marker
+        expect(significantCountBefore('FF', 2, 'hex')).toBe(2);
+    });
+});
+
+describe('sanitize — decimal edge cases', () => {
+    test('decimalAllowed with no decimal point returns the integer canonical', () => {
+        expect(sanitize('123', { decimalAllowed: true })).toBe('123');
+    });
+    test('decimalAccuracy trims the fractional part', () => {
+        expect(sanitize('1.2345', { decimalAllowed: true, decimalAccuracy: 2 })).toBe('1.23');
+    });
+    test('no decimalAccuracy keeps the full fraction', () => {
+        expect(sanitize('1.2345', { decimalAllowed: true })).toBe('1.2345');
+    });
 });

@@ -4,6 +4,7 @@
  * Licensed under the MIT License.
  */
 import { afterEach, expect, test, vi } from 'vitest';
+import { createRawSnippet } from 'svelte';
 import { page } from '@vitest/browser/context';
 import { render } from 'vitest-browser-svelte';
 import PasswordField from './PasswordField.svelte';
@@ -73,4 +74,25 @@ test('two-way binds the value', async () => {
     render(PasswordField, { label: 'Password' });
     await page.getByLabelText('Password', { exact: true }).fill('hunter2');
     await vi.waitFor(() => expect(input().value).toBe('hunter2'));
+});
+
+// ── leading adornment + caption ───────────────────────────────────────────────
+test('renders a leading adornment when a leadingIcon snippet is supplied', () => {
+    const leadingIcon = createRawSnippet(() => ({
+        render: () => `<svg data-testid="lead" aria-hidden="true"></svg>`,
+    }));
+    render(PasswordField, { label: 'Password', leadingIcon });
+    expect(document.querySelector('[data-slot="leading"]')).toBeTruthy();
+    expect(document.querySelector('[data-testid="lead"]')).toBeTruthy();
+});
+
+test('renders a caption (supporting text + counter) when supportingText / maxlength are set', () => {
+    render(PasswordField, { label: 'Password', supportingText: 'Use 8+ characters', maxlength: 32 });
+    expect(document.body.textContent).toContain('Use 8+ characters');
+    expect(document.querySelector('.tf-counter')).toBeTruthy();
+});
+
+test('renders the caption for an error with errorText (no supportingText / maxlength)', () => {
+    render(PasswordField, { label: 'Password', error: true, errorText: 'Too weak' });
+    expect(document.querySelector('.tf-bottom')).toBeTruthy();
 });

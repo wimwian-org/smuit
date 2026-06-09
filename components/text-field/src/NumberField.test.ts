@@ -203,3 +203,63 @@ test('editing clears a previously reported error', async () => {
     await page.getByRole('textbox', { name: 'Age' }).fill('25');
     await vi.waitFor(() => expect(root().dataset.error).toBeUndefined());
 });
+
+test('a programmatic value change is reflected in the display', async () => {
+    const { rerender } = render(NumberField, { label: 'Amount', value: 100 });
+    await vi.waitFor(() => expect(input().value).toBe('100'));
+    await rerender({ label: 'Amount', value: 250 });
+    await vi.waitFor(() => expect(input().value).toBe('250'));
+});
+
+// ── alternate bases ───────────────────────────────────────────────────────────
+test('a hex value switches the inputmode to text', async () => {
+    render(Harness, { label: 'Hex', value: null, decimalAllowed: true });
+    await page.getByRole('textbox', { name: 'Hex' }).fill('0x1f');
+    await vi.waitFor(() => expect(input().getAttribute('inputmode')).toBe('text'));
+});
+
+// ── keydown gating ────────────────────────────────────────────────────────────
+test('modifier chords (ctrl / meta / alt) are not blocked as printable', () => {
+    render(NumberField, { label: 'Amount' });
+    const el = input();
+    el.focus();
+    for (const mod of ['ctrlKey', 'metaKey', 'altKey'] as const) {
+        const ev = new KeyboardEvent('keydown', { key: 'a', [mod]: true, cancelable: true, bubbles: true });
+        el.dispatchEvent(ev);
+        expect(ev.defaultPrevented).toBe(false);
+    }
+});
+
+test('a decimal point is allowed once when decimalAllowed', () => {
+    render(NumberField, { label: 'Price', decimalAllowed: true });
+    const el = input();
+    el.focus();
+    const dot = new KeyboardEvent('keydown', { key: '.', cancelable: true, bubbles: true });
+    el.dispatchEvent(dot);
+    expect(dot.defaultPrevented).toBe(false);
+});
+
+// ── validation: max + custom validate ─────────────────────────────────────────
+test('flags a value above max on blur', async () => {
+    render(NumberField, { label: 'Pct', max: 100 });
+    const el = input();
+    el.focus();
+    await page.getByRole('textbox', { name: 'Pct' }).fill('150');
+    el.blur();
+    await vi.waitFor(() => expect(root().dataset.error).toBe('true'));
+});
+
+test('runs a custom async validate on blur and clears when valid', async () => {
+    render(NumberField, {
+        label: 'Odd',
+        validate: (v: number | null) => (v != null && v % 2 !== 0 ? 'Must be even' : undefined),
+    });
+    const el = input();
+    el.focus();
+    await page.getByRole('textbox', { name: 'Odd' }).fill('3');
+    el.blur();
+    await vi.waitFor(() => expect(root().dataset.error).toBe('true'));
+    await page.getByRole('textbox', { name: 'Odd' }).fill('4');
+    el.blur();
+    await vi.waitFor(() => expect(root().dataset.error).toBeUndefined());
+});

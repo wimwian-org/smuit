@@ -61,6 +61,7 @@
 
     function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
         const el = event.currentTarget;
+        /* istanbul ignore next -- selectionStart is non-null for a focused text input; the ?? is defensive */
         const caret = el.selectionStart ?? el.value.length;
         const anchor = unmaskedCountBefore(el.value, caret);
 
