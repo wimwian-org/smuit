@@ -91,12 +91,15 @@
         const els = orderedRoving();
         if (els.length === 0) return;
         const cur = els.indexOf(document.activeElement as HTMLElement);
-        let idx = cur;
+        let idx: number;
         if (e.key === 'ArrowDown') idx = cur < 0 ? 0 : Math.min(cur + 1, els.length - 1);
         else if (e.key === 'ArrowUp') idx = cur < 0 ? els.length - 1 : Math.max(cur - 1, 0);
         else if (e.key === 'Home') idx = 0;
-        else if (e.key === 'End') idx = els.length - 1;
+        // The key guard above leaves End as the only remaining option.
+        else idx = els.length - 1;
         const target = els[idx];
+        /* istanbul ignore next -- @preserve: unreachable defensive guard; idx is always
+           clamped to [0, els.length-1] and els is non-empty here, so target is never nullish. */
         if (!target) return;
         e.preventDefault();
         setActive(target);
