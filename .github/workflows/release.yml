@@ -1,0 +1,48 @@
+name: Release
+
+# Publishes any @smuit/* package whose version is not yet on npm (private
+# packages — the root and the playground — are skipped automatically).
+#
+# Triggers:
+#   - push to `master` — the repo's release promotion (master only advances on
+#     a release), so a master push publishes whatever was just versioned.
+#   - manual dispatch — run it from the Actions tab or `gh workflow run`.
+#
+# Auth: the NPM_TOKEN secret lives in the `Secrets` environment, whose
+# deployment-branch policy restricts it to protected branches (dev/master), so
+# the job declares `environment: Secrets` and only runs from those refs. The
+# token must be an npm Automation (or 2FA-bypass granular) token.
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [master]
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        environment: Secrets
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.tool-versions'
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+
+            # The packages publish their built `dist`, so build it first.
+            - name: Build component packages
+              run: pnpm package
+
+            - name: Publish to npm
+              run: |
+                  echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+                  pnpm -r publish --no-git-checks --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
