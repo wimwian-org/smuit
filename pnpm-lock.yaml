@@ -324,6 +324,9 @@ importers:
       '@smuit/list':
         specifier: workspace:*
         version: link:../../components/list
+      '@smuit/loading-indicator':
+        specifier: workspace:*
+        version: link:../../components/loading-indicator
       '@smuit/ripple':
         specifier: workspace:*
         version: link:../../components/ripple
@@ -366,6 +369,28 @@ importers:
         version: 8.0.16(@types/node@25.9.1)(jiti@2.7.0)
 
   components/list:
+    dependencies:
+      tailwind-merge:
+        specifier: ^3.6.0
+        version: 3.6.0
+      tailwind-variants:
+        specifier: ^3.2.2
+        version: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.0
+    devDependencies:
+      '@smuit/theme':
+        specifier: workspace:*
+        version: link:../../packages/theme
+      '@sveltejs/package':
+        specifier: ^2.3.0
+        version: 2.5.8(svelte@5.56.1(@typescript-eslint/types@8.60.1))(typescript@6.0.3)
+      svelte:
+        specifier: ^5.55.10
+        version: 5.56.1(@typescript-eslint/types@8.60.1)
+
+  components/loading-indicator:
     dependencies:
       tailwind-merge:
         specifier: ^3.6.0
