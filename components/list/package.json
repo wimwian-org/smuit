@@ -1,6 +1,6 @@
 {
     "name": "@smuit/list",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Material Design 3–style list for Svelte 5 — Baseline and Expressive variants, one/two-line items, leading/trailing slots, and static/button/link rows, on smuit design tokens.",
     "type": "module",
     "files": [
@@ -44,7 +44,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/smuit/smuit.git",
+        "url": "https://github.com/wimwian-org/smuit.git",
         "directory": "components/list"
     },
     "dependencies": {

@@ -1,5 +1,14 @@
 # @smuit/text-field
 
+## 0.2.2
+
+### Patch Changes
+
+- Fix the `repository.url` in package.json — it pointed at the non-existent
+  `github.com/smuit/smuit`; corrected to `github.com/wimwian-org/smuit`.
+- Updated dependencies []:
+    - @smuit/theme@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
     "name": "@smuit/theme",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Material Design 3 design tokens, oklch palettes, and Tailwind CSS v4 theme for smuit components",
     "type": "module",
     "exports": {
@@ -35,7 +35,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/smuit/smuit.git",
+        "url": "https://github.com/wimwian-org/smuit.git",
         "directory": "packages/theme"
     },
     "devDependencies": {
