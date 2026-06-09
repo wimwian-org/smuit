@@ -7,15 +7,14 @@
 
 /*
  * Colour + motion that tailwind-variants can't express cleanly: the accent and
- * the tonal track per `tint`, the determinate fill width (from the inline
- * `--progress-value`), the indeterminate slide, and the reduced-motion
- * fallback. Every value reads one of the component tokens declared on
- * `.progress`, which in turn read the smuit `--surface-*` / `--color-g-*`
- * design tokens — no literals, no `.dark` selector.
+ * the tonal track per `tint`, the determinate linear fill / circular arc, the
+ * indeterminate slide / spin, the linear buffer, the four-colour cycle, and the
+ * reduced-motion fallback. Every value reads one of the component tokens
+ * declared on `.progress`, which in turn read the smuit `--surface-*` /
+ * `--color-g-*` design tokens — no literals, no `.dark` selector.
  */
-/* Keyframes live at the top level (not inside @layer components): keyframe
-   names resolve globally, and nesting them in a cascade layer has no project
-   precedent. They read `--progress-accent` from the animated element at runtime. */
+/* Keyframes live at the top level (not inside @layer components): keyframe names
+   resolve globally. They read `--progress-accent` / `--surface-*` at runtime. */
 @keyframes progress-slide {
     0% {
         transform: translateX(-100%);
@@ -35,6 +34,57 @@
     }
 }
 
+/* Circular indeterminate — spin the whole ring. */
+@keyframes progress-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Shape-agnostic activity pulse for the reduced-motion fallback. */
+@keyframes progress-pulse-opacity {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Four-colour indeterminate — cycle the bar fill / ring stroke through four
+   accents (Material's primary / tertiary / secondary / primary-container feel). */
+@keyframes progress-fourcolor-bg {
+    0%,
+    100% {
+        background-color: var(--surface-primary-accent);
+    }
+    25% {
+        background-color: var(--surface-tertiary-accent);
+    }
+    50% {
+        background-color: var(--surface-secondary-accent);
+    }
+    75% {
+        background-color: var(--surface-primary-solid);
+    }
+}
+@keyframes progress-fourcolor-stroke {
+    0%,
+    100% {
+        stroke: var(--surface-primary-accent);
+    }
+    25% {
+        stroke: var(--surface-tertiary-accent);
+    }
+    50% {
+        stroke: var(--surface-secondary-accent);
+    }
+    75% {
+        stroke: var(--surface-primary-solid);
+    }
+}
+
 @layer components {
     .progress {
         /* Tokens-first — everything below resolves through these. */
@@ -43,8 +93,7 @@
            scale) so it works under the flat theme. Default = neutral grey;
            the `tint` prop repoints it to a palette accent. */
         --progress-accent: var(--color-g-700);
-        /* Inactive rail — a translucent tint of the accent (cohesive, flips
-           with the theme via the accent). */
+        /* Inactive rail — a translucent tint of the accent (flips with theme). */
         --progress-track: color-mix(in srgb, var(--progress-accent) 24%, transparent);
         /* Determinate fill, 0–1. Set inline per render; defaults full. */
         --progress-value: 1;
@@ -68,26 +117,117 @@
     }
     /* Neutral keeps the default `--progress-accent` (a theme-flipping grey). */
 
+    /* ════ LINEAR ══════════════════════════════════════════════════════ */
     /* ── Determinate: width from the clamped fraction ────────────────── */
-    .progress:not([data-indeterminate]) .progress-bar {
+    .progress[data-shape='linear']:not([data-indeterminate]) .progress-bar {
         width: calc(var(--progress-value) * 100%);
         transition: width 200ms ease;
     }
 
     /* ── Indeterminate: a fixed segment slides across the track ──────── */
-    /* `linear` keeps a steady march with a clean loop seam (ease-in-out dwells
-       off-screen at both ends and reads as sluggish). */
-    .progress[data-indeterminate] .progress-bar {
+    .progress[data-shape='linear'][data-indeterminate] .progress-bar {
         width: 40%;
         animation: progress-slide 1.4s linear infinite;
     }
+    /* Four-colour: keep the slide, cycle the fill colour alongside it. */
+    .progress[data-shape='linear'][data-indeterminate][data-four-color] .progress-bar {
+        animation:
+            progress-slide 1.4s linear infinite,
+            progress-fourcolor-bg 4s linear infinite;
+    }
 
-    /* ── Reduced motion: keep an activity signal without the slide ───── */
+    /* ── Buffer: faint fill up to `--progress-buffer`, dots beyond it ── */
+    .progress-buffer {
+        position: absolute;
+        inset-block: 0;
+        left: 0;
+        width: calc(var(--progress-buffer, 0) * 100%);
+        border-radius: inherit;
+        background: color-mix(in srgb, var(--progress-accent) 38%, transparent);
+        transition: width 200ms ease;
+    }
+    .progress-dots {
+        position: absolute;
+        inset-block: 0;
+        left: calc(var(--progress-buffer, 0) * 100%);
+        right: 0;
+        background-image: radial-gradient(circle at center, var(--progress-accent) 0.9px, transparent 1.1px);
+        background-size: 0.5rem 100%;
+        opacity: 0.4;
+        transition: left 200ms ease;
+    }
+
+    /* ════ CIRCULAR ════════════════════════════════════════════════════ */
+    .progress[data-shape='circular'] {
+        --progress-ring: 2.5rem; /* md */
+        grid-template-areas: 'stack';
+    }
+    .progress[data-shape='circular'][data-size='sm'] {
+        --progress-ring: 1.5rem;
+    }
+    .progress[data-shape='circular'][data-size='lg'] {
+        --progress-ring: 3.5rem;
+    }
+    /* Stack the ring + the centred value in one grid cell. */
+    .progress[data-shape='circular'] > * {
+        grid-area: stack;
+    }
+    .progress-svg {
+        width: var(--progress-ring);
+        height: var(--progress-ring);
+    }
+    .progress[data-shape='circular'] .progress-track-ring,
+    .progress[data-shape='circular'] .progress-bar {
+        fill: none;
+        stroke-width: 4.5;
+    }
+    .progress[data-shape='circular'] .progress-track-ring {
+        stroke: var(--progress-track);
+    }
+    .progress[data-shape='circular'] .progress-bar {
+        stroke: var(--progress-accent);
+        stroke-linecap: round;
+    }
+    /* Determinate: start at 12 o'clock, animate the reveal. */
+    .progress[data-shape='circular']:not([data-indeterminate]) .progress-svg {
+        transform: rotate(-90deg);
+    }
+    .progress[data-shape='circular']:not([data-indeterminate]) .progress-bar {
+        transition: stroke-dashoffset 200ms ease;
+    }
+    /* Indeterminate: spin the ring with a fixed arc. */
+    .progress[data-shape='circular'][data-indeterminate] .progress-bar {
+        stroke-dasharray: 25 75;
+        stroke-dashoffset: 0;
+    }
+    .progress[data-shape='circular'][data-indeterminate] .progress-svg {
+        animation: progress-spin 1s linear infinite;
+    }
+    .progress[data-shape='circular'][data-indeterminate][data-four-color] .progress-bar {
+        animation: progress-fourcolor-stroke 4s linear infinite;
+    }
+    /* Centred numeric readout — scales with the ring. */
+    .progress[data-shape='circular'] .progress-value {
+        font-size: calc(var(--progress-ring) * 0.28);
+        font-weight: 600;
+        line-height: 1;
+        color: var(--color-c-800);
+    }
+
+    /* ── Reduced motion: keep an activity signal without the slide/spin ─ */
     @media (prefers-reduced-motion: reduce) {
-        .progress[data-indeterminate] .progress-bar {
+        .progress[data-shape='linear'][data-indeterminate] .progress-bar {
             width: 100%;
             transform: none;
             animation: progress-pulse 1.6s ease-in-out infinite;
+        }
+        .progress[data-shape='circular'][data-indeterminate] .progress-svg {
+            transform: rotate(-90deg);
+            animation: progress-pulse-opacity 1.6s ease-in-out infinite;
+        }
+        .progress[data-shape='circular'][data-indeterminate] .progress-bar {
+            stroke-dasharray: 25 75;
+            animation: none;
         }
     }
 }

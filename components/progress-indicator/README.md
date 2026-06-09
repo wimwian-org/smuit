@@ -61,22 +61,15 @@ into `[0, max]`.
 
 ## Scope
 
-**v1 (this release)** ships the **linear** indicator only:
-
-- ✅ **Linear** track + indicator
+- ✅ **Linear** track + indicator, and **circular** ring (`shape="circular"`)
 - ✅ **Determinate** (`value` / `max`) and **indeterminate** (animated) modes
 - ✅ `tint` (neutral · primary · secondary · error · warning · success), `size` (sm · md · lg)
+- ✅ Linear **buffer** channel (`buffer`) with a dotted track
+- ✅ **Four-colour** indeterminate cycle (`fourColor`)
+- ✅ Built-in **label** caption + inline **value** readout (`label`, `showValue`)
 - ✅ `prefers-reduced-motion` fallback, full ARIA
 
-**Deferred — next:**
-
-- ⛔ **Circular** indicator (ring shape, size/stroke tokens)
-- ⛔ **Four-color** indeterminate mode
-- ⛔ Linear **buffer** value + buffer-dots track
-- ⛔ Built-in label / inline value-text slot
-
-See [`progress-indicator-design.md`](./progress-indicator-design.md) for the full design spec and
-MVP rationale.
+See [`progress-indicator-design.md`](./progress-indicator-design.md) for the full design spec.
 
 ## Acknowledgements
 
