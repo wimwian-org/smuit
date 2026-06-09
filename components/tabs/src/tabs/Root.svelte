@@ -5,10 +5,11 @@
 -->
 <!--
   Tabs.Root — the state owner. Wraps `bits-ui` Tabs.Root (which owns the active
-  `value`, the activation mode, the roving keyboard nav, and the tablist/panel
-  ARIA wiring). Publishes a TabsContext (variant / size / tint + a getter for the
-  active value) so Tabs.List can position the sliding indicator and the triggers
-  can read the axes. Compose `Tabs.List` + `Tabs.Content` as children.
+  `value`, the activation mode, the roving keyboard nav, the `orientation` axis,
+  and the tablist/panel ARIA wiring). Publishes a TabsContext (variant / size /
+  tint / orientation / iconLayout + a getter for the active value) so Tabs.List
+  can position the sliding indicator on the right axis and the triggers can read
+  the axes. Compose `Tabs.List` + `Tabs.Content` as children.
 -->
 <script lang="ts">
     import { Tabs as BitsTabs } from 'bits-ui';
@@ -26,6 +27,8 @@
         variant = 'bold',
         size = 'md',
         tint = 'neutral',
+        orientation = 'horizontal',
+        iconLayout = 'inline',
         activationMode = 'automatic',
         loop = true,
         disabled = false,
@@ -45,18 +48,25 @@
         get tint() {
             return tint;
         },
+        get orientation() {
+            return orientation;
+        },
+        get iconLayout() {
+            return iconLayout;
+        },
         get value() {
             return value;
         },
     };
     setTabsContext(ctx);
 
-    const styles = $derived(tabs({ variant, size, tint }));
+    const styles = $derived(tabs({ variant, size, tint, orientation, iconLayout }));
 </script>
 
 <BitsTabs.Root
     bind:ref
     bind:value
+    {orientation}
     {activationMode}
     {loop}
     {disabled}

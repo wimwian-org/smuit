@@ -2,15 +2,17 @@
 
 Material Design 3–style **tabs** for Svelte 5, built on the smuit design tokens. A composable
 `Tabs.Root` / `Tabs.List` / `Tabs.Trigger` / `Tabs.Content` set in two variants — **bold** (M3
-Primary: top-level, emphatic, with optional inline leading icons) and **subtle** (M3 Secondary:
-quieter, nested sub-navigation) — with `sm`/`md` sizes, tint retinting, automatic/manual activation,
-and an **animated active indicator** that slides under the active tab (snapping under
-`prefers-reduced-motion`). Themed and dark-mode aware out of the box.
+Primary: top-level, emphatic, with leading icons) and **subtle** (M3 Secondary: quieter, nested
+sub-navigation) — with `sm`/`md` sizes, tint retinting, automatic/manual activation, **horizontal or
+vertical** orientation, **inline or stacked** leading icons, optional **badges**, **overflow
+scrolling** with prev/next affordances, and an **animated active indicator** that slides under the
+active tab (snapping under `prefers-reduced-motion`). Themed and dark-mode aware out of the box.
 
 > Built from the [tabs design spec](./tabs-design.md). Behaviour (the `tablist`/`tab`/`tabpanel`
-> roles, `aria-controls`/`aria-labelledby` wiring, roving arrow-key navigation, and activation mode)
-> is provided by the headless [`bits-ui`](https://bits-ui.com) `Tabs` primitive; this package layers
-> on the smuit theming, the variant/size/tint axes, the icon slot, and the sliding indicator.
+> roles, `aria-controls`/`aria-labelledby` wiring, roving arrow-key navigation, the orientation axis,
+> and activation mode) is provided by the headless [`bits-ui`](https://bits-ui.com) `Tabs` primitive;
+> this package layers on the smuit theming, the variant/size/tint axes, the icon + badge slots, the
+> stacked layout, the scroll affordances, and the sliding indicator.
 
 ## Install
 
@@ -57,46 +59,52 @@ dependency (the headless behaviour layer).
 
 ### Parts
 
-| Part           | Element / role          | Notes                                                                                                |
-| -------------- | ----------------------- | ---------------------------------------------------------------------------------------------------- |
-| `Tabs.Root`    | `<div>`                 | State owner. `bind:value`, `variant`, `size`, `tint`, `activationMode`, `loop`, `disabled`.          |
-| `Tabs.List`    | `<div role="tablist">`  | The trigger row + the bottom track + the sliding active indicator.                                   |
-| `Tabs.Trigger` | `<button role="tab">`   | Needs a `value`. Optional `icon` snippet (inline, leading) + label children; per-trigger `disabled`. |
-| `Tabs.Content` | `<div role="tabpanel">` | Needs a matching `value`. The panel shown when its tab is active.                                    |
+| Part           | Element / role          | Notes                                                                                                                                 |
+| -------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Tabs.Root`    | `<div>`                 | State owner. `bind:value`, `variant`, `size`, `tint`, `orientation`, `iconLayout`, `activationMode`, `loop`, `disabled`.              |
+| `Tabs.List`    | `<div role="tablist">`  | The trigger row/column + the track + the sliding active indicator. `scrollable` adds an overflow viewport with prev/next affordances. |
+| `Tabs.Trigger` | `<button role="tab">`   | Needs a `value`. Optional `icon` snippet (inline or stacked) + label children + optional `badge` snippet; per-trigger `disabled`.     |
+| `Tabs.Content` | `<div role="tabpanel">` | Needs a matching `value`. The panel shown when its tab is active.                                                                     |
 
 ### Props (axes)
 
-| Prop             | Values                                                                             | Default     |
-| ---------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `variant`        | `bold` · `subtle`                                                                  | `bold`      |
-| `size`           | `sm` · `md`                                                                        | `md`        |
-| `tint`           | `neutral` · `primary` · `secondary` · `tertiary` · `error` · `warning` · `success` | `neutral`   |
-| `activationMode` | `automatic` (focus selects) · `manual` (Enter/Space selects)                       | `automatic` |
-| `loop`           | `boolean` — wrap keyboard navigation                                               | `true`      |
-| `disabled`       | `boolean` (on `Root` = whole set; on `Trigger` = that tab)                         | `false`     |
+| Prop             | On               | Values                                                                             | Default      |
+| ---------------- | ---------------- | ---------------------------------------------------------------------------------- | ------------ |
+| `variant`        | `Root`           | `bold` · `subtle`                                                                  | `bold`       |
+| `size`           | `Root`           | `sm` · `md`                                                                        | `md`         |
+| `tint`           | `Root`           | `neutral` · `primary` · `secondary` · `tertiary` · `error` · `warning` · `success` | `neutral`    |
+| `orientation`    | `Root`           | `horizontal` · `vertical`                                                          | `horizontal` |
+| `iconLayout`     | `Root`           | `inline` (icon before label) · `stacked` (icon above label, M3 stacked)            | `inline`     |
+| `activationMode` | `Root`           | `automatic` (focus selects) · `manual` (Enter/Space selects)                       | `automatic`  |
+| `loop`           | `Root`           | `boolean` — wrap keyboard navigation                                               | `true`       |
+| `disabled`       | `Root`/`Trigger` | `boolean` (on `Root` = whole set; on `Trigger` = that tab)                         | `false`      |
+| `scrollable`     | `List`           | `boolean` — overflow-scroll viewport + prev/next affordances                       | `false`      |
+| `icon`           | `Trigger`        | `Snippet` — leading icon (inline or stacked per `iconLayout`)                      | —            |
+| `badge`          | `Trigger`        | `Snippet` — trailing count chip; an **empty** snippet renders a dot                | —            |
 
 ## Scope
 
-**v1 (this release)** ships a fully-themed, accessible, **horizontal** tab set:
+This release ships a fully-themed, accessible tab set in **both axes**:
 
 - **Variants** — `bold` (M3 Primary) and `subtle` (M3 Secondary).
 - **Sizes** — `sm` (~40px) and `md` (~48px).
 - **Tints** — neutral (default) + primary/secondary/tertiary/error/warning/success, retinting the
   indicator, active label/icon, hover/pressed state layers, and focus outline together.
-- **Trigger content** — text label + optional **inline leading icon**.
-- **Active indicator** — a single bar that **slides + resizes** between tabs, with a
-  `prefers-reduced-motion` **static (snap)** fallback.
+- **Orientation** — **horizontal** or **vertical** (the list sits beside the panel; the indicator,
+  track, and roving arrow-key axis follow).
+- **Trigger content** — text label + optional leading icon (**inline** before the label or
+  **stacked** above it) + optional trailing **badge** (a count chip, or an empty dot).
+- **Overflow scrolling** — opt a `Tabs.List` into a scroll viewport with `scrollable`; the active
+  tab is kept in view and **prev/next affordance buttons** appear only while the row overflows.
+- **Active indicator** — a single bar that **slides + resizes** between tabs on the active axis, with
+  a `prefers-reduced-motion` **static (snap)** fallback.
 - **Activation** — `automatic` or `manual`, plus `loop` keyboard wrapping.
 - **States** — active · inactive · hover · focus-visible · disabled (per-trigger and whole-set).
 - **A11y** — bits-ui roles + ARIA wiring, arrow-key roving + Home/End, visible AA focus.
 
-**Deferred (next releases):**
+**Deferred (next release):**
 
-- **Overflow / scrollable** tab bars (scroll affordances, `scrollToTab`).
-- **Vertical orientation** (bits-ui supports it; v1 styles horizontal only).
-- **Stacked icon layout** (icon above the label, for bold tabs).
-- **Badge / count** on a tab.
-- **Dynamic tabs** (closeable / addable).
+- **Dynamic tabs** (closeable / addable, with keyboard/focus reconciliation).
 
 ## Acknowledgements
 

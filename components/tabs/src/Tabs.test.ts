@@ -121,6 +121,77 @@ test('a disabled trigger sets data-disabled and cannot be activated', async () =
     expect(two?.dataset.state).toBe('inactive');
 });
 
+// ── orientation axis ──────────────────────────────────────────────────────────
+test('vertical orientation sets the data-orientation hook and the row layout', () => {
+    render(Harness, { orientation: 'vertical' });
+    const el = root();
+    expect(el.dataset.orientation).toBe('vertical');
+    // Root flips to a row (list beside the panel); the list stacks its triggers.
+    expect(el.className).toContain('flex-row');
+    expect(document.querySelector('[role="tablist"]')?.className).toContain('flex-col');
+});
+
+test('horizontal (default) keeps the column root + data-orientation hook', () => {
+    render(Harness, {});
+    expect(root().dataset.orientation).toBe('horizontal');
+    expect(root().className).toContain('flex-col');
+});
+
+test('vertical: ArrowDown moves + activates the next tab (automatic)', async () => {
+    render(Harness, { orientation: 'vertical' });
+    tabByName('One')?.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(tabByName('Two'));
+    expect(tabByName('Two')?.dataset.state).toBe('active');
+});
+
+// ── stacked icon layout ───────────────────────────────────────────────────────
+test('stacked iconLayout makes triggers column-stacked and taller', () => {
+    render(Harness, { iconLayout: 'stacked' });
+    const three = tabByName('Three');
+    expect(three?.className).toContain('flex-col');
+    expect(three?.className).toContain('h-16'); // md stacked
+    // The leading icon still renders, now above the label.
+    expect(three?.querySelector('[data-slot="icon"]')).not.toBeNull();
+});
+
+// ── badge slot ────────────────────────────────────────────────────────────────
+test('renders the optional trailing badge after the label', () => {
+    render(Harness, { badgeTwo: true });
+    const two = tabByName('Two');
+    expect(two?.querySelector('[data-slot="badge"]')).not.toBeNull();
+    expect(two?.querySelector('[data-testid="tab-badge"]')?.textContent).toBe('3');
+});
+
+test('omits the badge when no badge snippet is supplied', () => {
+    render(Harness, {});
+    expect(tabByName('One')?.querySelector('[data-slot="badge"]')).toBeNull();
+});
+
+// ── overflow scrolling ────────────────────────────────────────────────────────
+test('scrollable wraps the list with prev/next affordance buttons', () => {
+    render(Harness, { scrollable: true });
+    const wrap = document.querySelector('[data-slot="list-wrap"]');
+    expect(wrap).not.toBeNull();
+    // The tablist becomes a scroll viewport.
+    expect(document.querySelector('[role="tablist"]')?.className).toContain('tabs-list-scroll');
+    // Two affordance buttons, labelled, outside the roving tab order.
+    const prev = document.querySelector('[data-slot="scroll-prev"]') as HTMLButtonElement;
+    const next = document.querySelector('[data-slot="scroll-next"]') as HTMLButtonElement;
+    expect(prev?.getAttribute('aria-label')).toBe('Scroll tabs backward');
+    expect(next?.getAttribute('aria-label')).toBe('Scroll tabs forward');
+    expect(prev?.tabIndex).toBe(-1);
+    expect(next?.tabIndex).toBe(-1);
+    // The affordance buttons are not tabs (they stay out of the tablist roving set).
+    expect(prev?.getAttribute('role')).not.toBe('tab');
+});
+
+test('non-scrollable lists render no scroll wrapper or buttons', () => {
+    render(Harness, {});
+    expect(document.querySelector('[data-slot="list-wrap"]')).toBeNull();
+    expect(document.querySelector('[data-slot="scroll-prev"]')).toBeNull();
+});
+
 // ── ref + class ───────────────────────────────────────────────────────────────
 test('binds ref to the underlying trigger button', () => {
     let ref: HTMLElement | null = null;

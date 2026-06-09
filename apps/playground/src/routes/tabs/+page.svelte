@@ -17,6 +17,26 @@
     let vStates = $state('active');
     let vManual = $state('a');
     let vTints = $state<Record<string, string>>(Object.fromEntries(tints.map((t) => [t, 'one'])));
+    let vVertical = $state('profile');
+    let vStacked = $state('home');
+    let vBadge = $state('inbox');
+    let vScroll = $state('m1');
+
+    // A long tab row for the scrollable demo.
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
 </script>
 
 {#snippet home()}
@@ -46,10 +66,10 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Tabs</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/tabs</code> · v1 (MVP) — Material Design 3 <strong>bold</strong> and
-            <strong>subtle</strong> variants, sm/md sizes, tints, inline leading icons, and an
-            <strong>animated sliding indicator</strong> (snaps under reduced-motion), backed by
-            <code>bits-ui</code>. Overflow scrolling, vertical orientation, stacked icons, and badges are deferred.
+            <code>@smuit/tabs</code> — Material Design 3 <strong>bold</strong> and
+            <strong>subtle</strong> variants, sm/md sizes, tints, inline + <strong>stacked</strong> leading icons,
+            <strong>badges</strong>, <strong>vertical</strong> orientation, <strong>overflow scrolling</strong>, and an
+            <strong>animated sliding indicator</strong> (snaps under reduced-motion), backed by <code>bits-ui</code>.
         </p>
     </header>
 
@@ -195,6 +215,87 @@
                 </div>
             {/each}
         </div>
+    </section>
+
+    <!-- ── Vertical orientation ─────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Vertical <span class="demo-hint">— list beside the panel; Up/Down arrow keys roving</span>
+        </h2>
+        <Tabs.Root bind:value={vVertical} orientation="vertical" tint="primary">
+            <Tabs.List>
+                <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
+                <Tabs.Trigger value="account">Account</Tabs.Trigger>
+                <Tabs.Trigger value="security">Security</Tabs.Trigger>
+                <Tabs.Trigger value="billing">Billing</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="profile">Profile settings.</Tabs.Content>
+            <Tabs.Content value="account">Account settings.</Tabs.Content>
+            <Tabs.Content value="security">Security settings.</Tabs.Content>
+            <Tabs.Content value="billing">Billing settings.</Tabs.Content>
+        </Tabs.Root>
+    </section>
+
+    <!-- ── Stacked icons ────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Stacked icons <span class="demo-hint">— bold, icon above the label (M3 stacked)</span></h2>
+        <Tabs.Root bind:value={vStacked} variant="bold" iconLayout="stacked" tint="secondary">
+            <Tabs.List>
+                <Tabs.Trigger value="home">
+                    {#snippet icon()}{@render home()}{/snippet}
+                    Home
+                </Tabs.Trigger>
+                <Tabs.Trigger value="alerts">
+                    {#snippet icon()}{@render bell()}{/snippet}
+                    Alerts
+                </Tabs.Trigger>
+                <Tabs.Trigger value="settings">
+                    {#snippet icon()}{@render gear()}{/snippet}
+                    Settings
+                </Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="home">Home panel.</Tabs.Content>
+            <Tabs.Content value="alerts">Alerts panel.</Tabs.Content>
+            <Tabs.Content value="settings">Settings panel.</Tabs.Content>
+        </Tabs.Root>
+    </section>
+
+    <!-- ── Badges ───────────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Badges <span class="demo-hint">— a trailing count chip, or an empty dot</span></h2>
+        <Tabs.Root bind:value={vBadge} tint="error">
+            <Tabs.List>
+                <Tabs.Trigger value="inbox">
+                    Inbox
+                    {#snippet badge()}24{/snippet}
+                </Tabs.Trigger>
+                <Tabs.Trigger value="drafts">Drafts</Tabs.Trigger>
+                <Tabs.Trigger value="spam">
+                    Spam
+                    {#snippet badge()}{/snippet}
+                </Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="inbox">24 unread.</Tabs.Content>
+            <Tabs.Content value="drafts">Your drafts.</Tabs.Content>
+            <Tabs.Content value="spam">Flagged messages.</Tabs.Content>
+        </Tabs.Root>
+    </section>
+
+    <!-- ── Overflow scrolling ───────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Overflow scrolling <span class="demo-hint">— a long row scrolls; prev/next appear as needed</span>
+        </h2>
+        <Tabs.Root bind:value={vScroll} tint="tertiary">
+            <Tabs.List scrollable>
+                {#each months as m, i (m)}
+                    <Tabs.Trigger value={'m' + (i + 1)}>{m}</Tabs.Trigger>
+                {/each}
+            </Tabs.List>
+            {#each months as m, i (m)}
+                <Tabs.Content value={'m' + (i + 1)}>{m} overview.</Tabs.Content>
+            {/each}
+        </Tabs.Root>
     </section>
 </div>
 
