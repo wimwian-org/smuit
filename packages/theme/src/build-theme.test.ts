@@ -186,7 +186,7 @@ test('generate is deterministic / idempotent', () => {
 test('minify collapses to one line but preserves significant value spaces', () => {
     const css = minify(generate(INPUT));
     expect(css).not.toContain('\n');
-    expect(css).toContain('--color-primary-500:oklch(0.65 0.23 34)'); // intra-value spaces kept
+    expect(css).toContain('--color-primary-500:oklch(0.68 0.15 237)'); // intra-value spaces kept
     expect(css).not.toContain('; }'); // structural whitespace gone
 });
 test('generate emits the expected structure', () => {
