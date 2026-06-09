@@ -45,11 +45,20 @@ export const loadingIndicator = tv({
             secondary: {},
             tertiary: {},
         },
+        // Container outline (contained only) — `rounded` is the M3 squircle-ish
+        // default radius; `squircle` / `cookie` swap a CSS mask in per
+        // `[data-container-shape]` (see loading-indicator.css). No class here.
+        containerShape: {
+            rounded: {},
+            squircle: {},
+            cookie: {},
+        },
     },
     defaultVariants: {
         variant: 'uncontained',
         size: 'md',
         tint: 'primary',
+        containerShape: 'rounded',
     },
 });
 

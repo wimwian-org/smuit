@@ -4,20 +4,37 @@
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { LoadingIndicator } from '@smuit/loading-indicator';
+    import { LoadingIndicator, LOADING_INDICATOR_SHAPES } from '@smuit/loading-indicator';
+    import { onMount } from 'svelte';
 
     const variants = ['uncontained', 'contained'] as const;
     const sizes = ['sm', 'md', 'lg'] as const;
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
+    const containerShapes = ['rounded', 'squircle', 'cookie'] as const;
+
+    // Live determinate demo — ramps 0 → 1, holds on the completion checkmark,
+    // then loops.
+    let live = $state(0);
+    onMount(() => {
+        const id = setInterval(() => {
+            live = live >= 1.25 ? 0 : Math.round((live + 0.05) * 100) / 100;
+        }, 180);
+        return () => clearInterval(id);
+    });
+    const liveProgress = $derived(Math.min(1, live));
+
+    // A custom two-shape morph (circle ⇄ diamond) supplied via the `shapes` prop.
+    const customShapes = [LOADING_INDICATOR_SHAPES.circle, LOADING_INDICATOR_SHAPES.diamond];
 </script>
 
 <div class="page">
     <header class="head">
         <a href="/" class="back">← Components</a>
-        <h1>Loading Indicator <span class="ver">· v1</span></h1>
+        <h1>Loading Indicator <span class="ver">· v1.1</span></h1>
         <p class="lede">
-            M3 Expressive indeterminate loader — the active indicator morphs through a curated set of Material shapes
-            (circle → cushion → diamond → pill) while rotating. Indeterminate-only in v1.
+            M3 Expressive loader — the active indicator morphs through a curated set of Material shapes (circle →
+            cushion → diamond → pill) while rotating. v1.1 adds a determinate <code>progress</code> mode, a completion
+            checkmark, custom <code>shapes</code>, and squircle / cookie container outlines.
         </p>
     </header>
 
@@ -64,6 +81,77 @@
                     <span class="chip">{tint}</span>
                 </div>
             {/each}
+        </div>
+    </section>
+
+    <!-- determinate progress -->
+    <section>
+        <h2>Determinate <span class="ver">· progress</span></h2>
+        <p class="lede">
+            Pass <code>progress</code> (0→1) and the indicator becomes a determinate
+            <code>role="progressbar"</code> — a sweep arc tracks the value and the root exposes
+            <code>aria-valuenow</code>. Reaching <code>1</code> hands off to the completion checkmark.
+        </p>
+        <div class="row">
+            {#each [0.25, 0.5, 0.75] as p (p)}
+                <div class="chipwrap">
+                    <LoadingIndicator variant="contained" progress={p} />
+                    <span class="chip">{Math.round(p * 100)}%</span>
+                </div>
+            {/each}
+            <div class="chipwrap">
+                <LoadingIndicator variant="contained" progress={liveProgress} complete={live >= 1} />
+                <span class="chip">live · {Math.round(liveProgress * 100)}%</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- completion hand-off -->
+    <section>
+        <h2>Completion</h2>
+        <p class="lede">
+            <code>complete</code> (or <code>progress >= 1</code>) settles into a success-tinted, drawn checkmark and
+            clears <code>aria-busy</code>.
+        </p>
+        <div class="row">
+            {#each variants as variant (variant)}
+                <div class="chipwrap">
+                    <LoadingIndicator {variant} complete />
+                    <span class="chip">{variant}</span>
+                </div>
+            {/each}
+        </div>
+    </section>
+
+    <!-- container shapes -->
+    <section>
+        <h2>Container shapes · contained</h2>
+        <p class="lede">
+            <code>containerShape</code> swaps the contained outline — the M3 <code>rounded</code> squircle-ish default,
+            a fuller <code>squircle</code>, or a scalloped <code>cookie</code>.
+        </p>
+        <div class="row">
+            {#each containerShapes as containerShape (containerShape)}
+                <div class="chipwrap">
+                    <LoadingIndicator variant="contained" size="lg" tint="secondary" {containerShape} />
+                    <span class="chip">{containerShape}</span>
+                </div>
+            {/each}
+        </div>
+    </section>
+
+    <!-- custom shapes -->
+    <section>
+        <h2>Custom shapes</h2>
+        <p class="lede">
+            Supply a <code>shapes</code> array (SVG <code>d</code> strings sharing the curated
+            <code>M + 4·C + Z</code> structure) to drive a bespoke morph — here a circle ⇄ diamond cycle.
+        </p>
+        <div class="row">
+            <div class="chipwrap">
+                <LoadingIndicator variant="contained" shapes={customShapes} />
+                <span class="chip">circle ⇄ diamond</span>
+            </div>
         </div>
     </section>
 

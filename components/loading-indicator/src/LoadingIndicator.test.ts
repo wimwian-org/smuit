@@ -25,11 +25,15 @@ test('renders a progressbar with the indeterminate defaults', async () => {
     const el = root();
     expect(el.getAttribute('aria-label')).toBe('Loading');
     expect(el.getAttribute('aria-busy')).toBe('true');
-    // Indeterminate → no aria-valuenow.
+    // Indeterminate → no aria-valuenow / valuemin / valuemax.
     expect(el.hasAttribute('aria-valuenow')).toBe(false);
+    expect(el.hasAttribute('aria-valuemin')).toBe(false);
+    expect(el.hasAttribute('aria-valuemax')).toBe(false);
     expect(el.dataset.variant).toBe('uncontained');
     expect(el.dataset.size).toBe('md');
     expect(el.dataset.tint).toBe('primary');
+    expect(el.dataset.mode).toBe('indeterminate');
+    expect(el.dataset.containerShape).toBe('rounded');
     expect(el.className).toContain('li');
 });
 
@@ -119,4 +123,72 @@ test('honours prefers-reduced-motion — drops the morph and marks data-reduced'
     expect(root().dataset.reduced).toBe('true');
     // The resting shape is still drawn.
     expect(shape().querySelector('path')!.getAttribute('d')).toContain('M 12');
+});
+
+// ── container shape axis ─────────────────────────────────────────────────────────
+test.each(['rounded', 'squircle', 'cookie'] as const)('containerShape=%s sets the data hook', (containerShape) => {
+    render(LoadingIndicator, { variant: 'contained', containerShape });
+    expect(root().dataset.containerShape).toBe(containerShape);
+});
+
+// ── determinate mode ─────────────────────────────────────────────────────────────
+test('progress switches to determinate — exposes aria-valuenow and a sweep arc', () => {
+    render(LoadingIndicator, { progress: 0.6 });
+    const el = root();
+    expect(el.dataset.mode).toBe('determinate');
+    expect(el.getAttribute('aria-busy')).toBe('true');
+    expect(el.getAttribute('aria-valuemin')).toBe('0');
+    expect(el.getAttribute('aria-valuemax')).toBe('100');
+    expect(el.getAttribute('aria-valuenow')).toBe('60');
+    // Arc, not the morphing blob.
+    expect(shape().querySelector('animate')).toBeNull();
+    const arc = shape().querySelector('.li-arc') as SVGCircleElement;
+    expect(arc).toBeTruthy();
+    // dashoffset = 100 - pct, so 60% → 40.
+    expect(arc.getAttribute('stroke-dashoffset')).toBe('40');
+    expect(shape().querySelector('.li-track')).toBeTruthy();
+});
+
+test('progress clamps below 0', () => {
+    render(LoadingIndicator, { progress: -0.5 });
+    expect(root().getAttribute('aria-valuenow')).toBe('0');
+});
+
+// ── completion hand-off ──────────────────────────────────────────────────────────
+test('complete settles into a checkmark and clears aria-busy', () => {
+    render(LoadingIndicator, { complete: true });
+    const el = root();
+    expect(el.dataset.mode).toBe('complete');
+    expect(el.getAttribute('aria-busy')).toBe('false');
+    // A bare complete reads as 100%.
+    expect(el.getAttribute('aria-valuenow')).toBe('100');
+    expect(shape().querySelector('.li-check')).toBeTruthy();
+    expect(shape().querySelector('animate')).toBeNull();
+});
+
+test('progress >= 1 auto-completes', () => {
+    render(LoadingIndicator, { progress: 1 });
+    const el = root();
+    expect(el.dataset.mode).toBe('complete');
+    expect(el.getAttribute('aria-busy')).toBe('false');
+    expect(shape().querySelector('.li-check')).toBeTruthy();
+});
+
+// ── custom shape sequence ────────────────────────────────────────────────────────
+test('shapes overrides the curated morph set', () => {
+    const A = 'M 12 2 C 17.52 2 22 6.48 22 12 C 22 17.52 17.52 22 12 22 C 6.48 22 2 17.52 2 12 C 2 6.48 6.48 2 12 2 Z';
+    const B = 'M 12 2 C 21.2 2 22 2.8 22 12 C 22 21.2 21.2 22 12 22 C 2.8 22 2 21.2 2 12 C 2 2.8 2.8 2 12 2 Z';
+    render(LoadingIndicator, { shapes: [A, B] });
+    const values = shape().querySelector('animate')!.getAttribute('values') ?? '';
+    // Two shapes + a loop-back to the first → three keyframes.
+    expect(values.split(';').length).toBe(3);
+    expect(values.startsWith(A)).toBe(true);
+});
+
+test('a single custom shape renders static — no morph', () => {
+    const ONE =
+        'M 12 2 C 17.52 2 22 6.48 22 12 C 22 17.52 17.52 22 12 22 C 6.48 22 2 17.52 2 12 C 2 6.48 6.48 2 12 2 Z';
+    render(LoadingIndicator, { shapes: [ONE] });
+    expect(shape().querySelector('animate')).toBeNull();
+    expect(shape().querySelector('path')!.getAttribute('d')).toBe(ONE);
 });

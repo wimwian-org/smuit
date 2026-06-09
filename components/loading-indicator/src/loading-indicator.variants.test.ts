@@ -18,22 +18,25 @@ test('shape slot carries the indicator class', () => {
     expect(loadingIndicator().shape()).toContain('li-shape');
 });
 
-test('footprint + fill are CSS-driven, so slot classes are stable across variant/size/tint', () => {
+test('footprint + fill are CSS-driven, so slot classes are stable across variant/size/tint/shape', () => {
     // The visual axes are carried as data hooks (see loading-indicator.css), not
     // tv classes — the base slots are identical regardless of the combination.
     const base = loadingIndicator().root();
     expect(loadingIndicator({ variant: 'contained' }).root()).toBe(base);
     expect(loadingIndicator({ size: 'lg' }).root()).toBe(base);
     expect(loadingIndicator({ tint: 'secondary' }).root()).toBe(base);
+    expect(loadingIndicator({ containerShape: 'cookie' }).root()).toBe(base);
 });
 
 test('accepts every documented axis value without error', () => {
     for (const variant of ['uncontained', 'contained'] as const) {
         for (const size of ['sm', 'md', 'lg'] as const) {
             for (const tint of ['neutral', 'primary', 'secondary', 'tertiary'] as const) {
-                const s = loadingIndicator({ variant, size, tint });
-                expect(s.root()).toContain('li');
-                expect(s.shape()).toContain('li-shape');
+                for (const containerShape of ['rounded', 'squircle', 'cookie'] as const) {
+                    const s = loadingIndicator({ variant, size, tint, containerShape });
+                    expect(s.root()).toContain('li');
+                    expect(s.shape()).toContain('li-shape');
+                }
             }
         }
     }
