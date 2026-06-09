@@ -40,6 +40,12 @@ export default defineConfig({
                 'components/**/*-harness.svelte.ts',
                 'components/**/index.ts',
                 'components/**/types.ts',
+                // Pure-logic helpers are unit-tested in node (their own *.test.ts);
+                // exclude them here so the merge keeps the node coverage instead of
+                // the indirect (and partial) browser coverage. The merge treats the
+                // two runs as disjoint file sets.
+                'components/**/mask.ts',
+                'components/**/number-field.ts',
                 '**/dist/**',
                 '**/.svelte-kit/**',
                 '**/*.d.ts',

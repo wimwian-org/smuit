@@ -131,3 +131,27 @@ describe('isDigitOnlyMask', () => {
         expect(isDigitOnlyMask('---')).toBe(false);
     });
 });
+
+describe('tokenize — escapes', () => {
+    test('a backslash escapes the next char into a literal', () => {
+        expect(tokenize('\\#')).toEqual([{ literal: true, char: '#' }]);
+    });
+    test('a trailing backslash is itself a literal', () => {
+        expect(tokenize('\\')).toEqual([{ literal: true, char: '\\' }]);
+    });
+});
+
+describe('accepts — alnum', () => {
+    test('accepts digits and letters, rejects symbols', () => {
+        expect(accepts('5', 'alnum')).toBe(true);
+        expect(accepts('q', 'alnum')).toBe(true);
+        expect(accepts('-', 'alnum')).toBe(false);
+    });
+});
+
+describe('caretAfterMask — past the last token', () => {
+    test('clamps to the full length when the count exceeds the token chars', () => {
+        const { masked } = applyMask('415', '(###) ###');
+        expect(caretAfterMask(masked, 99)).toBe(masked.length);
+    });
+});

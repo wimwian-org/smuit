@@ -47,8 +47,11 @@ export const textField = tv({
                 container: 'items-end rounded-t-md border-b border-g-400 bg-g-100 px-3.5 hover:bg-g-150',
             },
             outlined: {
+                // Focus = a single tint border (no ring) so only one colour shows.
+                // Hover only greys the border while NOT focused, so hovering a
+                // focused field keeps the accent (doesn't fall back to grey).
                 container:
-                    'rounded-md border border-g-300 px-3.5 hover:border-g-500 focus-within:border-[var(--tf-accent)] focus-within:ring-2 focus-within:ring-[var(--tf-accent)]',
+                    'rounded-md border border-g-300 px-3.5 [&:hover:not(:focus-within)]:border-g-500 focus-within:border-2 focus-within:border-[var(--tf-accent)]',
             },
             // Legacy underline-only — no fill or frame. Shares the filled bottom
             // indicator + bottom-aligned label (see text-field.css :is() rules).

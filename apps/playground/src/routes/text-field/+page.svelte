@@ -14,6 +14,33 @@
     const fruits = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Date', 'Fig', 'Grape'];
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
+
+    // Variant-comparison table: each use case rendered as outlined · filled · standard.
+    const cmpVariants = [undefined, 'filled', 'standard'] as const;
+    type CmpCase = {
+        uc: string;
+        label: string;
+        value?: string;
+        placeholder?: string;
+        hideLabel?: boolean;
+        required?: boolean;
+        error?: boolean;
+        disabled?: boolean;
+    };
+    const cmpCases: CmpCase[] = [
+        { uc: 'Resting label', label: 'Label' },
+        { uc: 'With value', label: 'Label', value: 'Jane Doe' },
+        { uc: 'Placeholder', label: 'Label', hideLabel: true, placeholder: 'Type here…' },
+        { uc: 'Required', label: 'Label', required: true },
+        { uc: 'Error', label: 'Label', value: 'nope', error: true },
+        { uc: 'Disabled', label: 'Label', value: 'Value', disabled: true },
+    ];
+    type CmpMl = { uc: string; label: string; value?: string; disabled?: boolean };
+    const cmpMlCases: CmpMl[] = [
+        { uc: 'Resting label', label: 'Notes' },
+        { uc: 'With value', label: 'Notes', value: 'Line one\nLine two' },
+        { uc: 'Disabled', label: 'Notes', value: 'Locked content', disabled: true },
+    ];
 </script>
 
 {#snippet search()}
@@ -39,6 +66,53 @@
             <TextField label="Outlined" supportingText="Default treatment." />
             <TextField label="Filled" variant="filled" supportingText="Tonal-fill treatment." />
             <TextField label="Standard" variant="standard" supportingText="Legacy underline." />
+        </div>
+    </section>
+
+    <!-- ── Variant comparison (use case × variant, underlines aligned) ── -->
+    <section>
+        <h2 class="demo-h2">Variant comparison <span class="demo-hint">— underlines aligned per row</span></h2>
+        <div class="cmp">
+            <span class="cmp-head">Use case</span>
+            <span class="cmp-head">Outlined</span>
+            <span class="cmp-head">Filled</span>
+            <span class="cmp-head">Standard</span>
+            {#each cmpCases as c (c.uc)}
+                <span class="cmp-uc">{c.uc}</span>
+                {#each cmpVariants as v (v ?? 'outlined')}
+                    <TextField
+                        label={c.label}
+                        value={c.value}
+                        placeholder={c.placeholder}
+                        hideLabel={c.hideLabel}
+                        required={c.required}
+                        error={c.error}
+                        disabled={c.disabled}
+                        variant={v}
+                        fullWidth
+                    />
+                {/each}
+            {/each}
+            <span class="cmp-uc">Leading icon</span>
+            {#each cmpVariants as v (v ?? 'outlined')}
+                <TextField label="Label" variant={v} fullWidth>
+                    {#snippet leadingIcon()}{@render search()}{/snippet}
+                </TextField>
+            {/each}
+        </div>
+
+        <h3 class="cmp-sub">Multiline</h3>
+        <div class="cmp">
+            <span class="cmp-head">Use case</span>
+            <span class="cmp-head">Outlined</span>
+            <span class="cmp-head">Filled</span>
+            <span class="cmp-head">Standard</span>
+            {#each cmpMlCases as c (c.uc)}
+                <span class="cmp-uc">{c.uc}</span>
+                {#each cmpVariants as v (v ?? 'outlined')}
+                    <TextArea label={c.label} value={c.value} disabled={c.disabled} rows={3} variant={v} fullWidth />
+                {/each}
+            {/each}
         </div>
     </section>
 
@@ -194,5 +268,30 @@
            Keep each row's supporting-text presence uniform so the box bottoms
            coincide with the underlines. */
         align-items: end;
+    }
+    .cmp {
+        display: grid;
+        grid-template-columns: minmax(7rem, 0.7fr) repeat(3, 1fr);
+        gap: 1.75rem 1.25rem;
+        /* Bottom-align every cell so the three variants' underlines line up
+           across each row (filled is 8px taller, so top-align would stagger them). */
+        align-items: end;
+    }
+    .cmp-head {
+        color: var(--page-fg);
+        font-size: var(--text-label-sm);
+        font-weight: 600;
+        opacity: 0.55;
+    }
+    .cmp-uc {
+        color: var(--page-fg);
+        font-size: var(--text-body-sm);
+        opacity: 0.8;
+    }
+    .cmp-sub {
+        color: var(--page-fg);
+        font-size: var(--text-heading-sm);
+        font-weight: 600;
+        margin: 2rem 0 1rem;
     }
 </style>

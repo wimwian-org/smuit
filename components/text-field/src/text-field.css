@@ -71,20 +71,39 @@
         --tf-label-left: calc(var(--tf-pad-x) + 1.75rem);
     }
     /* Standard (legacy underline): no horizontal padding, so the underline spans
-       the full width. Shares the bottom-aligned + indicator mechanics below. */
+       the full width. `0px` (not unitless `0`) so the leading-icon label offset
+       `calc(--tf-pad-x + 1.75rem)` stays a valid length. */
     .tf-container[data-variant='standard'] {
-        --tf-pad-x: 0;
+        --tf-pad-x: 0px;
     }
     /* Filled / standard (single-line): the input is bottom-aligned (items-end),
        leaving the top free for the floated label. */
     .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) {
         padding-bottom: 0.225rem;
     }
+    /* Filled / standard: 8px taller than the shared height, with a 4px gap above
+       and below the input (padding-block 4px → +8px). */
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) {
+        min-height: calc(var(--tf-height) + 0.5rem);
+        padding-block: 0.25rem;
+    }
+    /* Outlined: drop the centred slack — the input sits 4px above the border
+       (same gap as filled), keeping the top spacing, so the outline closes
+       tight around the content instead of padding out to the shared height. */
+    .tf-container[data-variant='outlined']:not([data-multiline]) {
+        min-height: 0;
+        padding-block: 0.625rem 0.25rem;
+    }
     /* Multiline (textarea): top-aligned, height driven by the textarea's rows,
        with room above for the floated label. */
     .tf-container[data-multiline] {
         min-height: 0;
         padding-block: 0.75rem 0.3125rem;
+    }
+    /* Filled textarea: 8px more top fill so the floated label is covered by the
+       fill with a gap above the first line of text. */
+    .tf-container[data-multiline][data-variant='filled'] {
+        padding-top: 1.25rem;
     }
     /* Filled / standard active indicator — a 2px accent bar that grows from the
        centre on focus (a ::after bar, so box-shadow stays free for `elevation`). */
@@ -100,6 +119,11 @@
     }
     .tf-container:is([data-variant='filled'], [data-variant='standard']):focus-within::after {
         transform: scaleX(1);
+    }
+    /* On focus the tint active-indicator takes over — drop the neutral resting
+       border so the two underline colours don't show at once. */
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):focus-within {
+        border-bottom-color: transparent;
     }
 
     /* ── Floating label (container-relative) ────────────────────────── */
@@ -133,7 +157,15 @@
        resting label sits over it; the floated label rises to the top. */
     .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) .tf-label {
         top: auto;
-        bottom: 0.225rem;
+        bottom: 0.5rem;
+        transform: translateY(0);
+    }
+    /* Outlined resting label: sit over the input (bottom-aligned) like filled,
+       so the resting "Label" lines up with the other variants instead of
+       floating high in the centre. (When floated it still rises to the notch.) */
+    .tf-container[data-variant='outlined']:not([data-multiline]):not([data-floated='true']) .tf-label {
+        top: auto;
+        bottom: 0.5rem;
         transform: translateY(0);
     }
     .tf-container:is([data-variant='filled'], [data-variant='standard'])[data-floated='true']:not([data-hide-label])
@@ -148,6 +180,11 @@
         top: 1rem;
         bottom: auto;
         transform: translateY(-50%);
+    }
+    /* Standard textarea: lift the floated label above the first line (no fill to
+       sit on, so it rises clear of the text). */
+    .tf-container[data-multiline][data-variant='standard'][data-floated='true']:not([data-hide-label]) .tf-label {
+        top: -0.3rem;
     }
     .tf-container[data-disabled] .tf-label {
         color: var(--tf-label-disabled-color);
@@ -187,16 +224,23 @@
         background: var(--color-g-100);
     }
 
-    /* ── Slotted icon / action sizing ───────────────────────────────── */
+    /* ── Slotted icon / action sizing (scaled to sit with the text) ──── */
     .tf-leading :where(svg),
     .tf-trailing :where(svg) {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1em;
+        height: 1em;
     }
     .tf-container[data-size='sm'] .tf-leading :where(svg),
     .tf-container[data-size='sm'] .tf-trailing :where(svg) {
-        width: 1.125rem;
-        height: 1.125rem;
+        width: 0.9em;
+        height: 0.9em;
+    }
+    /* Filled/standard bottom-align their children; size the adornment box to the
+       input line (1.5rem) so the centred icon lands on the input baseline (where
+       outlined — being items-center — already paints it). */
+    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline])
+        :is(.tf-leading, .tf-trailing) {
+        height: 1.5rem;
     }
     .tf-trailing :where(button) {
         display: inline-flex;
