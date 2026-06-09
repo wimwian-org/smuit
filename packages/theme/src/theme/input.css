@@ -34,7 +34,7 @@
     --color-tertiary: oklch(0.68 0.15 237);
     --color-error: oklch(0.56 0.21 21);
     --color-warning: oklch(0.93 0.18 103);
-    --color-success: oklch(0.55 0.1 132);
+    --color-success: oklch(0.74 0.25 142);
 
     /* ── Fonts ───────────────────────────────────────────────────── */
     --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;

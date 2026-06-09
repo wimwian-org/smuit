@@ -19,6 +19,7 @@ import {
     conf,
     parseTypeRamps,
     generate,
+    minify,
     describe as themeDescribe,
     mirror,
     isRag,
@@ -157,11 +158,17 @@ test('describe falls back to 7 elevation steps when invalid', () => {
 });
 
 // ── generate ──────────────────────────────────────────────────────────────────
-test('generate is a byte-for-byte match for the committed output.css', () => {
-    expect(generate(INPUT)).toBe(OUTPUT);
+test('minify(generate) is a byte-for-byte match for the committed (minified) output.css', () => {
+    expect(minify(generate(INPUT))).toBe(OUTPUT);
 });
 test('generate is deterministic / idempotent', () => {
     expect(generate(INPUT)).toBe(generate(INPUT));
+});
+test('minify collapses to one line but preserves significant value spaces', () => {
+    const css = minify(generate(INPUT));
+    expect(css).not.toContain('\n');
+    expect(css).toContain('--color-primary-500:oklch(0.65 0.23 34)'); // intra-value spaces kept
+    expect(css).not.toContain('; }'); // structural whitespace gone
 });
 test('generate emits the expected structure', () => {
     const css = generate(INPUT);

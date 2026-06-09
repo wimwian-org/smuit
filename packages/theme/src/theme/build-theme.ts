@@ -16,14 +16,15 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate, describe, ALL } from './theme-gen.ts';
+import { generate, minify, describe, ALL } from './theme-gen.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const INPUT = join(HERE, 'input.css');
 const OUTPUT = join(HERE, 'output.css');
 
 const source = readFileSync(INPUT, 'utf8');
-const out = generate(source);
+// output.css ships minified — it's a generated artifact, not hand-edited.
+const out = minify(generate(source));
 writeFileSync(OUTPUT, out, 'utf8');
 
 const { ramps, elevSteps } = describe(source);
