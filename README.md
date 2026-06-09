@@ -102,14 +102,16 @@ pnpm add @smuit/button @smuit/theme
 
 ### `@smuit/theme`
 
-A pure-CSS package (no Svelte, no JS) implementing MD3 color roles. Consumers import one of:
+A pure-CSS package (no Svelte, no JS): a single **flat** stylesheet — `output.css`,
+generated from `input.css` — with every MD3 color role, oklch palette, tint
+`@utility`, elevation/shadow ramp, and typescale baked to concrete values (no
+runtime `color-mix()` / `light-dark()`). Import it once at your app root:
 
 ```css
-@import '@smuit/theme'; /* full bundle */
-@import '@smuit/theme/tokens'; /* --L/--D toggle, MD3 color roles, elevation */
-@import '@smuit/theme/tints'; /* tint @utility classes */
-@import '@smuit/theme/typography'; /* MD3 typescale utilities */
+@import '@smuit/theme'; /* the flat theme — resolves to output.css */
 ```
+
+The same file is also reachable as `@smuit/theme/flat`.
 
 ### Component package anatomy
 
