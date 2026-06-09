@@ -53,7 +53,14 @@
     );
     // Percentage drives both the sweep arc and `aria-valuenow`. A bare `complete`
     // (no progress) reads as 100%.
-    const pct = $derived(isComplete ? 100 : clamped == null ? null : Math.round(clamped * 100));
+    const pct = $derived(
+        isComplete
+            ? 100
+            : /* istanbul ignore next -- pct is only read when mode !== 'indeterminate' (isComplete || clamped != null), so the `clamped == null` arm is dead when read */
+              clamped == null
+              ? null
+              : Math.round(clamped * 100),
+    );
 
     // Indeterminate morph set — custom `shapes` override the curated sequence; a
     // single shape rests static. The values list loops back to the first shape
@@ -76,6 +83,16 @@
         mq.addEventListener('change', onChange);
         return () => mq.removeEventListener('change', onChange);
     });
+
+    // The SMIL morph only animates with motion allowed *and* a real morph set
+    // (≥2 distinct shapes). A single static shape — or reduced motion — drops it.
+    const showMorph = $derived(!reduced && morph != null);
+
+    // Sweep-arc dash offset (determinate only). `pct` is always a number when the
+    // arc renders (mode === 'determinate' ⇒ clamped != null ⇒ pct = Math.round…),
+    // so the `?? 0` is a defensive fallback that never fires in practice.
+    /* istanbul ignore next -- defensive: pct is non-null whenever the arc renders */
+    const dashoffset = $derived(100 - (pct ?? 0));
 
     const styles = $derived(loadingIndicator({ variant, size, tint, containerShape }));
 </script>
@@ -133,12 +150,12 @@
                 stroke-linecap="round"
                 pathLength="100"
                 stroke-dasharray="100"
-                stroke-dashoffset={100 - (pct ?? 0)}
+                stroke-dashoffset={dashoffset}
                 transform="rotate(-90 12 12)"
             />
         {:else}
             <path d={restShape} fill="currentColor">
-                {#if !reduced && morph}
+                {#if showMorph}
                     <animate attributeName="d" dur="3s" repeatCount="indefinite" values={morph} />
                 {/if}
             </path>
