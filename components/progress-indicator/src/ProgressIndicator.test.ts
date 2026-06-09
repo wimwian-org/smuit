@@ -199,3 +199,61 @@ test('label snippet renders a caption and wraps the bar in a field', () => {
     expect(field()).toBeTruthy();
     expect(document.querySelector('[data-slot="label"]')?.textContent).toContain('Uploading');
 });
+
+// ── edge cases for value/max clamping ───────────────────────────────────────────
+test('determinate with no value (indeterminate=false) clamps to 0', () => {
+    // indeterminate forced false but no value → the `value == null ? 0` arm is
+    // read through aria-valuenow / --progress-value.
+    render(ProgressIndicator, { indeterminate: false });
+    const el = bar();
+    expect(el.getAttribute('aria-valuenow')).toBe('0');
+    expect(el.getAttribute('aria-valuetext')).toBe('0%');
+    expect(el.style.getPropertyValue('--progress-value')).toBe('0');
+});
+
+test('a non-positive max yields a 0 fraction (no divide-by-zero)', () => {
+    render(ProgressIndicator, { value: 0.5, max: 0 });
+    const el = bar();
+    // max <= 0 → fraction is 0, so 0% and no width.
+    expect(el.getAttribute('aria-valuetext')).toBe('0%');
+    expect(el.style.getPropertyValue('--progress-value')).toBe('0');
+    expect(el.getAttribute('aria-valuemax')).toBe('0');
+});
+
+test('a non-positive max yields a 0 buffer fraction', () => {
+    render(ProgressIndicator, { value: 0.5, max: 0, buffer: 0.5 });
+    const el = bar();
+    expect(el.querySelector('[data-slot="buffer"]')).toBeTruthy();
+    expect(el.style.getPropertyValue('--progress-buffer')).toBe('0');
+});
+
+// ── circular field / readout edge cases ─────────────────────────────────────────
+test('circular determinate without showValue omits the centred readout', () => {
+    render(ProgressIndicator, { shape: 'circular', value: 0.5 });
+    expect(field()).toBeNull();
+    expect(valueText()).toBeNull();
+});
+
+test('circular with a label wraps the ring in a centred field + caption', () => {
+    render(ProgressIndicator, {
+        shape: 'circular',
+        value: 0.5,
+        label: createRawSnippet(() => ({ render: () => '<span>Loading</span>' })),
+    });
+    const wrap = field();
+    expect(wrap).toBeTruthy();
+    expect(wrap?.className).toContain('items-center');
+    expect(wrap?.querySelector('[role="progressbar"]')).toBeTruthy();
+    expect(document.querySelector('[data-slot="label"]')?.textContent).toContain('Loading');
+});
+
+test('linear label without showValue renders the caption but no % readout', () => {
+    render(ProgressIndicator, {
+        value: 0.5,
+        label: createRawSnippet(() => ({ render: () => '<span>Status</span>' })),
+    });
+    const wrap = field();
+    expect(wrap?.className).toContain('w-full');
+    expect(document.querySelector('[data-slot="label"]')?.textContent).toContain('Status');
+    expect(valueText()).toBeNull();
+});
