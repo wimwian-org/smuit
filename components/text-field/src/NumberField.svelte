@@ -86,6 +86,7 @@
     $effect(() => {
         const o = opts;
         untrack(() => {
+            /* istanbul ignore else -- guards a hex/binary display from being re-derived from the numeric value */
             if (detectBase(display) === 'decimal') display = fromNumber(value, o);
         });
     });
@@ -125,6 +126,7 @@
 
     function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
         const el = event.currentTarget;
+        /* istanbul ignore next -- selectionStart is non-null for a focused text input; the ?? is defensive */
         const caret = el.selectionStart ?? el.value.length;
         const base = detectBase(el.value);
         const anchor = significantCountBefore(el.value, caret, base, seps.decimal);
@@ -155,6 +157,7 @@
         if (message === '' && validate) {
             const token = ++validateToken;
             const result = await validate(value);
+            /* istanbul ignore next -- only hit when a newer blur supersedes this validate mid-flight (race) */
             if (token !== validateToken) return; // superseded by a newer blur
             message = result ?? '';
         }

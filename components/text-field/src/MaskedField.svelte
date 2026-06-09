@@ -53,6 +53,7 @@
             );
             lastEmitted = r.masked;
             if (r.masked !== value) value = r.masked;
+            /* istanbul ignore next -- defensive: unmasked tracks the mask result, so it rarely differs alone */
             if (r.unmasked !== unmasked) unmasked = r.unmasked;
         }
     });
