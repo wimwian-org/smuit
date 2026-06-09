@@ -515,3 +515,21 @@ export function generate(source: string): string {
         ``,
     ].join('\n');
 }
+
+/**
+ * Minify generated CSS so output.css ships as a single line — signalling it is a
+ * build artifact (don't hand-edit) and shrinking it. Value-safe: runs of
+ * whitespace collapse to ONE space (so significant single spaces inside values —
+ * `oklch(0.65 0.23 34)`, `var(--L, x) var(--D, y)`, shadows — survive); only the
+ * insignificant whitespace around `{ } ; ,` and after `:` is removed. Space
+ * BEFORE `:` is kept, so descendant + pseudo selectors don't merge.
+ */
+export function minify(css: string): string {
+    return css
+        .replace(/\/\*[\s\S]*?\*\//g, '') // strip comments
+        .replace(/\s+/g, ' ') // collapse whitespace runs to a single space
+        .replace(/\s*([{};,])\s*/g, '$1') // drop space around { } ; ,
+        .replace(/:\s+/g, ':') // drop space after a colon (declarations / @media / @supports)
+        .replace(/;}/g, '}') // drop the redundant last semicolon in a block
+        .trim();
+}

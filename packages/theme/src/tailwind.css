@@ -25,7 +25,8 @@
 :root {
     /* ── Base hues (override to retheme) ─────────────────────────── */
     --color-mono: oklch(0.5 0 0);
-    --color-primary: oklch(0.57 0.19 268);
+    /* Keep in step with input.css --color-primary (the flat theme's base). */
+    --color-primary: oklch(0.65 0.23 34);
     --color-secondary: oklch(0.421 0.193 328.4);
     --color-tertiary: oklch(0.5 0.08 54);
     --color-error: oklch(0.65 0.21 36);

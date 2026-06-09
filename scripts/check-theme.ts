@@ -13,12 +13,12 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate } from '../packages/theme/src/theme/theme-gen.ts';
+import { generate, minify } from '../packages/theme/src/theme/theme-gen.ts';
 
 const THEME = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages', 'theme', 'src', 'theme');
 const input = readFileSync(join(THEME, 'input.css'), 'utf8');
 const committed = readFileSync(join(THEME, 'output.css'), 'utf8');
-const fresh = generate(input);
+const fresh = minify(generate(input));
 
 if (fresh === committed) {
     console.log('✓ @smuit/theme output.css is up to date.');

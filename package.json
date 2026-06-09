@@ -6,6 +6,8 @@
     "scripts": {
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "check:theme": "node scripts/check-theme.ts",
+        "theme:regen": "node scripts/regen-theme.ts",
+        "theme:watch": "node scripts/regen-theme.ts --watch",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "eslint .",
