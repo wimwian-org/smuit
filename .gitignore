@@ -5,6 +5,9 @@ build/
 coverage/
 coverage-browser/
 
+# Local theme backups — kept on disk, never tracked or published
+packages/theme/src/backup/
+
 # Generated snapshots
 apps/playground/src/routes/coverage.json
 apps/playground/src/routes/git-status.json

@@ -13,9 +13,9 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate, minify } from '../packages/theme/src/theme/theme-gen.ts';
+import { generate, minify } from '../packages/theme/src/theme-gen.ts';
 
-const THEME = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages', 'theme', 'src', 'theme');
+const THEME = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages', 'theme', 'src');
 const input = readFileSync(join(THEME, 'input.css'), 'utf8');
 const committed = readFileSync(join(THEME, 'output.css'), 'utf8');
 const fresh = minify(generate(input));
@@ -30,7 +30,7 @@ const b = fresh.split('\n');
 let i = 0;
 while (i < a.length && i < b.length && a[i] === b[i]) i++;
 
-console.error('✗ packages/theme/src/theme/output.css does NOT match generate(input.css).');
+console.error('✗ packages/theme/src/output.css does NOT match generate(input.css).');
 console.error('  output.css is GENERATED — do not hand-edit it. Regenerate with:');
 console.error('      pnpm --filter @smuit/theme build:theme');
 console.error(`  First difference at line ${i + 1}:`);

@@ -5,9 +5,8 @@
  */
 /*
  * Playground stylesheet — drives the sandbox from the GENERATED flat theme
- * (@smuit/theme/flat = packages/theme/src/theme/output.css), not the runtime
- * color-mix/contrast-color system. Tailwind must be imported first so it can
- * process the flat theme's @theme block and emit utilities.
+ * (@smuit/theme = packages/theme/src/output.css). Tailwind must be imported
+ * first so it can process the flat theme's @theme block and emit utilities.
  */
 @import 'tailwindcss';
 @import '@smuit/theme/flat';
