@@ -11,6 +11,13 @@ character counter — themed and dark-mode aware out of the box.
 
 ## Install
 
+Published to **GitHub Packages** under the `@wimwian-org` scope. GitHub Packages requires auth even to install, so add this to your project's `.npmrc` first:
+
+```ini
+@wimwian-org:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}   # a PAT with read:packages
+```
+
 ```sh
 pnpm add @wimwian-org/text-field
 ```
