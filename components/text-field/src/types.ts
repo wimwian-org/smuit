@@ -143,5 +143,35 @@ export type NumberFieldProps = Omit<Props, 'value' | 'min' | 'max' | 'suggestion
     validate?: (value: number | null) => string | null | undefined | Promise<string | null | undefined>;
 };
 
-// Deferred (next): non-text input `type`s (email/password/search/tel/url,
-// `pattern`); select mode; and input masking.
+/**
+ * Props for the password field. Built on {@link Props} (so label, variant, size,
+ * tint, leading icon, supporting/error text, etc. all flow through), rendering a
+ * masked `type="password"` input with a built-in show/hide reveal toggle in the
+ * trailing slot. `autocomplete` defaults to `"current-password"`. The
+ * autosuggest, prefix/suffix, and custom trailing-icon affordances of the base
+ * field are dropped (not meaningful for a password).
+ */
+export type PasswordFieldProps = Omit<Props, 'suggestions' | 'prefix' | 'suffix' | 'trailingIcon' | 'type'> & {
+    /** Show the built-in reveal (show/hide) toggle in the trailing slot. @default true */
+    revealable?: boolean;
+};
+
+/**
+ * Props for the masked field. Built on {@link Props} (so label, variant, size,
+ * tint, prefix/suffix, icons, supporting/error text, etc. all flow through). A
+ * `mask` template formats the value as the user types: `#` accepts a digit, `A`
+ * a letter, `*` an alphanumeric, `\` escapes a token character, and every other
+ * character is a literal separator inserted automatically. The bound `value` is
+ * the formatted string; `unmasked` exposes the raw token characters.
+ */
+export type MaskedFieldProps = Omit<Props, 'suggestions'> & {
+    /** Mask template — e.g. `"(###) ###-####"`. Required. */
+    mask: string;
+    /** Two-way bound formatted display string. @default "" */
+    value?: string;
+    /** Two-way bound raw value — token characters only, no literals. @default "" */
+    unmasked?: string;
+};
+
+// Deferred (next): the remaining non-text input `type`s (email/search/tel/url,
+// `pattern`); and select mode.

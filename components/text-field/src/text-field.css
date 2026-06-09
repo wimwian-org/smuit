@@ -202,4 +202,24 @@
         display: inline-flex;
         cursor: pointer;
     }
+
+    /* ── Password reveal toggle ─────────────────────────────────────── */
+    /* A bare icon button living in the trailing slot; inherits the slot colour
+       and shows an AA-contrast focus ring. Disabled with the field. */
+    .tf-reveal {
+        margin: 0;
+        padding: 0.125rem;
+        border: 0;
+        border-radius: 0.25rem;
+        background: transparent;
+        color: inherit;
+        line-height: 0;
+    }
+    .tf-reveal:disabled {
+        cursor: not-allowed;
+    }
+    .tf-reveal:focus-visible {
+        outline: 2px solid var(--tf-accent);
+        outline-offset: 2px;
+    }
 }

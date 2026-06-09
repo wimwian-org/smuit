@@ -18,6 +18,7 @@
     };
 
     let {
+        type = 'text',
         placeholder,
         onfocus,
         onblur,
@@ -82,7 +83,7 @@
     {placeholder}
     {...restProps}
     id={ctx.inputId}
-    type="text"
+    {type}
     class={styles.input()}
     data-slot="input"
     aria-describedby={ctx.describedBy}
