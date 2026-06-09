@@ -3,16 +3,35 @@
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
-import { afterEach, expect, test } from 'vitest';
+import { afterEach, expect, test, vi } from 'vitest';
 import { page, userEvent } from '@vitest/browser/context';
 import { render } from 'vitest-browser-svelte';
 import Harness from './tabs-harness.test.svelte';
 import RefHarness from './tabs-ref.test.svelte';
 
+const realMatchMedia = window.matchMedia;
+
 afterEach(() => {
     document.body.innerHTML = '';
     document.documentElement.removeAttribute('data-theme');
+    window.matchMedia = realMatchMedia;
 });
+
+// Force the `prefers-reduced-motion: reduce` branch — list scrolling then snaps
+// (behavior: 'auto'), which also lets the scroll position settle synchronously.
+function forceReducedMotion() {
+    window.matchMedia = ((query: string) =>
+        ({
+            matches: query.includes('reduce'),
+            media: query,
+            addEventListener() {},
+            removeEventListener() {},
+            addListener() {},
+            removeListener() {},
+            onchange: null,
+            dispatchEvent: () => false,
+        }) as unknown as MediaQueryList) as typeof window.matchMedia;
+}
 
 const root = () => document.querySelector('.tabs') as HTMLElement;
 const tabByName = (name: string) =>
@@ -204,4 +223,120 @@ test('merges a consumer class onto a trigger', () => {
     expect(tabByName('One')?.className).toContain('my-tab');
     // The base trigger class is preserved alongside the consumer class.
     expect(tabByName('One')?.className).toContain('tabs-trigger');
+});
+
+// ── overflow scrolling: live behaviour ────────────────────────────────────────
+const list = () => document.querySelector('[role="tablist"]') as HTMLElement;
+const wrap = () => document.querySelector('[data-slot="list-wrap"]') as HTMLElement;
+const prevBtn = () => document.querySelector('[data-slot="scroll-prev"]') as HTMLButtonElement;
+const nextBtn = () => document.querySelector('[data-slot="scroll-next"]') as HTMLButtonElement;
+
+// Squeeze the scroll viewport so the (many) triggers genuinely overflow, then
+// wait for the ResizeObserver-driven $effect to flag the overflow.
+// Set the active tab programmatically (no focus → no native focus-scroll), so the
+// bit's own scrollActiveIntoView runs against a genuinely off-view active tab.
+async function setActive(v: string) {
+    const btn = document.querySelector('[data-testid="set-value"]') as HTMLButtonElement;
+    btn.dataset.v = v;
+    btn.click();
+}
+
+async function overflow() {
+    const w = wrap();
+    w.style.maxWidth = '160px';
+    w.style.width = '160px';
+    list().style.maxWidth = '120px';
+    await vi.waitFor(() => expect(wrap().hasAttribute('data-overflow')).toBe(true));
+}
+
+test('scrollable: an overflowing row flags data-overflow and enables Next', async () => {
+    render(Harness, { scrollable: true, extraTabs: 12 });
+    await overflow();
+    // At the start, Prev is disabled and Next is enabled (more to scroll forward).
+    expect(prevBtn().disabled).toBe(true);
+    expect(nextBtn().disabled).toBe(false);
+});
+
+test('scrollable: Next pages the viewport forward, then Prev pages it back', async () => {
+    render(Harness, { scrollable: true, extraTabs: 12 });
+    await overflow();
+    expect(list().scrollLeft).toBe(0);
+
+    // Pressing Next scrolls the viewport forward; Prev becomes enabled.
+    await nextBtn().click();
+    await vi.waitFor(() => expect(list().scrollLeft).toBeGreaterThan(0));
+    await vi.waitFor(() => expect(prevBtn().disabled).toBe(false));
+
+    const after = list().scrollLeft;
+    // Pressing Prev scrolls it back toward the start (wait for it to re-enable).
+    await vi.waitFor(() => expect(prevBtn().disabled).toBe(false));
+    await prevBtn().click();
+    await vi.waitFor(() => expect(list().scrollLeft).toBeLessThan(after));
+});
+
+test('scrollable: far + early selections scroll the row both directions (reduced motion)', async () => {
+    // Reduced motion → scroll snaps instantly, so both scroll-into-view branches
+    // (a.right > r.right scrolling forward, then a.left < r.left scrolling back)
+    // settle deterministically.
+    forceReducedMotion();
+    render(Harness, { scrollable: true, extraTabs: 12 });
+    await overflow();
+    expect(list().scrollLeft).toBe(0);
+
+    // Activating a trigger off the right edge scrolls the list forward (a.right > r.right).
+    await setActive('extra-11');
+    await vi.waitFor(() => expect(list().scrollLeft).toBeGreaterThan(0));
+    const far = list().scrollLeft;
+
+    // Activating an early (left-of-view) tab scrolls the list back (a.left < r.left).
+    await setActive('one');
+    await vi.waitFor(() => expect(list().scrollLeft).toBeLessThan(far));
+});
+
+test('scrollable + vertical: an overflowing column scrolls both directions (reduced motion)', async () => {
+    forceReducedMotion();
+    render(Harness, { scrollable: true, orientation: 'vertical', extraTabs: 24 });
+    const w = wrap();
+    w.style.maxHeight = '160px';
+    w.style.height = '160px';
+    list().style.maxHeight = '130px';
+    await vi.waitFor(() => expect(wrap().hasAttribute('data-overflow')).toBe(true));
+    expect(prevBtn().disabled).toBe(true);
+    expect(nextBtn().disabled).toBe(false);
+
+    // Activating a far-down tab scrolls it into view (a.bottom > r.bottom)…
+    await setActive('extra-23');
+    await vi.waitFor(() => expect(list().scrollTop).toBeGreaterThan(0));
+    const far = list().scrollTop;
+    // …then an early tab scrolls back up (a.top < r.top).
+    await setActive('one');
+    await vi.waitFor(() => expect(list().scrollTop).toBeLessThan(far));
+
+    // Next pages the column down from the (now top-aligned) position.
+    await nextBtn().click();
+    await vi.waitFor(() => expect(list().scrollTop).toBeGreaterThan(0));
+    const afterNext = list().scrollTop;
+    // Wait for the scroll-event to re-enable Prev before pressing it back up.
+    await vi.waitFor(() => expect(prevBtn().disabled).toBe(false));
+    await prevBtn().click();
+    await vi.waitFor(() => expect(list().scrollTop).toBeLessThan(afterNext));
+});
+
+// ── indicator measurement edge cases ─────────────────────────────────────────
+test('subtle variant measures the whole trigger box for the indicator', async () => {
+    // bold hugs the label span; subtle spans the whole trigger — exercise the
+    // non-bold measurement branch and assert the indicator becomes ready.
+    render(Harness, { variant: 'subtle' });
+    const indicator = root().querySelector('[data-slot="indicator"]') as HTMLElement;
+    await vi.waitFor(() => expect(indicator.hasAttribute('data-ready')).toBe(true));
+});
+
+test('scrollable with no matching active value leaves the indicator not-ready', async () => {
+    // No trigger matches the value → no active tab. Both measure() and (because
+    // scrollable) scrollActiveIntoView() take their `!active` early-return path.
+    render(Harness, { value: 'does-not-exist', scrollable: true });
+    const indicator = root().querySelector('[data-slot="indicator"]') as HTMLElement;
+    // Give the rAF/measure a chance to run, then confirm it never marked ready.
+    await new Promise((r) => setTimeout(r, 50));
+    expect(indicator.hasAttribute('data-ready')).toBe(false);
 });
