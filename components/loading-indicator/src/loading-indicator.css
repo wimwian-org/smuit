@@ -1,0 +1,92 @@
+/*
+ * @smuit/loading-indicator
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+@reference "@smuit/theme";
+
+/*
+ * Geometry + colour that tailwind-variants can't express cleanly: the container
+ * vs indicator footprint per `size`, the contained fill + corner shape per
+ * `variant`, the tint accent, and the morph/spin animation. Every value reads
+ * one of the component tokens declared on `.li`, which in turn read the smuit
+ * `--color-g-*` / `--surface-*` design tokens — no literals, no `.dark` selector.
+ */
+@layer components {
+    .li {
+        /* Tokens-first — everything below resolves through these. */
+        --li-ind: 2.375rem; /* active-indicator size (md / 38dp default) */
+        --li-box: 3rem; /* contained container size (md / 48dp default) */
+        --li-radius: 35%; /* contained container corner (the M3 "container shape") */
+        --li-spin: 4s; /* one full rotation */
+
+        /* Accent — drives the indicator colour and the contained fill. Theme-
+           independent semantic tokens (not the `--color-c-*` content scale) so
+           it works under both the runtime and the flat theme. Default = neutral
+           grey; the `tint` prop repoints it to a palette accent. */
+        --li-accent: var(--color-g-700);
+        --li-container: color-mix(in srgb, var(--li-accent) 14%, var(--surface-mono-bg));
+
+        color: var(--li-accent);
+    }
+
+    /* ── Tint → accent + container fill (semantic surface tokens) ─────── */
+    .li[data-tint='primary'] {
+        --li-accent: var(--surface-primary-accent);
+        --li-container: color-mix(in srgb, var(--li-accent) 14%, var(--surface-primary-bg));
+    }
+    .li[data-tint='secondary'] {
+        --li-accent: var(--surface-secondary-accent);
+        --li-container: color-mix(in srgb, var(--li-accent) 14%, var(--surface-secondary-bg));
+    }
+    .li[data-tint='tertiary'] {
+        --li-accent: var(--surface-tertiary-accent);
+        --li-container: color-mix(in srgb, var(--li-accent) 14%, var(--surface-tertiary-bg));
+    }
+    /* Neutral keeps the default `--li-accent` (a theme-flipping grey). */
+
+    /* ── Footprint per size ──────────────────────────────────────────── */
+    .li[data-size='sm'] {
+        --li-ind: 1.5rem;
+        --li-box: 2rem;
+    }
+    .li[data-size='lg'] {
+        --li-ind: 3.25rem;
+        --li-box: 4rem;
+    }
+
+    /* ── Variant footprint + container surface ───────────────────────── */
+    /* Uncontained: the box hugs the indicator, transparent background. */
+    .li[data-variant='uncontained'] {
+        width: var(--li-ind);
+        height: var(--li-ind);
+    }
+    /* Contained: a filled, rounded surface framing a centred indicator. */
+    .li[data-variant='contained'] {
+        width: var(--li-box);
+        height: var(--li-box);
+        background: var(--li-container);
+        border-radius: var(--li-radius);
+    }
+
+    /* ── Active indicator — size + continuous morph/spin ─────────────── */
+    .li-shape {
+        width: var(--li-ind);
+        height: var(--li-ind);
+        animation: li-spin var(--li-spin) linear infinite;
+    }
+
+    @keyframes li-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ── Reduced motion — stop the spin; the morph (SMIL) is dropped in
+       the component, leaving a single resting shape. ─────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+        .li-shape {
+            animation: none;
+        }
+    }
+}
