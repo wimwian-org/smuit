@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 // Loads Tailwind + design tokens (the generated flat theme, @smuit/theme) into

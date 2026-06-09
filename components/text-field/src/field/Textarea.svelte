@@ -1,6 +1,6 @@
 <!--
   @smuit/text-field
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!--
@@ -34,7 +34,9 @@
     }: TextareaProps = $props();
 
     const ctx = getFieldContext();
-    const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
+    const styles = $derived(
+        textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }),
+    );
     // `tf-autosize` (CSS) owns field-sizing + a rows-based min-height + overflow:
     // hidden so it grows cleanly with no scrollbar. Otherwise: manual vertical resize.
     const cls = $derived(twMerge(styles.input(), autosize ? 'tf-autosize' : 'resize-y'));

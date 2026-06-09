@@ -27,7 +27,7 @@
         "css",
         "svelte"
     ],
-    "author": "Anand Panchapakesan",
+    "author": "wimwian",
     "license": "MIT",
     "publishConfig": {
         "access": "public",

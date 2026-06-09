@@ -113,4 +113,4 @@ bits).
 
 ## License
 
-[MIT](./LICENSE) © Anand Panchapakesan
+[MIT](./LICENSE) © wimwian

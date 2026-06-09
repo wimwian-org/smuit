@@ -36,7 +36,7 @@
         "material-design",
         "mui"
     ],
-    "author": "Anand Panchapakesan",
+    "author": "wimwian",
     "license": "MIT",
     "publishConfig": {
         "access": "public",

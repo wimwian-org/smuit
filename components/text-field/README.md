@@ -103,40 +103,40 @@ prefix/suffix or icon adornments (not meaningful for multi-line entry).
 
 ## Props
 
-| Prop             | Type                                                  | Default      | Description                                                      |
-| ---------------- | ----------------------------------------------------- | ------------ | ---------------------------------------------------------------- |
-| `label`          | `string`                                              | —            | Field label and accessible name. **Required.**                   |
-| `variant`        | `'filled' \| 'outlined' \| 'standard'`                | `'outlined'` | Container treatment (`standard` = legacy underline).            |
-| `size`           | `'sm' \| 'md'`                                        | `'md'`       | Density.                                                         |
-| `tint`           | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'primary'`  | Focus-accent palette (retints `--color-c-*`).                    |
-| `value`          | `string`                                              | `''`         | Two-way bindable value.                                          |
-| `hideLabel`      | `boolean`                                             | `false`      | Visually hide the label (kept for screen readers).               |
-| `placeholder`    | `string`                                              | —            | Hint shown while empty and focused.                              |
-| `supportingText` | `string`                                              | —            | Static guidance below the field.                                 |
-| `prefix`         | `string`                                              | —            | Static text before the value (e.g. `$`); revealed once floated.  |
-| `suffix`         | `string`                                              | —            | Static text after the value (e.g. `.00`); revealed once floated. |
-| `leadingIcon`    | `Snippet`                                             | —            | Leading icon slot.                                               |
-| `trailingIcon`   | `Snippet`                                             | —            | Trailing icon / action slot.                                     |
-| `maxlength`      | `number`                                              | —            | Enables the character counter and soft-caps typed input.         |
-| `fullWidth`      | `boolean`                                             | `false`      | Stretch to fill the available inline width.                      |
-| `elevation`      | `boolean`                                             | `false`      | Resting shadow that deepens and lifts 2px on focus.              |
-| `disabled`       | `boolean`                                             | `false`      | Non-interactive; excluded from submission.                       |
-| `readonly`       | `boolean`                                             | `false`      | Not editable, but selectable and focusable.                      |
-| `error`          | `boolean`                                             | `false`      | Paint the error state (also set by a reported constraint failure). |
-| `errorText`      | `string`                                              | —            | Shown while in error; replaces the supporting text (empty keeps it). |
-| `required`       | `boolean`                                             | `false`      | Required; renders an asterisk and sets the native attribute.      |
-| `noAsterisk`     | `boolean`                                             | `false`      | Suppress the asterisk while keeping `required` semantics.         |
+| Prop             | Type                                                  | Default      | Description                                                                   |
+| ---------------- | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------- |
+| `label`          | `string`                                              | —            | Field label and accessible name. **Required.**                                |
+| `variant`        | `'filled' \| 'outlined' \| 'standard'`                | `'outlined'` | Container treatment (`standard` = legacy underline).                          |
+| `size`           | `'sm' \| 'md'`                                        | `'md'`       | Density.                                                                      |
+| `tint`           | `'neutral' \| 'primary' \| 'secondary' \| 'tertiary'` | `'primary'`  | Focus-accent palette (retints `--color-c-*`).                                 |
+| `value`          | `string`                                              | `''`         | Two-way bindable value.                                                       |
+| `hideLabel`      | `boolean`                                             | `false`      | Visually hide the label (kept for screen readers).                            |
+| `placeholder`    | `string`                                              | —            | Hint shown while empty and focused.                                           |
+| `supportingText` | `string`                                              | —            | Static guidance below the field.                                              |
+| `prefix`         | `string`                                              | —            | Static text before the value (e.g. `$`); revealed once floated.               |
+| `suffix`         | `string`                                              | —            | Static text after the value (e.g. `.00`); revealed once floated.              |
+| `leadingIcon`    | `Snippet`                                             | —            | Leading icon slot.                                                            |
+| `trailingIcon`   | `Snippet`                                             | —            | Trailing icon / action slot.                                                  |
+| `maxlength`      | `number`                                              | —            | Enables the character counter and soft-caps typed input.                      |
+| `fullWidth`      | `boolean`                                             | `false`      | Stretch to fill the available inline width.                                   |
+| `elevation`      | `boolean`                                             | `false`      | Resting shadow that deepens and lifts 2px on focus.                           |
+| `disabled`       | `boolean`                                             | `false`      | Non-interactive; excluded from submission.                                    |
+| `readonly`       | `boolean`                                             | `false`      | Not editable, but selectable and focusable.                                   |
+| `error`          | `boolean`                                             | `false`      | Paint the error state (also set by a reported constraint failure).            |
+| `errorText`      | `string`                                              | —            | Shown while in error; replaces the supporting text (empty keeps it).          |
+| `required`       | `boolean`                                             | `false`      | Required; renders an asterisk and sets the native attribute.                  |
+| `noAsterisk`     | `boolean`                                             | `false`      | Suppress the asterisk while keeping `required` semantics.                     |
 | `suggestions`    | `string[]`                                            | `[]`         | Autosuggest values shown in a listbox on focus (capped by `MAX_SUGGESTIONS`). |
-| `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                          |
+| `ref`            | `HTMLInputElement \| null`                            | `null`       | `bind:ref` to the underlying `<input>`.                                       |
 
 All other native `<input>` attributes (`name`, `id`, `autocomplete`, `oninput`, `onchange`, …)
 pass straight through to the underlying element.
 
 ### CSS custom properties
 
-| Variable        | Default       | Description                                                                                              |
-| --------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
-| `--tf-notch-bg` | `--page-bg`   | Backdrop the **outlined** floated label paints over the top border. Set it on an ancestor when the field sits on a non-page surface (e.g. a tinted card) so the notch matches that surface. |
+| Variable        | Default     | Description                                                                                                                                                                                 |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--tf-notch-bg` | `--page-bg` | Backdrop the **outlined** floated label paints over the top border. Set it on an ancestor when the field sits on a non-page surface (e.g. a tinted card) so the notch matches that surface. |
 
 ## Scope
 
@@ -181,4 +181,4 @@ conventions. It does not depend on, bundle, or copy code from either project —
 anatomy, behaviour, and accessibility model only (with Material Web taking precedence where the two
 disagreed).
 
-MIT © Anand Panchapakesan
+MIT © wimwian

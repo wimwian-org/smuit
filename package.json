@@ -31,7 +31,7 @@
         "push:master": "node scripts/push-master.mjs"
     },
     "keywords": [],
-    "author": "Anand Panchapakesan",
+    "author": "wimwian",
     "license": "MIT",
     "type": "module",
     "devDependencies": {

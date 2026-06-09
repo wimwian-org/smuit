@@ -1,6 +1,6 @@
 <!--
   @smuit/text-field
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!--
@@ -19,7 +19,9 @@
     let { side, children }: { side: Side; children: Snippet } = $props();
 
     const ctx = getFieldContext();
-    const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
+    const styles = $derived(
+        textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }),
+    );
 
     // Register a leading adornment so the label start shifts past it.
     $effect(() => {

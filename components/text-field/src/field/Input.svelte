@@ -1,6 +1,6 @@
 <!--
   @smuit/text-field
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!--
@@ -29,7 +29,9 @@
     }: InputProps = $props();
 
     const ctx = getFieldContext();
-    const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
+    const styles = $derived(
+        textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }),
+    );
     const activeId = $derived(ctx.open && ctx.activeIndex >= 0 ? ctx.optionId(ctx.activeIndex) : undefined);
 
     function handleFocus(event: FocusEvent & { currentTarget: HTMLInputElement }) {

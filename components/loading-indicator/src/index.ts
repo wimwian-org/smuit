@@ -1,6 +1,6 @@
 /*
  * @smuit/loading-indicator
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 export { default as LoadingIndicator } from './LoadingIndicator.svelte';

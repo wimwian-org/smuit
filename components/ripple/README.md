@@ -82,4 +82,4 @@ import { ripple, Ripple, rippleVariants } from '@smuit/ripple';
 import type { RippleVariant, RippleOptions } from '@smuit/ripple';
 ```
 
-MIT © Anand Panchapakesan
+MIT © wimwian

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -222,7 +222,7 @@ const DANGER = `/* =============================================================
  *
  *   Light is the default. Dark applies via [data-theme='dark'] OR the OS
  *   preference (prefers-color-scheme: dark), unless [data-theme='light'] is
- *   explicitly set. Copyright (c) 2026 Anand Panchapakesan · MIT.
+ *   explicitly set. Copyright (c) 2026 wimwian · MIT.
  * ============================================================================ */`;
 
 /** Metadata about a parsed input — handy for CLI logging. */
