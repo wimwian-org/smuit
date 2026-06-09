@@ -86,8 +86,8 @@
     --type-display: 3 36px;
     --type-title: 3 24px;
     --type-heading: 5 20px;
-    --type-body: 5 16px;
-    --type-label: 3 14px;
+    --type-body: 5 0.875rem;
+    --type-label: 3 0.75rem;
     --type-code: 3 14px;
 
     --font-ratio: 1.2; /* default modular ratio between adjacent steps */
