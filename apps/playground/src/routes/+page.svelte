@@ -164,6 +164,11 @@
             style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border: 1px solid var(--canvas-border); border-radius: 0.5rem; color: var(--page-fg); text-decoration: none; font-size: var(--text-body-sm); font-weight: 500"
             >List <span style="opacity: 0.5">· v1</span></a
         >
+        <a
+            href="/tabs"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border: 1px solid var(--canvas-border); border-radius: 0.5rem; color: var(--page-fg); text-decoration: none; font-size: var(--text-body-sm); font-weight: 500"
+            >Tabs <span style="opacity: 0.5">· v1</span></a
+        >
     </div>
 </nav>
 
