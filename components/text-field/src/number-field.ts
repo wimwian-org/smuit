@@ -43,9 +43,10 @@ export interface NumberFormatOptions {
 export function localeSeparators(locale?: string): { group: string; decimal: string } {
     const parts = new Intl.NumberFormat(locale).formatToParts(11111.1);
     return {
-        /* v8 ignore next 2 -- the 11111.1 sample always yields group + decimal parts; the ?? are defensive */
+        /* v8 ignore start -- the 11111.1 sample always yields group + decimal parts; the ?? are defensive */
         group: parts.find((p) => p.type === 'group')?.value ?? ',',
         decimal: parts.find((p) => p.type === 'decimal')?.value ?? '.',
+        /* v8 ignore stop */
     };
 }
 

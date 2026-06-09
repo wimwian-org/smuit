@@ -239,6 +239,33 @@ test('a decimal point is allowed once when decimalAllowed', () => {
     expect(dot.defaultPrevented).toBe(false);
 });
 
+test('a decimal point is blocked when decimalAllowed is false', () => {
+    render(NumberField, { label: 'Qty' });
+    const el = input();
+    el.focus();
+    const dot = new KeyboardEvent('keydown', { key: '.', cancelable: true, bubbles: true });
+    el.dispatchEvent(dot);
+    expect(dot.defaultPrevented).toBe(true);
+});
+
+test('binary base gates keys to 0 and 1', async () => {
+    render(Harness, { label: 'Bin', value: null });
+    await page.getByRole('textbox', { name: 'Bin' }).fill('0b1');
+    const el = input();
+    el.focus();
+    const one = new KeyboardEvent('keydown', { key: '1', cancelable: true, bubbles: true });
+    el.dispatchEvent(one);
+    expect(one.defaultPrevented).toBe(false); // 0/1 allowed in binary
+    const two = new KeyboardEvent('keydown', { key: '2', cancelable: true, bubbles: true });
+    el.dispatchEvent(two);
+    expect(two.defaultPrevented).toBe(true); // 2 is not a binary digit
+});
+
+test('a static errorText is shown', () => {
+    render(NumberField, { label: 'Amount', error: true, errorText: 'Bad number' });
+    expect(document.body.textContent).toContain('Bad number');
+});
+
 // ── validation: max + custom validate ─────────────────────────────────────────
 test('flags a value above max on blur', async () => {
     render(NumberField, { label: 'Pct', max: 100 });
@@ -262,4 +289,28 @@ test('runs a custom async validate on blur and clears when valid', async () => {
     await page.getByRole('textbox', { name: 'Odd' }).fill('4');
     el.blur();
     await vi.waitFor(() => expect(root().dataset.error).toBeUndefined());
+});
+
+test('non-printable keys (multi-char) are not gated', () => {
+    render(NumberField, { label: 'Amount', value: 5 });
+    const el = input();
+    el.focus();
+    const ev = new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true, bubbles: true });
+    el.dispatchEvent(ev);
+    expect(ev.defaultPrevented).toBe(false);
+});
+
+test('a second decimal point is blocked', () => {
+    render(NumberField, { label: 'Price', decimalAllowed: true, value: 1.5 });
+    const el = input();
+    el.focus();
+    const dot = new KeyboardEvent('keydown', { key: '.', cancelable: true, bubbles: true });
+    el.dispatchEvent(dot);
+    expect(dot.defaultPrevented).toBe(true); // already has a '.'
+});
+
+test('a binary value keeps the numeric inputmode (decimalAllowed ignored off-base)', async () => {
+    render(Harness, { label: 'Bin', value: null, decimalAllowed: true });
+    await page.getByRole('textbox', { name: 'Bin' }).fill('0b101');
+    await vi.waitFor(() => expect(input().getAttribute('inputmode')).toBe('numeric'));
 });

@@ -189,4 +189,7 @@ describe('sanitize — decimal edge cases', () => {
     test('no decimalAccuracy keeps the full fraction', () => {
         expect(sanitize('1.2345', { decimalAllowed: true })).toBe('1.2345');
     });
+    test('a negative decimalAccuracy disables the fractional cap', () => {
+        expect(sanitize('1.23456789', { decimalAllowed: true, decimalAccuracy: -1 })).toBe('1.23456789');
+    });
 });
