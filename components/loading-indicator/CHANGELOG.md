@@ -1,5 +1,12 @@
 # @smuit/loading-indicator
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`44a58ed`](https://github.com/wimwian-org/smuit/commit/44a58ed7926e4e7057b442a0839c1f76932cb1f7), [`08ace21`](https://github.com/wimwian-org/smuit/commit/08ace2175a3fac4185a76555db3bf61754712fbf)]:
+    - @smuit/theme@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
