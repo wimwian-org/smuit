@@ -12,7 +12,7 @@ pre-commit:
         - name: theme-up-to-date
           # Fail the commit if the generated flat theme drifts from input.css
           # (a stale build, or a hand-edit to the GENERATED output.css).
-          glob: 'packages/theme/src/theme/{input.css,output.css,theme-gen.ts,build-theme.ts}'
+          glob: 'packages/theme/src/{input.css,output.css,theme-gen.ts,build-theme.ts}'
           run: pnpm check:theme
         - name: branch-prune-reminder
           skip:
