@@ -1,5 +1,16 @@
 # @smuit/loading-indicator
 
+## 0.2.0
+
+### Minor Changes
+
+- [#17](https://github.com/wimwian-org/smuit/pull/17) [`9a68d37`](https://github.com/wimwian-org/smuit/commit/9a68d374103d86dc16172c14e2e2ac54287b8631) Thanks [@wimwian](https://github.com/wimwian)! - Add the deferred loading-indicator features: a determinate `progress` (0→1) mode with a sweep arc and `aria-valuenow`, a completion hand-off (`complete` / `progress >= 1`) that settles into a success checkmark, a custom `shapes` morph sequence (with exported `LOADING_INDICATOR_SHAPES` / `DEFAULT_SHAPE_SEQUENCE`), and a `containerShape` option (`rounded` / `squircle` / `cookie`) for the contained variant. The exact AndroidX spring-physics morph remains deferred.
+
+### Patch Changes
+
+- Updated dependencies [[`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd)]:
+    - @smuit/theme@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

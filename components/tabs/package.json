@@ -1,6 +1,6 @@
 {
     "name": "@smuit/tabs",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Material Design 3–style tabs for Svelte 5 — bold and subtle variants, sm/md sizes, an animated sliding indicator, leading icons, and automatic/manual activation, backed by bits-ui on smuit design tokens.",
     "type": "module",
     "files": [

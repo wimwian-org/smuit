@@ -1,6 +1,6 @@
 {
     "name": "@smuit/theme",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Material Design 3 design tokens, oklch palettes, and Tailwind CSS v4 theme for smuit components",
     "type": "module",
     "exports": {
