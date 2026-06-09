@@ -16,7 +16,9 @@
     .tf {
         /* Tokens-first — everything below resolves through these. */
         --tf-pad-x: 0.875rem;
-        --tf-height: 3.5rem;
+        /* Sized to the content, not a fixed 56px: the input line (text-base,
+           1.5rem) + the floated-label region above it + the bottom padding. */
+        --tf-height: 2.75rem;
         --tf-label-rest: 1rem;
         /* Focus accent + floated-label colour. Driven by the per-tint semantic
            surface tokens below (not the `--color-c-*` content scale), so the
@@ -60,7 +62,8 @@
         --tf-label-left: var(--tf-pad-x);
     }
     .tf-container[data-size='sm'] {
-        --tf-height: 3rem;
+        /* text-sm input line (1.25rem) + label region + padding. */
+        --tf-height: 2.5rem;
         --tf-label-rest: 0.875rem;
     }
     /* Shift the label start past a leading icon (icon box + container gap). */
@@ -111,9 +114,9 @@
     }
     .tf-container[data-floated='true'] .tf-label {
         color: var(--tf-label-float-color);
-        /* The lifted label alone reads as a small-caps, semibold field caption.
+        /* The lifted label alone reads as a small-caps, bold field caption.
            (The placeholder is the input's ::placeholder — unaffected.) */
-        font-weight: 600;
+        font-weight: 700;
         text-transform: capitalize;
         font-variant-caps: small-caps;
     }
