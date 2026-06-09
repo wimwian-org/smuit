@@ -1,5 +1,19 @@
 # @smuit/text-field
 
+## 0.2.0
+
+### Minor Changes
+
+- [#10](https://github.com/wimwian-org/smuit/pull/10) [`2892c5a`](https://github.com/wimwian-org/smuit/commit/2892c5a1a4dee020b8719c1a132ffad449f26854) Thanks [@wimwian](https://github.com/wimwian)! - Halve the field's vertical spacing for a denser layout: the single-line and
+  multiline block padding, the resting/floated label insets (kept in step with the
+  padding), the caption gap, and the suggestion popup/option padding are all cut by
+  half. Container height and horizontal spacing are unchanged.
+
+### Patch Changes
+
+- Updated dependencies [[`44a58ed`](https://github.com/wimwian-org/smuit/commit/44a58ed7926e4e7057b442a0839c1f76932cb1f7), [`08ace21`](https://github.com/wimwian-org/smuit/commit/08ace2175a3fac4185a76555db3bf61754712fbf)]:
+    - @smuit/theme@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
