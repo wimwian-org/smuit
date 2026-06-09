@@ -1,6 +1,6 @@
 <!--
   @smuit/tabs
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!-- Ref harness — surfaces a bound trigger element to the test. -->

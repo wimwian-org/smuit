@@ -1,6 +1,6 @@
 <!--
   @smuit/text-field
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!--
@@ -14,7 +14,9 @@
     import { getFieldContext } from './field-context';
 
     const ctx = getFieldContext();
-    const styles = $derived(textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }));
+    const styles = $derived(
+        textField({ variant: ctx.variant, size: ctx.size, tint: ctx.tint, disabled: ctx.disabled }),
+    );
 </script>
 
 {#if ctx.open}

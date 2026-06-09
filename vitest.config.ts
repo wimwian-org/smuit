@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 import { defineConfig } from 'vitest/config';
@@ -9,11 +9,7 @@ export default defineConfig({
         // Node-mode tests: lowercase utility tests + *.variants.test.ts, plus the
         // pure theme-generator core. Browser-mode tests (PascalCase *.test.ts) run
         // under vitest.browser.config.ts.
-        include: [
-            'components/**/[a-z]*.test.ts',
-            'components/**/*.variants.test.ts',
-            'packages/theme/src/*.test.ts',
-        ],
+        include: ['components/**/[a-z]*.test.ts', 'components/**/*.variants.test.ts', 'packages/theme/src/*.test.ts'],
         passWithNoTests: true,
         coverage: {
             provider: 'v8',

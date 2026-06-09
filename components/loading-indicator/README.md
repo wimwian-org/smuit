@@ -90,4 +90,4 @@ and accessibility model only.
 
 ## License
 
-MIT © Anand Panchapakesan
+MIT © wimwian

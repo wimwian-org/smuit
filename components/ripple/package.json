@@ -34,7 +34,7 @@
         "animation",
         "action"
     ],
-    "author": "Anand Panchapakesan",
+    "author": "wimwian",
     "license": "MIT",
     "publishConfig": {
         "access": "public",

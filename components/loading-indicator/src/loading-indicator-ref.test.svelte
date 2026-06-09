@@ -1,6 +1,6 @@
 <!--
   @smuit/loading-indicator
-  Copyright (c) 2026 Anand Panchapakesan
+  Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <!-- Test harness: binds `ref` so a test can assert it resolves to the root element. -->
