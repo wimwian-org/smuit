@@ -278,4 +278,4 @@ Developed with [Claude Code](https://claude.com/claude-code). Guidance lives in 
 
 ## License
 
-[MIT](LICENSE) © Anand Panchapakesan
+[MIT](LICENSE) © wimwian

@@ -38,7 +38,7 @@
         "m3",
         "expressive"
     ],
-    "author": "Anand Panchapakesan",
+    "author": "wimwian",
     "license": "MIT",
     "publishConfig": {
         "access": "public",

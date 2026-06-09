@@ -1,6 +1,6 @@
 /*
  * @smuit/text-field
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 import { afterEach, expect, test, vi } from 'vitest';
@@ -79,7 +79,14 @@ test('honours disabled and readonly', async () => {
 
 test('supports the error / required validation surface', async () => {
     const oninvalid = vi.fn();
-    render(TextArea, { label: 'Bio', required: true, error: true, errorText: 'Required', supportingText: 'Help', oninvalid });
+    render(TextArea, {
+        label: 'Bio',
+        required: true,
+        error: true,
+        errorText: 'Required',
+        supportingText: 'Help',
+        oninvalid,
+    });
     const root = document.querySelector('.tf') as HTMLElement;
     expect(root.dataset.error).toBe('true');
     expect(textarea().required).toBe(true);

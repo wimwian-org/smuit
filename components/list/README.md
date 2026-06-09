@@ -169,4 +169,4 @@ The design spec this component implements was synthesised from two references:
 conventions. It does not depend on, bundle, or copy code from either project — they informed the
 anatomy, behaviour, and accessibility model only.
 
-MIT © Anand Panchapakesan
+MIT © wimwian

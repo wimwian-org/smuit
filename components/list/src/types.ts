@@ -1,6 +1,6 @@
 /*
  * @smuit/list
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 import type { HTMLAttributes, HTMLLiAttributes } from 'svelte/elements';

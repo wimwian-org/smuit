@@ -86,4 +86,4 @@ as design references only.
 
 ## License
 
-MIT © Anand Panchapakesan
+MIT © wimwian

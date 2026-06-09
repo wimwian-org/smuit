@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2026 Anand Panchapakesan
+ * Copyright (c) 2026 wimwian
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -222,7 +222,7 @@ const DANGER = `/* =============================================================
  *
  *   Light is the default. Dark applies via [data-theme='dark'] OR the OS
  *   preference (prefers-color-scheme: dark), unless [data-theme='light'] is
- *   explicitly set. Copyright (c) 2026 Anand Panchapakesan · MIT.
+ *   explicitly set. Copyright (c) 2026 wimwian · MIT.
  * ============================================================================ */`;
 
 /** Metadata about a parsed input — handy for CLI logging. */
@@ -273,7 +273,11 @@ export function generate(source: string): string {
         toneCache[name] = {};
         for (const n of stepsOf(name)) toneCache[name][n] = tone(baseHue[name], n);
     }
-    const toneOf = (name: Name, n: number): OKLCH => toneCache[name][n];
+    // Fall back to computing (and memoizing) the tone for steps outside a
+    // palette's defined ramp — RAG palettes are 100-step, so intermediate
+    // steps like 250/750 (used by solid-hover) aren't pre-cached.
+    const toneOf = (name: Name, n: number): OKLCH =>
+        toneCache[name][n] ?? (toneCache[name][n] = tone(baseHue[name], n));
 
     // ── Emit functions (close over the parsed state) ──────────────────────────
     function surfaceValues(name: Name, dark: boolean): Record<string, string> {
@@ -289,8 +293,8 @@ export function generate(source: string): string {
             border: fmt(borderFor(bg, accent)),
             'border-bold': fmt(borderBoldFor(bg, accent)),
             accent: fmt(accent),
-            solid: fmt(toneOf(name, dark ? 400 : 600)),
-            'solid-hover': fmt(toneOf(name, dark ? 300 : 700)),
+            solid: fmt(toneOf(name, dark ? 300 : 700)),
+            'solid-hover': fmt(toneOf(name, dark ? 250 : 750)),
             'solid-fg': fmt(toneOf(name, dark ? sfg.dark : sfg.light)),
         };
     }
