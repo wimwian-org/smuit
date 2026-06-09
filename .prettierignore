@@ -22,4 +22,7 @@ src/routes/git-status.json
 src/routes/metadata.json
 
 # Generated flat theme — produced by build-theme.ts; must match generate() byte-for-byte
-packages/theme/src/theme/output.css
+packages/theme/src/output.css
+
+# Vendored design references — kept verbatim from upstream (not ours to reformat)
+components/text-field/text-field.md
