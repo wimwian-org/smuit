@@ -1,0 +1,93 @@
+/*
+ * @smuit/progress-indicator
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+@reference "@smuit/theme";
+
+/*
+ * Colour + motion that tailwind-variants can't express cleanly: the accent and
+ * the tonal track per `tint`, the determinate fill width (from the inline
+ * `--progress-value`), the indeterminate slide, and the reduced-motion
+ * fallback. Every value reads one of the component tokens declared on
+ * `.progress`, which in turn read the smuit `--surface-*` / `--color-g-*`
+ * design tokens — no literals, no `.dark` selector.
+ */
+/* Keyframes live at the top level (not inside @layer components): keyframe
+   names resolve globally, and nesting them in a cascade layer has no project
+   precedent. They read `--progress-accent` from the animated element at runtime. */
+@keyframes progress-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(350%);
+    }
+}
+
+@keyframes progress-pulse {
+    0%,
+    100% {
+        background-color: color-mix(in srgb, var(--progress-accent) 35%, transparent);
+    }
+    50% {
+        background-color: var(--progress-accent);
+    }
+}
+
+@layer components {
+    .progress {
+        /* Tokens-first — everything below resolves through these. */
+        /* Tint accent — drives the indicator fill and the tonal track. A
+           theme-independent semantic token (not the `--color-c-*` content
+           scale) so it works under the flat theme. Default = neutral grey;
+           the `tint` prop repoints it to a palette accent. */
+        --progress-accent: var(--color-g-700);
+        /* Inactive rail — a translucent tint of the accent (cohesive, flips
+           with the theme via the accent). */
+        --progress-track: color-mix(in srgb, var(--progress-accent) 24%, transparent);
+        /* Determinate fill, 0–1. Set inline per render; defaults full. */
+        --progress-value: 1;
+    }
+
+    /* ── Tint → accent (theme-independent semantic tokens) ───────────── */
+    .progress[data-tint='primary'] {
+        --progress-accent: var(--surface-primary-accent);
+    }
+    .progress[data-tint='secondary'] {
+        --progress-accent: var(--surface-secondary-accent);
+    }
+    .progress[data-tint='error'] {
+        --progress-accent: var(--surface-error-accent);
+    }
+    .progress[data-tint='warning'] {
+        --progress-accent: var(--surface-warning-accent);
+    }
+    .progress[data-tint='success'] {
+        --progress-accent: var(--surface-success-accent);
+    }
+    /* Neutral keeps the default `--progress-accent` (a theme-flipping grey). */
+
+    /* ── Determinate: width from the clamped fraction ────────────────── */
+    .progress:not([data-indeterminate]) .progress-bar {
+        width: calc(var(--progress-value) * 100%);
+        transition: width 200ms ease;
+    }
+
+    /* ── Indeterminate: a fixed segment slides across the track ──────── */
+    /* `linear` keeps a steady march with a clean loop seam (ease-in-out dwells
+       off-screen at both ends and reads as sluggish). */
+    .progress[data-indeterminate] .progress-bar {
+        width: 40%;
+        animation: progress-slide 1.4s linear infinite;
+    }
+
+    /* ── Reduced motion: keep an activity signal without the slide ───── */
+    @media (prefers-reduced-motion: reduce) {
+        .progress[data-indeterminate] .progress-bar {
+            width: 100%;
+            transform: none;
+            animation: progress-pulse 1.6s ease-in-out infinite;
+        }
+    }
+}
