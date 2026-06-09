@@ -1,5 +1,5 @@
 <!--
-  @smuit/list
+  @wimwian-org/list
   Copyright (c) 2026 Anand Panchapakesan
   Licensed under the MIT License.
 -->

@@ -1,12 +1,12 @@
-# @smuit/progress-indicator
+# @wimwian-org/progress-indicator
 
 A Material Design 3–style **linear progress indicator** for Svelte 5, built on
-[`@smuit/theme`](../../packages/theme) design tokens. Determinate and indeterminate modes,
+[`@wimwian-org/theme`](../../packages/theme) design tokens. Determinate and indeterminate modes,
 retintable, three track heights, dark-mode-automatic, and accessible.
 
 ```svelte
 <script>
-    import { ProgressIndicator } from '@smuit/progress-indicator';
+    import { ProgressIndicator } from '@wimwian-org/progress-indicator';
 </script>
 
 <!-- determinate — value is a fraction of max (default max = 1) -->
@@ -22,11 +22,11 @@ retintable, three track heights, dark-mode-automatic, and accessible.
 ## Install
 
 ```bash
-pnpm add @smuit/progress-indicator
+pnpm add @wimwian-org/progress-indicator
 ```
 
-Peer dependencies: `@smuit/theme`, `svelte` ^5, `tailwindcss` ^4. Import the theme once at your
-app root (`@import '@smuit/theme';`).
+Peer dependencies: `@wimwian-org/theme`, `svelte` ^5, `tailwindcss` ^4. Import the theme once at your
+app root (`@import '@wimwian-org/theme';`).
 
 ## Props
 
@@ -73,7 +73,7 @@ See [`progress-indicator-design.md`](./progress-indicator-design.md) for the ful
 
 ## Acknowledgements
 
-`@smuit/progress-indicator` is an **independent implementation** on smuit design tokens and
+`@wimwian-org/progress-indicator` is an **independent implementation** on smuit design tokens and
 Svelte 5 runes. Its design is **synthesised from**:
 
 - **Material Web** — [`<md-linear-progress>` / `<md-circular-progress>`](https://github.com/material-components/material-web/blob/main/docs/components/progress.md)

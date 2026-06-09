@@ -1,5 +1,5 @@
 <!--
-  @smuit/tabs
+  @wimwian-org/tabs
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->

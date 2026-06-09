@@ -1,6 +1,6 @@
 # List — Design Spec
 
-A design breakdown (no implementation) for the `@smuit/list` bit: architecture, design elements,
+A design breakdown (no implementation) for the `@wimwian-org/list` bit: architecture, design elements,
 and key behaviours. Synthesised from two references:
 
 1. **Material Design 3** — Lists overview/specs (<https://m3.material.io/components/lists/overview>),
@@ -26,7 +26,7 @@ checkbox / radio / switch controls and `listbox`/`option` semantics), **roving**
 navigation, sticky section **subheaders**, and the Expressive **press shape-morph** ship on top of
 that base. Drag-to-reorder and swipe actions remain deferred.
 
-> The original v1 (released as `@smuit/list@0.1.x`) shipped the two variants, one/two-line rows,
+> The original v1 (released as `@wimwian-org/list@0.1.x`) shipped the two variants, one/two-line rows,
 > slots, and static/button/link interactivity. The selection system, three-line density, roving
 > navigation, subheaders, and the Expressive press morph were layered on in a later minor — the
 > tables below mark each accordingly.
@@ -275,6 +275,6 @@ tints the fill, state layers, and focus outline together.
 ## Acknowledgements
 
 This spec was synthesised from **Material Design 3 — Lists** (the Baseline and Expressive design
-styles) and the **Material Web** list component. `@smuit/list` is an **independent implementation**
+styles) and the **Material Web** list component. `@wimwian-org/list` is an **independent implementation**
 on smuit's own design tokens and Svelte 5 conventions — it does not depend on, bundle, or copy code
 from either project; they informed the anatomy, behaviour, and accessibility model only.

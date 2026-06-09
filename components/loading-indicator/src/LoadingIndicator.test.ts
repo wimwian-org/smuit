@@ -1,5 +1,5 @@
 /*
- * @smuit/loading-indicator
+ * @wimwian-org/loading-indicator
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */

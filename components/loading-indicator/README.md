@@ -1,4 +1,4 @@
-# @smuit/loading-indicator
+# @wimwian-org/loading-indicator
 
 A shape-morphing **loading indicator** for Svelte 5 — Material Design 3 Expressive's replacement for
 the circular spinner — built on smuit design tokens.
@@ -10,7 +10,7 @@ fallback, and three modes: **indeterminate** (default), **determinate** (a `prog
 
 ```svelte
 <script>
-    import { LoadingIndicator } from '@smuit/loading-indicator';
+    import { LoadingIndicator } from '@wimwian-org/loading-indicator';
 </script>
 
 <!-- bare morphing shape (indeterminate) -->
@@ -37,10 +37,10 @@ fallback, and three modes: **indeterminate** (default), **determinate** (a `prog
 ## Install
 
 ```bash
-pnpm add @smuit/loading-indicator
+pnpm add @wimwian-org/loading-indicator
 ```
 
-`@smuit/theme`, `svelte`, and `tailwindcss` are peer dependencies. Import the theme once in your app
+`@wimwian-org/theme`, `svelte`, and `tailwindcss` are peer dependencies. Import the theme once in your app
 so the tokens are available.
 
 ## Props
@@ -103,7 +103,7 @@ automatic via the `--L`/`--D` space-toggle — no `.dark` selector.
 
 The design was synthesised from **Material Design 3 (Expressive) — Loading indicator** and the
 **Material 3 Jetpack Compose** `LoadingIndicator` / `ContainedLoadingIndicator` API (the variant
-split, colour roles, polygon-morph model, and default sizing). `@smuit/loading-indicator` is an
+split, colour roles, polygon-morph model, and default sizing). `@wimwian-org/loading-indicator` is an
 **independent implementation** on smuit's own design tokens and Svelte 5 conventions — it does not
 depend on, bundle, or copy code from either project; they informed the anatomy, variants, behaviour,
 and accessibility model only.

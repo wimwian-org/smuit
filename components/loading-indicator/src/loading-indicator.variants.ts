@@ -1,5 +1,5 @@
 /*
- * @smuit/loading-indicator
+ * @wimwian-org/loading-indicator
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
@@ -13,7 +13,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
  * corner shape per `variant`, and the tint accent) lives in
  * loading-indicator.css, keyed off the `data-variant` / `data-size` /
  * `data-tint` hooks the component sets — the same CSS-driven approach as
- * `@smuit/list`. Every colour resolves through the `--li-accent` /
+ * `@wimwian-org/list`. Every colour resolves through the `--li-accent` /
  * `--li-container` tokens declared there.
  */
 export const loadingIndicator = tv({

@@ -1,5 +1,5 @@
 {
-    "name": "@smuit/playground",
+    "name": "@wimwian-org/playground",
     "version": "0.1.5",
     "private": true,
     "description": "Interactive component sandbox for smuit development",
@@ -25,12 +25,12 @@
         "vite": "^8.0.14"
     },
     "dependencies": {
-        "@smuit/list": "workspace:*",
-        "@smuit/loading-indicator": "workspace:*",
-        "@smuit/progress-indicator": "workspace:*",
-        "@smuit/ripple": "workspace:*",
-        "@smuit/tabs": "workspace:*",
-        "@smuit/text-field": "workspace:*",
-        "@smuit/theme": "workspace:*"
+        "@wimwian-org/list": "workspace:*",
+        "@wimwian-org/loading-indicator": "workspace:*",
+        "@wimwian-org/progress-indicator": "workspace:*",
+        "@wimwian-org/ripple": "workspace:*",
+        "@wimwian-org/tabs": "workspace:*",
+        "@wimwian-org/text-field": "workspace:*",
+        "@wimwian-org/theme": "workspace:*"
     }
 }

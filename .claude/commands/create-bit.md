@@ -5,7 +5,7 @@ argument-hint: Primitive name (e.g. Dialog, Tabs, Tooltip) or leave empty to be 
 
 # Create Bit
 
-You are helping the developer add a new bit to **sui** — a Svelte 5 component that wraps a [`bits-ui`](https://bits-ui.com) headless primitive with the project's design tokens, `tailwind-variants` axes, tests, demo route, and release-ready commit. Each bit is its own published package at `components/<name>/` (`@smuit/<name>`). The workflow has seven phases; track them all with `TodoWrite`.
+You are helping the developer add a new bit to **sui** — a Svelte 5 component that wraps a [`bits-ui`](https://bits-ui.com) headless primitive with the project's design tokens, `tailwind-variants` axes, tests, demo route, and release-ready commit. Each bit is its own published package at `components/<name>/` (`@wimwian-org/<name>`). The workflow has seven phases; track them all with `TodoWrite`.
 
 Initial request: $ARGUMENTS
 
@@ -44,7 +44,7 @@ Before you propose architecture, re-read these in order:
 2. [`.claude/component.md`](../component.md) — bit standards: prop design, accessibility checklist, file structure.
 3. [`.claude/variants.md`](../variants.md) — `tailwind-variants` `tv()` slot/variant configuration.
 4. [`.claude/styling.md`](../styling.md) — design tokens, `--L`/`--D` toggle, elevation tokens, `@layer components` rule.
-5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@smuit/theme"`, semantic class naming, `data-slot`.
+5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@wimwian-org/theme"`, semantic class naming, `data-slot`.
 6. [`.claude/testing.md`](../testing.md) — Vitest browser-mode (`vitest-browser-svelte`, `@vitest/browser/context`, `createRawSnippet` for children).
 7. [`components/button/`](../../components/button/) — the seven files (`Button.svelte` / `button.css` / `button.variants.ts` / `button.variants.test.ts` / `types.ts` / `index.ts` / `Button.test.ts`).
 
@@ -90,7 +90,7 @@ Before you propose architecture, re-read these in order:
 
     ```
     Trace components/button/ end-to-end: Button.svelte's wrapping pattern and
-    import order (bits-ui → '@smuit/theme' → './button.css' → './button.variants'
+    import order (bits-ui → '@wimwian-org/theme' → './button.css' → './button.variants'
     → 'tailwind-merge' → './types'), types.ts's prop extension via the bits-ui
     Root props + variant axes, button.variants.ts's tv() config, button.css's
     token-block + @layer components structure, and Button.test.ts's browser-mode
@@ -100,7 +100,7 @@ Before you propose architecture, re-read these in order:
 
 3. **Read the files the agent identifies**, plus a sibling that wraps a similar primitive (e.g. [`components/switch/`](../../components/switch/) for a compound thumb part). Don't trust the agent's summary without reading the cited source.
 
-4. Summarise findings: parts list, recommended single-vs-compound shape, the `variant`/`tint`/`size` axes Button uses, the `data-*` attribute conventions, and the `@reference "@smuit/theme"` + `@layer components` CSS rule.
+4. Summarise findings: parts list, recommended single-vs-compound shape, the `variant`/`tint`/`size` axes Button uses, the `data-*` attribute conventions, and the `@reference "@wimwian-org/theme"` + `@layer components` CSS rule.
 
 ---
 
@@ -188,16 +188,16 @@ If the user says "whatever you think is best", recommend based on the Button bit
     **Do not skip the `cd`.** Staying in the primary checkout means editing `dev` — forbidden by the [Hard precondition](#-hard-precondition-feature-branch--worktree-before-any-write).
 
 2. **Scaffold the package** at `components/<kebab-name>/`, mirroring [`components/button/`](../../components/button/):
-    - **`package.json`** — name `@smuit/<name>`, `"type": "module"`, `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`, `"publishConfig": { "access": "public" }`, MIT author/license. `dependencies`: `bits-ui`, `tailwind-merge`, `tailwind-variants`. `peerDependencies`: `@smuit/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`. `devDependencies` mirror a sibling. Copy `components/button/package.json` and edit.
+    - **`package.json`** — name `@wimwian-org/<name>`, `"type": "module"`, `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`, `"publishConfig": { "access": "public" }`, MIT author/license. `dependencies`: `bits-ui`, `tailwind-merge`, `tailwind-variants`. `peerDependencies`: `@wimwian-org/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`. `devDependencies` mirror a sibling. Copy `components/button/package.json` and edit.
     - **`tsconfig.json`** — copy from a sibling component.
     - **`README.md`**, **`LICENSE`**, **`CHANGELOG.md`** (initial) — match siblings.
-    - **`src/` files** (each begins with the `@smuit/<name>` MIT license-header comment block, as in existing files):
+    - **`src/` files** (each begins with the `@wimwian-org/<name>` MIT license-header comment block, as in existing files):
         - **`<Component>.svelte`** — start from the [Button template](../../components/button/src/Button.svelte). Import order:
 
             ```svelte
             <script lang="ts">
                 import { ComponentName as BitsComponent } from 'bits-ui';
-                import '@smuit/theme';
+                import '@wimwian-org/theme';
                 import './component-name.css';
                 import { componentName } from './component-name.variants';
                 import { twMerge } from 'tailwind-merge';
@@ -223,14 +223,14 @@ If the user says "whatever you think is best", recommend based on the Button bit
             ```
 
         - **`component-name.variants.ts`** — `tv()` config exporting the `componentName` const and `ComponentNameVariants = VariantProps<typeof componentName>` type. Base class is a short semantic prefix; variants map to component classes; `tint` maps to the tint utility names; set `defaultVariants`.
-        - **`component-name.css`** — `@reference "@smuit/theme";` then all rules inside `@layer components { … }`. **Tokens-first**: declare a `--…` token block at the top of the base class, then reference via `var()` below. All colours via `--color-c-*` / `--color-g-*`; never inline hex/rgb; no `.dark` selector.
+        - **`component-name.css`** — `@reference "@wimwian-org/theme";` then all rules inside `@layer components { … }`. **Tokens-first**: declare a `--…` token block at the top of the base class, then reference via `var()` below. All colours via `--color-c-*` / `--color-g-*`; never inline hex/rgb; no `.dark` selector.
         - **`types.ts`** — `Props` derived from the variants (`ComponentNameVariant`/`Tint`/`Size` via `NonNullable<ComponentNameVariants[...]>`) combined with `BitsComponent.RootProps & OwnProps`. Export the axis types.
         - **`index.ts`** — license header; re-export the default component, the `componentName` variants const + `ComponentNameVariants` type, and the `Props`/axis types (see [`components/badge/src/index.ts`](../../components/badge/src/index.ts)).
         - **`<Component>.test.ts`** — Vitest **browser-mode**: `import { page } from '@vitest/browser/context'`, `import { render } from 'vitest-browser-svelte'`, `createRawSnippet` from `svelte` for the `children` prop. Minimum coverage per [`.claude/component.md`](../component.md) § 8 and [`.claude/testing.md`](../testing.md).
         - **`component-name.variants.test.ts`** — assert the `tv()` config returns the expected class strings per variant combination.
 
 3. **Create the demo route** at `apps/playground/src/routes/<kebab-slug>/+page.svelte`:
-    - Imports the bit from `@smuit/<name>`.
+    - Imports the bit from `@wimwian-org/<name>`.
     - Renders every variant × tint × size matrix agreed in Phase 3.
     - Adds label chips matching the existing demo pages; state-toggle buttons for interactive state (e.g. open/closed for Dialog).
 
@@ -253,9 +253,9 @@ If the user says "whatever you think is best", recommend based on the Button bit
     ```bash
     pnpm check                                   # svelte-check (workspace)
     pnpm lint                                    # eslint
-    pnpm --filter @smuit/<name> check              # the component's own types
+    pnpm --filter @wimwian-org/<name> check              # the component's own types
     pnpm test:browser                            # browser-mode component tests
-    pnpm --filter @smuit/playground build          # demo site builds
+    pnpm --filter @wimwian-org/playground build          # demo site builds
     ```
 
     Any failure: stop, fix, re-run. Do not commit red.
@@ -266,10 +266,10 @@ If the user says "whatever you think is best", recommend based on the Button bit
     Agent 1 (conventions):
     Review components/<name>/ against CLAUDE.md, .claude/bits.md, .claude/component.md,
     .claude/variants.md, .claude/styling.md. Flag any deviation: hardcoded colours,
-    missing @layer components / @reference "@smuit/theme", missing data-* attrs, missing
+    missing @layer components / @reference "@wimwian-org/theme", missing data-* attrs, missing
     ref bindable, prop type not extending the bits-ui Root props, variant composition
     not going through tailwind-variants, package.json shape (exports/files/peerDeps
-    @smuit/theme workspace:*).
+    @wimwian-org/theme workspace:*).
     ```
 
     ```
@@ -287,7 +287,7 @@ If the user says "whatever you think is best", recommend based on the Button bit
     forwarding is verified, and ref binding is checked.
     ```
 
-3. **Visually verify in both themes.** Run `pnpm --filter @smuit/playground dev`, open `/<kebab-slug>`, and check AA contrast in light AND dark, all variants retint per tint, and a visible focus indicator on keyboard tab.
+3. **Visually verify in both themes.** Run `pnpm --filter @wimwian-org/playground dev`, open `/<kebab-slug>`, and check AA contrast in light AND dark, all variants retint per tint, and a visible focus indicator on keyboard tab.
 
 4. **Present consolidated findings.** Ask: fix now, fix later, or proceed.
 

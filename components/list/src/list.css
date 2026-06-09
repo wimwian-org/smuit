@@ -1,9 +1,9 @@
 /*
- * @smuit/list
+ * @wimwian-org/list
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 /*
  * Geometry + state that tailwind-variants can't express cleanly: the row

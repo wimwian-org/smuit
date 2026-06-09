@@ -1,6 +1,6 @@
 # Tabs — Design Spec
 
-A design breakdown (no implementation) for the `@smuit/tabs` bit: architecture, design elements,
+A design breakdown (no implementation) for the `@wimwian-org/tabs` bit: architecture, design elements,
 and key behaviours. Synthesised from three references:
 
 1. **Material Design 3** — Tabs overview/specs (<https://m3.material.io/components/tabs/overview>),
@@ -310,7 +310,7 @@ state layers, and focus outline together.
 
 This spec was synthesised from **Material Design 3 — Tabs** (the Primary and Secondary tab types
 and the active-indicator language) and the **Material Web** tabs component, with behaviour backed by
-the headless **bits-ui Tabs** primitive. `@smuit/tabs` is an **independent implementation** on
+the headless **bits-ui Tabs** primitive. `@wimwian-org/tabs` is an **independent implementation** on
 smuit's own design tokens and Svelte 5 conventions — it does not depend on, bundle, or copy code
 from Material Design or Material Web; they informed the anatomy, behaviour, and accessibility model
 only. (bits-ui _is_ a runtime dependency, as the headless behaviour layer — the standard pattern for

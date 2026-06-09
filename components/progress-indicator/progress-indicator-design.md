@@ -1,6 +1,6 @@
 # Progress Indicator — Design Spec
 
-A design breakdown (no implementation) for the `@smuit/progress-indicator` bit: architecture,
+A design breakdown (no implementation) for the `@wimwian-org/progress-indicator` bit: architecture,
 anatomy, design elements, and key behaviours. Synthesised from two references:
 
 1. **Material Web** — <https://github.com/material-components/material-web/blob/main/docs/components/progress.md>
@@ -168,7 +168,7 @@ consumer retints to `error` (a failing upload), `success`, etc.
 
 ## 6. Token mapping (design role → smuit token)
 
-Following the `@smuit/list` pattern: a `--progress-accent` token is set per `[data-tint]` from the
+Following the `@wimwian-org/list` pattern: a `--progress-accent` token is set per `[data-tint]` from the
 **semantic surface tokens** (theme-independent, flips light/dark), and the track + indicator derive
 from it. No literals, no `.dark` selector.
 
@@ -192,7 +192,7 @@ from it. No literals, no `.dark` selector.
 
 ```
 components/progress-indicator/
-├── package.json            @smuit/progress-indicator (no bits-ui; no upstream @mui/@material)
+├── package.json            @wimwian-org/progress-indicator (no bits-ui; no upstream @mui/@material)
 ├── tsconfig.json           copied from a sibling
 ├── README.md               + Scope section + Acknowledgements (Material Web, MUI)
 ├── LICENSE · CHANGELOG.md
@@ -224,7 +224,7 @@ Plus the demo route `apps/playground/src/routes/progress-indicator/+page.svelte`
 
 ## 9. Acknowledgements
 
-`@smuit/progress-indicator` is an **independent implementation** built on smuit design tokens and
+`@wimwian-org/progress-indicator` is an **independent implementation** built on smuit design tokens and
 Svelte 5 runes. It is **synthesised from** the design of Material Web's progress components and
 MUI's `LinearProgress` for API ergonomics — it does **not** depend on, vendor, or copy
 `@material/*` or `@mui/*`. Those projects are credited as design references only.

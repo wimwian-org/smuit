@@ -1,5 +1,5 @@
 <!--
-  @smuit/loading-indicator
+  @wimwian-org/loading-indicator
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
@@ -20,9 +20,9 @@
     <LoadingIndicator complete />
 -->
 <script lang="ts">
-    // @smuit/theme is a peerDependency; importing it here lets the bit render
+    // @wimwian-org/theme is a peerDependency; importing it here lets the bit render
     // with design tokens even when the host app hasn't imported the theme.
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import './loading-indicator.css';
     import { loadingIndicator } from './loading-indicator.variants';
     import { DEFAULT_SHAPE_SEQUENCE, CHECK_PATH } from './loading-indicator.shapes';

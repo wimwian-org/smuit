@@ -1,4 +1,4 @@
-# @smuit/ripple
+# @wimwian-org/ripple
 
 Material UI–style **touch ripple** for Svelte 5. Zero dependencies, no stylesheet — a
 [Web Animations API](https://developer.mozilla.org/docs/Web/API/Web_Animations_API)
@@ -24,7 +24,7 @@ matching the smuit theme's size ramps:
 ## Install
 
 ```sh
-pnpm add @smuit/ripple
+pnpm add @wimwian-org/ripple
 ```
 
 `svelte@^5` is a peer dependency.
@@ -35,7 +35,7 @@ pnpm add @smuit/ripple
 
 ```svelte
 <script>
-    import { ripple } from '@smuit/ripple';
+    import { ripple } from '@wimwian-org/ripple';
 </script>
 
 <button use:ripple={{ variant: 'lg' }}>Click me</button>
@@ -50,7 +50,7 @@ For when you don't control the host element's positioning:
 
 ```svelte
 <script>
-    import { Ripple } from '@smuit/ripple';
+    import { Ripple } from '@wimwian-org/ripple';
 </script>
 
 <Ripple variant="xl" color="currentColor">
@@ -78,8 +78,8 @@ For when you don't control the host element's positioning:
 ## Exports
 
 ```ts
-import { ripple, Ripple, rippleVariants } from '@smuit/ripple';
-import type { RippleVariant, RippleOptions } from '@smuit/ripple';
+import { ripple, Ripple, rippleVariants } from '@wimwian-org/ripple';
+import type { RippleVariant, RippleOptions } from '@wimwian-org/ripple';
 ```
 
 MIT © wimwian

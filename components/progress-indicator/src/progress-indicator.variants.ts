@@ -1,5 +1,5 @@
 /*
- * @smuit/progress-indicator
+ * @wimwian-org/progress-indicator
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
@@ -21,7 +21,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
  *     `[data-shape='circular'][data-size]`.
  *
  * `tint` carries no class — the accent is a CSS token repointed per
- * `[data-tint]` (the proven `@smuit/list` pattern), so it works regardless of
+ * `[data-tint]` (the proven `@wimwian-org/list` pattern), so it works regardless of
  * how the theme names its tint utilities.
  */
 export const progressIndicator = tv({

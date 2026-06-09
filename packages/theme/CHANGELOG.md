@@ -1,4 +1,4 @@
-# @smuit/theme
+# @wimwian-org/theme
 
 ## 0.1.3
 

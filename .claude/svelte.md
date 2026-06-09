@@ -312,6 +312,6 @@ See [.claude/testing.md](testing.md). In short:
 - [ ] `pnpm format` and `pnpm lint`
 - [ ] `pnpm check` (svelte-check + tsc)
 - [ ] `pnpm test` (Vitest — see testing.md for current mode)
-- [ ] `pnpm --filter @smuit/playground build` succeeds
+- [ ] `pnpm --filter @wimwian-org/playground build` succeeds
 - [ ] No unused props or variables
 - [ ] Accessible: semantic HTML, keyboard nav, aria attributes, color contrast (4.5:1)

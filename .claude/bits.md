@@ -10,9 +10,9 @@ Every bit follows the same shape. Use Button as the template:
 <!-- components/button/src/Button.svelte -->
 <script lang="ts">
     import { Button } from 'bits-ui';
-    // @smuit/theme is a peerDependency; consumers import it once in their layout.
+    // @wimwian-org/theme is a peerDependency; consumers import it once in their layout.
     // Import it here too so the bit works in isolation (Vite dedupes).
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import './button.css';
     import type { Props } from './types';
 
@@ -65,7 +65,7 @@ Every bit follows the same shape. Use Button as the template:
 Read this as five rules:
 
 1. **Import the primitive from `bits-ui`** at the top. Use named imports (`import { Button } from 'bits-ui'`) and reach into `Button.Root`, `Button.Trigger`, `Dialog.Content`, etc.
-2. **Import the theme inside the bit.** `import '@smuit/theme'` plus the bit's own CSS. Vite dedupes; consumers get tokens even if they haven't imported the theme in their own layout.
+2. **Import the theme inside the bit.** `import '@wimwian-org/theme'` plus the bit's own CSS. Vite dedupes; consumers get tokens even if they haven't imported the theme in their own layout.
 3. **Type props by extending the primitive's RootProps.** `type Props = Button.RootProps & { variant?: ... }`. All native attributes pass through.
 4. **Forward `ref` via `$bindable(null)`** and `bind:ref` on the `Root`. Consumers can hold the underlying element.
 5. **Add `data-*` attributes** for variants / states. Tests and consumer CSS hook these.

@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { LoadingIndicator, LOADING_INDICATOR_SHAPES } from '@smuit/loading-indicator';
+    import { LoadingIndicator, LOADING_INDICATOR_SHAPES } from '@wimwian-org/loading-indicator';
     import { onMount } from 'svelte';
 
     const variants = ['uncontained', 'contained'] as const;

@@ -1,4 +1,4 @@
-# @smuit/text-field
+# @wimwian-org/text-field
 
 ## 0.3.0
 
@@ -26,7 +26,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd)]:
-    - @smuit/theme@0.1.3
+    - @wimwian-org/theme@0.1.3
 
 ## 0.2.2
 
@@ -35,7 +35,7 @@
 - Fix the `repository.url` in package.json — it pointed at the non-existent
   `github.com/smuit/smuit`; corrected to `github.com/wimwian-org/smuit`.
 - Updated dependencies []:
-    - @smuit/theme@0.1.2
+    - @wimwian-org/theme@0.1.2
 
 ## 0.2.1
 
@@ -58,7 +58,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`44a58ed`](https://github.com/wimwian-org/smuit/commit/44a58ed7926e4e7057b442a0839c1f76932cb1f7), [`08ace21`](https://github.com/wimwian-org/smuit/commit/08ace2175a3fac4185a76555db3bf61754712fbf)]:
-    - @smuit/theme@0.1.1
+    - @wimwian-org/theme@0.1.1
 
 ## 0.1.0
 
@@ -81,4 +81,4 @@
     Props: `min`, `max`, `decimalAllowed`, `decimalAccuracy`, `grouping`, `locale`,
     `align` (`'left' | 'right'`, default `'right'`), and `validate`.
 
-- [`a6701e9`](https://github.com/wimwian-org/smuit/commit/a6701e9c217c85d5c0352fd7d327f825d1e40930) - Add `@smuit/text-field` (v1) — a Material Design 3–style single-line text field built from the design spec on smuit design tokens. Ships filled · outlined variants, a floating label plus hidden-label mode, supporting text, prefix/suffix text and leading/trailing icon slots, a character counter with a `maxlength` soft cap, small/medium density, full-width, neutral/primary/secondary/tertiary focus tints, and enabled/hover/focused/populated/read-only/disabled states, with automatic light/dark theming and label↔input↔supporting-text accessibility wiring. Validation/error state, multiline, and alternate input types are deferred to a later release.
+- [`a6701e9`](https://github.com/wimwian-org/smuit/commit/a6701e9c217c85d5c0352fd7d327f825d1e40930) - Add `@wimwian-org/text-field` (v1) — a Material Design 3–style single-line text field built from the design spec on smuit design tokens. Ships filled · outlined variants, a floating label plus hidden-label mode, supporting text, prefix/suffix text and leading/trailing icon slots, a character counter with a `maxlength` soft cap, small/medium density, full-width, neutral/primary/secondary/tertiary focus tints, and enabled/hover/focused/populated/read-only/disabled states, with automatic light/dark theming and label↔input↔supporting-text accessibility wiring. Validation/error state, multiline, and alternate input types are deferred to a later release.

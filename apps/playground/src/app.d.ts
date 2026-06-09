@@ -1,5 +1,5 @@
 /*
- * @smuit/playground
+ * @wimwian-org/playground
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
@@ -9,6 +9,6 @@ declare global {
     namespace App {}
 }
 
-declare module '@smuit/theme' {}
+declare module '@wimwian-org/theme' {}
 
 export {};

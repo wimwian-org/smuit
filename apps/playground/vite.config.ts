@@ -1,5 +1,5 @@
 /*
- * @smuit/playground
+ * @wimwian-org/playground
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
@@ -17,7 +17,7 @@ export default defineConfig({
             allow: ['../..'],
         },
         watch: {
-            // @smuit/theme is symlinked into node_modules; follow it so edits to
+            // @wimwian-org/theme is symlinked into node_modules; follow it so edits to
             // the theme's CSS (palettes, tokens, tints) trigger HMR in the playground.
             followSymlinks: true,
             ignored: ['!**/packages/theme/src/**'],

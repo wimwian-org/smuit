@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 Anand Panchapakesan
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { PasswordField } from '@smuit/text-field';
+    import { PasswordField } from '@wimwian-org/text-field';
 
     let pw = $state('hunter2');
     let confirm = $state('');
@@ -14,7 +14,7 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Password Field</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/text-field</code> · <code>PasswordField</code> — a masked
+            <code>@wimwian-org/text-field</code> · <code>PasswordField</code> — a masked
             <code>type="password"</code> field on the text-field foundation. Ships a built-in show/hide reveal toggle in
             the trailing slot and defaults <code>autocomplete</code> to <code>current-password</code>. Set
             <code>revealable={false}</code> to drop the toggle.

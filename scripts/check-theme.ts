@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 //
-// Guard against a stale or hand-edited @smuit/theme output.css. Regenerates the
+// Guard against a stale or hand-edited @wimwian-org/theme output.css. Regenerates the
 // flat theme IN MEMORY from input.css and compares it to the committed
 // output.css — exits non-zero (with the first differing line) if they diverge.
 // Does NOT write anything, so it's safe in CI and pre-commit.
@@ -21,7 +21,7 @@ const committed = readFileSync(join(THEME, 'output.css'), 'utf8');
 const fresh = minify(generate(input));
 
 if (fresh === committed) {
-    console.log('✓ @smuit/theme output.css is up to date.');
+    console.log('✓ @wimwian-org/theme output.css is up to date.');
     process.exit(0);
 }
 
@@ -32,7 +32,7 @@ while (i < a.length && i < b.length && a[i] === b[i]) i++;
 
 console.error('✗ packages/theme/src/output.css does NOT match generate(input.css).');
 console.error('  output.css is GENERATED — do not hand-edit it. Regenerate with:');
-console.error('      pnpm --filter @smuit/theme build:theme');
+console.error('      pnpm --filter @wimwian-org/theme build:theme');
 console.error(`  First difference at line ${i + 1}:`);
 console.error(`    committed: ${JSON.stringify(a[i] ?? '<missing>')}`);
 console.error(`    expected:  ${JSON.stringify(b[i] ?? '<missing>')}`);

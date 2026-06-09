@@ -1,6 +1,6 @@
 # Loading Indicator — Design Spec
 
-A design breakdown (no implementation) for the `@smuit/loading-indicator` bit: architecture,
+A design breakdown (no implementation) for the `@wimwian-org/loading-indicator` bit: architecture,
 design elements, and key behaviours. Synthesised from two references:
 
 1. **Material Design 3 (Expressive)** — Loading indicator overview/guidelines
@@ -157,7 +157,7 @@ the presence of the filled container. Recommended default: **uncontained**.
 Compose expresses these as `indicatorColor` (primary) and `containerColor` (surface-container). The
 smuit equivalents resolve through a single `--li-accent` token (set per `[data-tint]` from the
 theme's semantic surface tokens), so the indicator flips with light/dark and retints automatically —
-the same mechanism `@smuit/list` uses.
+the same mechanism `@wimwian-org/list` uses.
 
 | Concept (Compose role)              | smuit token (suggested)                                                    |
 | ----------------------------------- | -------------------------------------------------------------------------- |
@@ -169,7 +169,7 @@ the same mechanism `@smuit/list` uses.
 > tokens cover **primary / secondary / tertiary**; **neutral** keeps a theme-flipping grey. (The
 > RAG palettes — error / warning / success — drive `--color-rag-*`, a separate semantic channel not
 > used here.) So this bit's `tint` axis is **neutral · primary · secondary · tertiary**, matching
-> `@smuit/list`.
+> `@wimwian-org/list`.
 
 > **Dark mode is automatic.** The `--color-g-*` / `--surface-*` tokens flip via the `--L`/`--D`
 > space-toggle bound to `html[data-theme]`. No `.dark` selector, no `prefers-color-scheme` for colour.
@@ -247,6 +247,6 @@ the same mechanism `@smuit/list` uses.
 
 This spec was synthesised from **Material Design 3 (Expressive) — Loading indicator** and the
 **Material 3 Jetpack Compose** `LoadingIndicator` / `ContainedLoadingIndicator` API.
-`@smuit/loading-indicator` is an **independent implementation** on smuit's own design tokens and
+`@wimwian-org/loading-indicator` is an **independent implementation** on smuit's own design tokens and
 Svelte 5 conventions — it does not depend on, bundle, or copy code from either project; they
 informed the anatomy, variants, behaviour, and accessibility model only.

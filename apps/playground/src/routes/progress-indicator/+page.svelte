@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { ProgressIndicator } from '@smuit/progress-indicator';
+    import { ProgressIndicator } from '@wimwian-org/progress-indicator';
 
     const tints = ['neutral', 'primary', 'secondary', 'error', 'warning', 'success'] as const;
     const sizes = ['sm', 'md', 'lg'] as const;
@@ -20,7 +20,7 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Progress Indicator</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/progress-indicator</code> — Material Design 3 progress in
+            <code>@wimwian-org/progress-indicator</code> — Material Design 3 progress in
             <strong>linear</strong> and <strong>circular</strong> shapes,
             <strong>determinate</strong> and <strong>indeterminate</strong> modes, retintable, in three sizes — now with
             a <strong>buffer</strong> channel, a <strong>four-colour</strong> spinner, and an optional

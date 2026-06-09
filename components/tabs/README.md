@@ -1,4 +1,4 @@
-# @smuit/tabs
+# @wimwian-org/tabs
 
 Material Design 3–style **tabs** for Svelte 5, built on the smuit design tokens. A composable
 `Tabs.Root` / `Tabs.List` / `Tabs.Trigger` / `Tabs.Content` set in two variants — **bold** (M3
@@ -17,17 +17,17 @@ active tab (snapping under `prefers-reduced-motion`). Themed and dark-mode aware
 ## Install
 
 ```sh
-pnpm add @smuit/tabs
+pnpm add @wimwian-org/tabs
 ```
 
-`@smuit/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies. `bits-ui` is a runtime
+`@wimwian-org/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies. `bits-ui` is a runtime
 dependency (the headless behaviour layer).
 
 ## Usage
 
 ```svelte
 <script>
-    import { Tabs } from '@smuit/tabs';
+    import { Tabs } from '@wimwian-org/tabs';
     let active = $state('overview');
 </script>
 
@@ -113,7 +113,7 @@ tab types and the active-indicator language) and the **Material Web** tabs compo
 ([`@material/web`](https://github.com/material-components/material-web)), with behaviour backed by the
 headless [`bits-ui`](https://bits-ui.com) `Tabs` primitive.
 
-`@smuit/tabs` is an **independent implementation** on smuit's own design tokens and Svelte 5
+`@wimwian-org/tabs` is an **independent implementation** on smuit's own design tokens and Svelte 5
 conventions — it does **not** depend on, bundle, or copy code from Material Design or Material Web;
 those projects informed the anatomy, behaviour, and accessibility model only. `bits-ui` _is_ a
 runtime dependency, used as the headless behaviour layer (the standard pattern for smuit interactive

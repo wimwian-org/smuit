@@ -29,7 +29,7 @@
  *
  * Run with Node (>= 22.6, native TypeScript):
  *   node src/build-theme.ts
- *   pnpm --filter @smuit/theme build:theme
+ *   pnpm --filter @wimwian-org/theme build:theme
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

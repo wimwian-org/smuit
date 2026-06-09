@@ -1,6 +1,6 @@
 # Text Field — Design Spec
 
-A design breakdown (no implementation) for the `@smuit/text-field` bit: architecture,
+A design breakdown (no implementation) for the `@wimwian-org/text-field` bit: architecture,
 design elements, and key behaviours. Synthesised from two references:
 
 1. **MUI** — `components/text-field/text-field.md` (React Text Field).

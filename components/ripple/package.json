@@ -1,5 +1,5 @@
 {
-    "name": "@smuit/ripple",
+    "name": "@wimwian-org/ripple",
     "version": "0.0.1",
     "description": "Material UI–style touch ripple for Svelte 5 — a use:ripple action and <Ripple> component with xs · sm · md · lg · xl variants.",
     "type": "module",
@@ -38,7 +38,7 @@
     "license": "MIT",
     "publishConfig": {
         "access": "public",
-        "registry": "https://registry.npmjs.org/"
+        "registry": "https://npm.pkg.github.com"
     },
     "repository": {
         "type": "git",

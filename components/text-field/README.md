@@ -1,4 +1,4 @@
-# @smuit/text-field
+# @wimwian-org/text-field
 
 Material Design 3–style **single-line text field** for Svelte 5, built on the smuit design
 tokens. A labelled native `<input>` dressed as a **filled** or **outlined** field, with a
@@ -12,16 +12,16 @@ character counter — themed and dark-mode aware out of the box.
 ## Install
 
 ```sh
-pnpm add @smuit/text-field
+pnpm add @wimwian-org/text-field
 ```
 
-`@smuit/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies.
+`@wimwian-org/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies.
 
 ## Usage
 
 ```svelte
 <script>
-    import { TextField } from '@smuit/text-field';
+    import { TextField } from '@wimwian-org/text-field';
 
     let email = $state('');
 </script>
@@ -47,7 +47,7 @@ context to the parts beneath it.
 
 ```svelte
 <script>
-    import { Field } from '@smuit/text-field';
+    import { Field } from '@wimwian-org/text-field';
     let email = $state('');
 </script>
 
@@ -93,7 +93,7 @@ prefix/suffix or icon adornments (not meaningful for multi-line entry).
 
 ```svelte
 <script>
-    import { TextArea } from '@smuit/text-field';
+    import { TextArea } from '@wimwian-org/text-field';
     let bio = $state('');
 </script>
 
@@ -176,7 +176,7 @@ The design spec this component implements was synthesised from two references:
 - [**MUI** Text Field](https://mui.com/material-ui/react-text-field/) (React).
 - [**Material Web** text field](https://github.com/material-components/material-web/blob/main/docs/components/text-field.md).
 
-`@smuit/text-field` is an **independent implementation** on smuit's own design tokens and Svelte 5
+`@wimwian-org/text-field` is an **independent implementation** on smuit's own design tokens and Svelte 5
 conventions. It does not depend on, bundle, or copy code from either project — they informed the
 anatomy, behaviour, and accessibility model only (with Material Web taking precedence where the two
 disagreed).

@@ -141,7 +141,7 @@ cd ../smuit.worktrees/dialog-bit
 pnpm install
 
 # Open this directory in a fresh editor/Claude Code session and work normally
-pnpm --filter @smuit/playground dev
+pnpm --filter @wimwian-org/playground dev
 pnpm commit                # auto-changeset still fires — hooks run in the worktree
 
 # When done: push, then leave the worktree before finishing
@@ -242,7 +242,7 @@ git add .
 git commit -m "chore(release): v0.4.0"
 
 # Optional: smoke-test one more time on the release branch
-pnpm check && pnpm test --run && pnpm --filter @smuit/playground build
+pnpm check && pnpm test --run && pnpm --filter @wimwian-org/playground build
 
 # Finish: merges into master + dev, tags v0.4.0 on master, deletes the branch
 git flow release finish v0.4.0

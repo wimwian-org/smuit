@@ -1,12 +1,12 @@
 ---
-description: Build a @smuit/<name> bit from a design markdown spec — code, test, and document the component on this project's design tokens, tailwind-variants, conventions, demo route, and git-flow integration, honouring the design doc's MVP scope
+description: Build a @wimwian-org/<name> bit from a design markdown spec — code, test, and document the component on this project's design tokens, tailwind-variants, conventions, demo route, and git-flow integration, honouring the design doc's MVP scope
 argument-hint: A component name and the path to its design markdown (e.g. "TextField components/text-field/text-field-design.md"), or leave empty to be asked
 ---
 
 # Create From Design
 
 You are helping the developer add a component to **smuit** by treating a **design markdown
-document as the authoritative spec**, then building a native `@smuit/<name>` bit that expresses
+document as the authoritative spec**, then building a native `@wimwian-org/<name>` bit that expresses
 it on this project's design tokens, Svelte 5 runes, `tailwind-variants` conventions, tests, demo
 route, and release-ready commit.
 
@@ -28,7 +28,7 @@ Initial request: $ARGUMENTS
 
 - **The design doc is the spec; implement it, don't reinvent it.** Read the doc end-to-end and
   build precisely what it describes. Its architecture, parts, variants, behaviours, and a11y are
-  authoritative. Where the doc is silent, fall back to the closest existing `@smuit/*` bit's
+  authoritative. Where the doc is silent, fall back to the closest existing `@wimwian-org/*` bit's
   convention — never to an external library's behaviour from memory.
 - **Honour the MVP scope. This is the defining rule of this command.** If the doc has an **MVP
   Scope** (or "In scope / Deferred", "v1", "Out of scope") section, build **only the in-scope
@@ -42,7 +42,7 @@ Initial request: $ARGUMENTS
   references (e.g. MUI, Material Web). Those are **design references**, not dependencies — never
   add `@mui/*`, `@material/*`, `@smui/*`, etc. Build on smuit tokens and a `bits-ui` primitive
   where one fits. **Credit the references the doc cites** in the component's README
-  Acknowledgements (mirroring how [`@smuit/data-grid`](../../components/data-grid/) credits SVAR).
+  Acknowledgements (mirroring how [`@wimwian-org/data-grid`](../../components/data-grid/) credits SVAR).
 - **Wrap a `bits-ui` primitive when one exists for the behaviour.** Interactive components
   (Dialog, Menu, Select, Checkbox, Switch, Slider, Tabs, Tooltip, …) have headless `bits-ui`
   equivalents that already own focus management, keyboard nav, and ARIA. Wrap those rather than
@@ -136,7 +136,7 @@ Before proposing architecture, re-read these in order:
    file structure.
 3. [`.claude/variants.md`](../variants.md) — `tailwind-variants` `tv()` slot/variant configuration.
 4. [`.claude/styling.md`](../styling.md) — design tokens, `--L`/`--D` toggle, elevation tokens.
-5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@smuit/theme"`,
+5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@wimwian-org/theme"`,
    `@layer components`, semantic class naming.
 6. [`.claude/testing.md`](../testing.md) — Vitest browser-mode (`vitest-browser-svelte`,
    `@vitest/browser/context`).
@@ -290,57 +290,44 @@ and get explicit confirmation.
 
     Do not skip the `cd`. All subsequent writes happen inside the worktree.
 
-2. **Scaffold the package** at `components/<kebab-name>/`, mirroring an existing component:
-    - **`package.json`** — name `@smuit/<name>`, `"type": "module"`,
-      `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`,
-      `"publishConfig": { "access": "public" }`, MIT license/author. `dependencies`:
-      `tailwind-merge`, `tailwind-variants`, and `bits-ui` **only if** wrapping a primitive.
-      `peerDependencies`: `@smuit/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`.
-      `devDependencies` mirror an existing package. Copy
-      [`components/switch/package.json`](../../components/switch/package.json) and edit. **No
-      upstream `@mui/*` / `@material/*` / `@smui/*`.**
-    - **`tsconfig.json`** — copy from a sibling component.
-    - **`README.md`**, **`LICENSE`**, **`CHANGELOG.md`** (empty/initial) — match siblings. The
-      README **must** include:
-        - a **Scope** section stating what v1 ships and what's deferred (from the doc's MVP section);
-        - an **Acknowledgements** section crediting the references the design doc was synthesised
-          from, stating `@smuit/<name>` is an independent implementation on smuit tokens that does
-          not depend on or copy them — mirror
-          [`@smuit/data-grid`](../../components/data-grid/README.md)'s credit.
-    - **`src/` files** (each begins with the `@smuit/<name>` MIT license header comment block):
-        - **`<Component>.svelte`** — import order: backing `bits-ui` import (if any) →
-          `import '@smuit/theme'` → `import './<name>.css'` →
-          `import { <name> } from './<name>.variants'` → `import { twMerge } from 'tailwind-merge'`
-          → `import type { Props } from './types'`. Destructure `$props()` with
-          `variant`/`tint`/`size` defaults, **IN-scope** state flags, `class: className = ''`,
-          `children`, `ref = $bindable<HTMLElement | null>(null)`, `...restProps`. Compose
-          `let cls = $derived(twMerge(<name>({ variant, size, tint }), String(className ?? '')))`.
-          Put `class={cls}`, `bind:ref`, `data-*` state hooks, `{...restProps}` on the root. Render
-          `{@render children?.()}`. Implement **only** the in-scope behaviours from the doc.
-        - **`<name>.variants.ts`** — `tv()` config exporting the `<name>` const and
-          `<Name>Variants = VariantProps<typeof <name>>` type. Base class is a short semantic prefix;
-          variants map to component classes; `tint` maps to the tint utility names; set
-          `defaultVariants`.
-        - **`<name>.css`** — `@reference "@smuit/theme";` then all rules inside
-          `@layer components { … }`. **Tokens-first**: a `--…` token block at the top of the base
-          class, referenced via `var()` below. All colours via `--color-c-*` / `--color-g-*` /
-          surface/elevation tokens. No hex/rgb, no `.dark` selector.
-        - **`types.ts`** — `Props` derived from the variants combined with the element or `bits-ui`
-          Root props. Export the axis types. Add a single `// Deferred (next): …` comment naming the
-          out-of-scope props, so the extension seam is documented (no stub props).
-        - **`index.ts`** — license header; re-export the default component, the `<name>` variants
-          const + `<Name>Variants` type, and the `Props`/axis types.
-        - **`<Component>.test.ts`** — Vitest **browser-mode**:
-          `import { page } from '@vitest/browser/context'`, `import { render } from
+2. **Scaffold the package** at `components/<kebab-name>/`, mirroring an existing component: - **`package.json`** — name `@wimwian-org/<name>`, `"type": "module"`,
+   `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`,
+   `"publishConfig": { "access": "public" }`, MIT license/author. `dependencies`:
+   `tailwind-merge`, `tailwind-variants`, and `bits-ui` **only if** wrapping a primitive.
+   `peerDependencies`: `@wimwian-org/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`.
+   `devDependencies` mirror an existing package. Copy
+   [`components/switch/package.json`](../../components/switch/package.json) and edit. **No
+   upstream `@mui/*` / `@material/*` / `@smui/*`.** - **`tsconfig.json`** — copy from a sibling component. - **`README.md`**, **`LICENSE`**, **`CHANGELOG.md`** (empty/initial) — match siblings. The
+   README **must** include: - a **Scope** section stating what v1 ships and what's deferred (from the doc's MVP section); - an **Acknowledgements** section crediting the references the design doc was synthesised
+   from, stating `@wimwian-org/<name>` is an independent implementation on smuit tokens that does
+   not depend on or copy them — mirror
+   [`@wimwian-org/data-grid`](../../components/data-grid/README.md)'s credit. - **`src/` files** (each begins with the `@wimwian-org/<name>` MIT license header comment block): - **`<Component>.svelte`** — import order: backing `bits-ui` import (if any) →
+   `import '@wimwian-org/theme'` → `import './<name>.css'` →
+   `import { <name> } from './<name>.variants'` → `import { twMerge } from 'tailwind-merge'`
+   → `import type { Props } from './types'`. Destructure `$props()` with
+   `variant`/`tint`/`size` defaults, **IN-scope** state flags, `class: className = ''`,
+   `children`, `ref = $bindable<HTMLElement | null>(null)`, `...restProps`. Compose
+   `let cls = $derived(twMerge(<name>({ variant, size, tint }), String(className ?? '')))`.
+   Put `class={cls}`, `bind:ref`, `data-*` state hooks, `{...restProps}` on the root. Render
+   `{@render children?.()}`. Implement **only** the in-scope behaviours from the doc. - **`<name>.variants.ts`** — `tv()` config exporting the `<name>` const and
+   `<Name>Variants = VariantProps<typeof <name>>` type. Base class is a short semantic prefix;
+   variants map to component classes; `tint` maps to the tint utility names; set
+   `defaultVariants`. - **`<name>.css`** — `@reference "@wimwian-org/theme";` then all rules inside
+   `@layer components { … }`. **Tokens-first**: a `--…` token block at the top of the base
+   class, referenced via `var()` below. All colours via `--color-c-*` / `--color-g-*` /
+   surface/elevation tokens. No hex/rgb, no `.dark` selector. - **`types.ts`** — `Props` derived from the variants combined with the element or `bits-ui`
+   Root props. Export the axis types. Add a single `// Deferred (next): …` comment naming the
+   out-of-scope props, so the extension seam is documented (no stub props). - **`index.ts`** — license header; re-export the default component, the `<name>` variants
+   const + `<Name>Variants` type, and the `Props`/axis types. - **`<Component>.test.ts`** — Vitest **browser-mode**:
+   `import { page } from '@vitest/browser/context'`, `import { render } from
 'vitest-browser-svelte'`. Cover **every IN-scope item**: renders with defaults; each
-          `variant`/`tint`/`size` applies the expected class; each in-scope state; event forwarding;
-          `ref` binds; plus any behaviour delegated to bits-ui (role, `data-state`, keyboard). **Do
-          not** test deferred features.
-        - **`<name>.variants.test.ts`** — assert the `tv()` config returns the expected class strings
-          per variant combination.
+   `variant`/`tint`/`size` applies the expected class; each in-scope state; event forwarding;
+   `ref` binds; plus any behaviour delegated to bits-ui (role, `data-state`, keyboard). **Do
+   not** test deferred features. - **`<name>.variants.test.ts`** — assert the `tv()` config returns the expected class strings
+   per variant combination.
 
 3. **Create the demo route** at `apps/playground/src/routes/<kebab-name>/+page.svelte`:
-    - Import the component from `@smuit/<name>`.
+    - Import the component from `@wimwian-org/<name>`.
     - Render the **IN-scope** variant × tint × size × state matrix agreed in Phase 4 — nothing
       deferred.
     - Add label chips matching existing demo pages (see [`components/badge/`](../../components/badge/)).
@@ -371,9 +358,9 @@ and **within MVP scope** before merging.
     ```bash
     pnpm check                                   # svelte-check (workspace)
     pnpm lint                                    # eslint
-    pnpm --filter @smuit/<name> check            # the component's own types
+    pnpm --filter @wimwian-org/<name> check            # the component's own types
     pnpm test:browser                            # browser-mode component tests
-    pnpm --filter @smuit/playground build        # demo site builds
+    pnpm --filter @wimwian-org/playground build        # demo site builds
     ```
 
     Any failure: stop, fix, re-run. Do not commit red. (See [`CLAUDE.md`](../../CLAUDE.md) §
@@ -394,7 +381,7 @@ and **within MVP scope** before merging.
     Review for leftover upstream artefacts — @mui/*, @material/*, @smui/* imports,
     hardcoded hex, .dark selectors, raw opacity for disabled. Verify every colour
     reads --color-c-*/--color-g-*/surface tokens (or the doc's own token table),
-    elevation uses the shadow tokens, CSS uses @reference "@smuit/theme" + @layer
+    elevation uses the shadow tokens, CSS uses @reference "@wimwian-org/theme" + @layer
     components with a tokens-first block, and variants go through tailwind-variants.
     ```
 
@@ -411,12 +398,12 @@ and **within MVP scope** before merging.
     Agent 4 (Svelte 5 + conventions):
     Confirm $props()/$state/$derived/$bindable(null) (no on:*, $$props, $:,
     createEventDispatcher). Verify package.json shape (exports, files, peerDeps
-    @smuit/theme workspace:*, no upstream deps), index.ts re-exports
+    @wimwian-org/theme workspace:*, no upstream deps), index.ts re-exports
     component+variants+types, types.ts extends the right base, and the *.test.ts +
     *.variants.test.ts cover every IN-scope axis.
     ```
 
-3. **Visually verify in both themes.** Run `pnpm --filter @smuit/playground dev`, open
+3. **Visually verify in both themes.** Run `pnpm --filter @wimwian-org/playground dev`, open
    `/<kebab-name>`, and check: all in-scope variants render in light + dark, focus indicator visible
    on keyboard tab, tint retinting works, and the deferred features are genuinely absent.
 

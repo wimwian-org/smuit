@@ -1,9 +1,9 @@
 /*
- * @smuit/text-field
+ * @wimwian-org/text-field
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 /*
  * Geometry + state that tailwind-variants can't express cleanly: the container
