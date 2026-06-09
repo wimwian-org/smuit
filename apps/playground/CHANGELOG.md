@@ -1,5 +1,12 @@
 # @smuit/playground
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`db0349b`](https://github.com/wimwian-org/smuit/commit/db0349b30419655a42285a3441ec2308dcf39ad0)]:
+    - @smuit/text-field@0.2.1
+
 ## 0.1.2
 
 ### Patch Changes

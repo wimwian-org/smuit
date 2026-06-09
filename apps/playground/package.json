@@ -1,6 +1,6 @@
 {
     "name": "@smuit/playground",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "private": true,
     "description": "Interactive component sandbox for smuit development",
     "type": "module",

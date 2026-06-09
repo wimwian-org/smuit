@@ -1,5 +1,14 @@
 # @smuit/text-field
 
+## 0.2.1
+
+### Patch Changes
+
+- [#13](https://github.com/wimwian-org/smuit/pull/13) [`db0349b`](https://github.com/wimwian-org/smuit/commit/db0349b30419655a42285a3441ec2308dcf39ad0) Thanks [@wimwian](https://github.com/wimwian)! - Tighten the field vertically: `--tf-height` now fits the content (input line +
+  floated-label region + bottom padding) rather than a fixed 56px — md `2.75rem`,
+  sm `2.5rem`. The lifted (floated) label is now **bold** (700) instead of
+  semibold.
+
 ## 0.2.0
 
 ### Minor Changes
