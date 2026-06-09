@@ -8,6 +8,10 @@
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
     let clicked = $state('—');
+
+    // Selection demos
+    let assignee = $state('grace'); // single
+    let labels = $state<string[]>(['urgent']); // multiple
 </script>
 
 {#snippet chevron()}
@@ -34,9 +38,10 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">List</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/list</code> · v1 (MVP) — Material Design 3 <strong>Baseline</strong> and
-            <strong>Expressive</strong> variants, one/two-line rows, leading/trailing slots, and static · button · link items.
-            Selection, three-line, and roving keyboard nav are deferred.
+            <code>@smuit/list</code> — Material Design 3 <strong>Baseline</strong> and
+            <strong>Expressive</strong> variants, one/two/three-line rows, leading/trailing slots, static · button ·
+            link items, single/multiple <strong>selection</strong> (checkbox · radio · switch), <strong>roving</strong>
+            arrow-key navigation, and sticky <strong>subheaders</strong>.
         </p>
     </header>
 
@@ -141,6 +146,97 @@
                     <List.Item disabled>Delete (disabled)</List.Item>
                 </List.Root>
             </div>
+        </div>
+    </section>
+
+    <!-- ── Selection — single / multiple, with controls ──────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Selection <span class="demo-hint">— roving focus (↑/↓, Home/End), Space/Enter to toggle</span>
+        </h2>
+        <div class="demo-grid">
+            <div>
+                <p class="demo-cap">Single · radio · <code>{assignee}</code></p>
+                <List.Root
+                    selection="single"
+                    variant="expressive"
+                    tint="primary"
+                    bind:value={assignee}
+                    aria-label="Assignee"
+                >
+                    <List.Item value="ada">Ada Lovelace</List.Item>
+                    <List.Item value="grace">Grace Hopper</List.Item>
+                    <List.Item value="alan">Alan Turing</List.Item>
+                    <List.Item value="edsger" disabled>Edsger Dijkstra (disabled)</List.Item>
+                </List.Root>
+            </div>
+            <div>
+                <p class="demo-cap">Multiple · switch · <code>[{labels.join(', ')}]</code></p>
+                <List.Root
+                    selection="multiple"
+                    control="switch"
+                    variant="expressive"
+                    tint="secondary"
+                    bind:value={labels}
+                    aria-label="Labels"
+                >
+                    <List.Subheader>Status</List.Subheader>
+                    <List.Item value="urgent">Urgent</List.Item>
+                    <List.Item value="blocked">Blocked</List.Item>
+                    <List.Subheader>Area</List.Subheader>
+                    <List.Item value="design" supporting="UI & UX">Design</List.Item>
+                    <List.Item value="api">API</List.Item>
+                </List.Root>
+            </div>
+            <div>
+                <p class="demo-cap">Multiple · checkbox (baseline)</p>
+                <List.Root selection="multiple" divider value={['api']} aria-label="Scopes">
+                    <List.Item value="read">Read</List.Item>
+                    <List.Item value="write">Write</List.Item>
+                    <List.Item value="api">API access</List.Item>
+                </List.Root>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Three-line layout ────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Three-line <span class="demo-hint">— supporting block clamps to two wrapped lines</span>
+        </h2>
+        <div class="demo-grid">
+            <List.Root variant="expressive">
+                <List.Item
+                    lines="three"
+                    supporting="A vertical arrangement of related items presented as a continuous, scannable column — the workhorse layout for collections."
+                >
+                    {#snippet leading()}{@render person()}{/snippet}
+                    About lists
+                    {#snippet trailing()}{@render chevron()}{/snippet}
+                </List.Item>
+                <List.Item
+                    lines="three"
+                    supporting="Each row carries a headline, optional supporting text, and optional leading or trailing decorations or actions."
+                >
+                    {#snippet leading()}{@render person()}{/snippet}
+                    Row anatomy
+                </List.Item>
+            </List.Root>
+        </div>
+    </section>
+
+    <!-- ── Subheaders — sticky section labels ───────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Subheaders <span class="demo-hint">— sticky labels; Expressive rounds each group</span></h2>
+        <div class="demo-grid">
+            <List.Root variant="expressive" tint="tertiary">
+                <List.Subheader sticky>Favourites</List.Subheader>
+                <List.Item href="#a">Inbox</List.Item>
+                <List.Item href="#b">Starred</List.Item>
+                <List.Subheader sticky>Folders</List.Subheader>
+                <List.Item href="#c">Work</List.Item>
+                <List.Item href="#d">Personal</List.Item>
+            </List.Root>
         </div>
     </section>
 

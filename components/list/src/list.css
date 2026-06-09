@@ -7,11 +7,14 @@
 
 /*
  * Geometry + state that tailwind-variants can't express cleanly: the row
- * heights per `lines`, the Expressive gap and **position-based corner shape**
- * (derived from DOM order via :first/:last/:only-child — no JS), the baseline
- * divider, the focus-visible outline, and icon sizing. Every value reads one of
- * the component tokens declared on `.list`, which in turn read the smuit
- * `--color-*` / `--surface-*` design tokens — no literals.
+ * heights per `lines` (incl. the three-line clamp), the Expressive gap and
+ * **position-based corner shape** (derived from DOM order via
+ * :first/:last/:only-child and subheader-delimited groups — no JS), the baseline
+ * divider, the focus-visible outline, the selection state + controls
+ * (checkbox / radio / switch), the section subheader, the Expressive press
+ * shape-morph, and icon sizing. Every value reads one of the component tokens
+ * declared on `.list`, which in turn read the smuit `--color-*` / `--surface-*`
+ * design tokens — no literals.
  */
 @layer components {
     .list {
@@ -25,11 +28,16 @@
            runtime and the flat theme. Default = neutral grey; the `tint` prop
            repoints it to a palette accent. */
         --list-accent: var(--color-g-700);
+        /* On-accent foreground (checkmark / switch thumb) — the page background
+           tracks the opposite end of the value scale from the accent, so it stays
+           contrasting in both themes. */
+        --list-on-accent: var(--page-bg);
         /* Resting fill + state layers, derived from the accent. Baseline rows
-           rest transparent and show a translucent tint on hover/press. */
+           rest transparent and show a translucent tint on hover/press/select. */
         --list-rest: transparent;
         --list-hover: color-mix(in srgb, var(--list-accent) 12%, transparent);
         --list-press: color-mix(in srgb, var(--list-accent) 22%, transparent);
+        --list-selected: color-mix(in srgb, var(--list-accent) 14%, transparent);
     }
 
     /* ── Tint → accent (theme-independent semantic tokens) ───────────── */
@@ -45,12 +53,13 @@
     /* Neutral keeps the default `--list-accent` (a theme-flipping grey). */
 
     /* Expressive: a small gap separates the rows, which carry a soft tinted
-       fill that deepens on hover/press (vs. baseline's transparent rest). */
+       fill that deepens on hover/press/select (vs. baseline's transparent rest). */
     .list[data-variant='expressive'] {
         gap: 0.25rem;
         --list-rest: color-mix(in srgb, var(--list-accent) 8%, var(--color-g-100));
         --list-hover: color-mix(in srgb, var(--list-accent) 16%, var(--color-g-100));
         --list-press: color-mix(in srgb, var(--list-accent) 26%, var(--color-g-100));
+        --list-selected: color-mix(in srgb, var(--list-accent) 20%, var(--color-g-100));
     }
 
     /* ── Row geometry ───────────────────────────────────────────────── */
@@ -69,16 +78,41 @@
     .list-item[data-lines='two'] {
         min-height: 4.5rem;
     }
+    /* Three-line: taller, top-aligned; the supporting block wraps and clamps to
+       two lines rather than truncating to one. */
+    .list-item[data-lines='three'] {
+        min-height: 5.5rem;
+        padding-block: 0.75rem;
+    }
+    .list-item[data-lines='three'] .list-supporting {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+        white-space: normal;
+    }
 
-    /* ── Expressive position-based shape (DOM order, no JS) ──────────── */
+    /* ── Selected fill ──────────────────────────────────────────────── */
+    /* Repoint the resting fill token on the row; the `bg-[var(--list-rest)]`
+       utility then picks up the selected tint, and hover/press still deepen it. */
+    .list-item[data-selected] {
+        --list-rest: var(--list-selected);
+    }
+
+    /* ── Expressive position-based shape (DOM order + subheaders, no JS) ── */
     .list[data-variant='expressive'] .list-item {
         border-radius: var(--list-radius-inner);
     }
-    .list[data-variant='expressive'] .list-row:first-child .list-item {
+    /* Top corners: the first row, or any row that opens a group (after a subheader). */
+    .list[data-variant='expressive'] .list-row:first-child .list-item,
+    .list[data-variant='expressive'] .list-subheader + .list-row .list-item {
         border-start-start-radius: var(--list-radius);
         border-start-end-radius: var(--list-radius);
     }
-    .list[data-variant='expressive'] .list-row:last-child .list-item {
+    /* Bottom corners: the last row, or any row that closes a group (before a subheader). */
+    .list[data-variant='expressive'] .list-row:last-child .list-item,
+    .list[data-variant='expressive'] .list-row:has(+ .list-subheader) .list-item {
         border-end-start-radius: var(--list-radius);
         border-end-end-radius: var(--list-radius);
     }
@@ -101,6 +135,116 @@
         outline-offset: -2px;
     }
 
+    /* ── Expressive press shape-morph ───────────────────────────────── */
+    /* On press, an interactive Expressive row rounds to the full container
+       radius and settles slightly — the M3 Expressive press feedback. Motion-only
+       (the row's transition is `motion-reduce:transition-none`), and gated here so
+       reduced-motion users get no shape change at all. */
+    @media (prefers-reduced-motion: no-preference) {
+        .list[data-variant='expressive'] .list-item[data-interactive]:active {
+            border-radius: var(--list-radius);
+            transform: scale(0.985);
+        }
+    }
+
+    /* ── Selection controls (checkbox / radio / switch) ─────────────── */
+    /* Visual indicators only — the row carries the `role="option"` +
+       `aria-selected` semantics, so the control is `aria-hidden`. */
+    .list-control {
+        display: inline-grid;
+        place-items: center;
+        box-sizing: border-box;
+        transition:
+            background-color 150ms ease-out,
+            border-color 150ms ease-out;
+    }
+    .list-control[data-control='checkbox'],
+    .list-control[data-control='radio'] {
+        width: 1.125rem;
+        height: 1.125rem;
+        border: 2px solid var(--color-g-500);
+    }
+    .list-control[data-control='checkbox'] {
+        border-radius: 0.25rem;
+    }
+    .list-control[data-control='radio'] {
+        border-radius: 50%;
+    }
+    .list-control[data-control='checkbox'][data-checked] {
+        background-color: var(--list-accent);
+        border-color: var(--list-accent);
+    }
+    /* Checkmark */
+    .list-control[data-control='checkbox'][data-checked]::after {
+        content: '';
+        width: 0.3rem;
+        height: 0.6rem;
+        margin-top: -0.1rem;
+        border: solid var(--list-on-accent);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    .list-control[data-control='radio'][data-checked] {
+        border-color: var(--list-accent);
+    }
+    /* Inner dot */
+    .list-control[data-control='radio'][data-checked]::after {
+        content: '';
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 50%;
+        background-color: var(--list-accent);
+    }
+    .list-control[data-control='switch'] {
+        position: relative;
+        width: 2rem;
+        height: 1.25rem;
+        border-radius: 1rem;
+        background-color: var(--color-g-400);
+    }
+    .list-control[data-control='switch']::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0.1875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+        border-radius: 50%;
+        background-color: var(--color-g-0);
+        transform: translateY(-50%);
+        transition: transform 150ms ease-out;
+    }
+    .list-control[data-control='switch'][data-checked] {
+        background-color: var(--list-accent);
+    }
+    .list-control[data-control='switch'][data-checked]::after {
+        transform: translate(0.75rem, -50%);
+    }
+    /* Dim the control on a disabled row alongside the rest of the dimmed palette. */
+    .list-item[data-disabled] .list-control {
+        opacity: 0.5;
+    }
+
+    /* ── Section subheader ──────────────────────────────────────────── */
+    .list-subheader {
+        display: flex;
+        align-items: center;
+        min-height: 2.5rem;
+        padding-inline: var(--list-pad-x);
+        padding-block: 0.5rem;
+        font-size: var(--text-label-sm);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-g-600);
+    }
+    .list-subheader[data-sticky] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--surface-bg);
+    }
+
     /* ── Leading / trailing icon sizing ─────────────────────────────── */
     .list-leading :where(svg) {
         width: 1.5rem;
@@ -109,5 +253,13 @@
     .list-trailing :where(svg) {
         width: 1.25rem;
         height: 1.25rem;
+    }
+
+    /* Reduced motion: drop the control transitions too. */
+    @media (prefers-reduced-motion: reduce) {
+        .list-control,
+        .list-control::after {
+            transition: none;
+        }
     }
 }

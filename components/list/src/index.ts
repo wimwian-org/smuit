@@ -5,5 +5,15 @@
  */
 export * as List from './list';
 export { list, type ListVariants } from './list.variants';
-export type { ListRootProps, ListItemProps, ListVariant, ListTint, ListLines, ListItemType } from './types';
+export type {
+    ListRootProps,
+    ListItemProps,
+    ListSubheaderProps,
+    ListVariant,
+    ListTint,
+    ListLines,
+    ListItemType,
+    ListSelection,
+    ListControl,
+} from './types';
 export type { ListContext } from './list/list-context';
