@@ -20,6 +20,9 @@
         triggerClass = undefined,
         scrollable = false,
         badgeTwo = false,
+        // Renders extra triggers so a constrained scrollable row genuinely
+        // overflows its viewport (exercising the scroll-affordance / measure paths).
+        extraTabs = 0,
     }: {
         variant?: TabsVariant;
         size?: TabsSize;
@@ -32,10 +35,21 @@
         triggerClass?: string;
         scrollable?: boolean;
         badgeTwo?: boolean;
+        extraTabs?: number;
     } = $props();
+
+    const extras = $derived(Array.from({ length: extraTabs }, (_, i) => `extra-${i}`));
 </script>
 
 {#snippet twoBadge()}<span data-testid="tab-badge">3</span>{/snippet}
+
+<!-- Sets the active value programmatically (no tab focus → no native focus-scroll),
+     so the bit's own scroll-active-into-view path runs against an off-view tab. -->
+<button
+    data-testid="set-value"
+    aria-label="set active value"
+    onclick={(e) => (value = (e.currentTarget as HTMLButtonElement).dataset.v ?? value)}
+></button>
 
 <Tabs.Root {variant} {size} {tint} {orientation} {iconLayout} {activationMode} bind:value>
     <Tabs.List {scrollable}>
@@ -47,6 +61,9 @@
             {/snippet}
             Three
         </Tabs.Trigger>
+        {#each extras as v (v)}
+            <Tabs.Trigger value={v}>Tab {v}</Tabs.Trigger>
+        {/each}
     </Tabs.List>
 
     <Tabs.Content value="one">Panel one</Tabs.Content>

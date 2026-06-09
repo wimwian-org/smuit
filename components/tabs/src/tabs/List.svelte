@@ -59,6 +59,7 @@
 
     function measure() {
         const root = ref;
+        /* istanbul ignore if -- defensive: bits-ui binds `ref` before this client effect runs, so it's never null here. */
         if (!root) return;
         const active = root.querySelector<HTMLElement>('[role="tab"][data-state="active"]');
         if (!active) {
@@ -67,7 +68,10 @@
         }
         // bold hugs the label span; subtle spans the whole trigger.
         const target =
-            ctx.variant === 'bold' ? (active.querySelector<HTMLElement>('[data-tabs-label]') ?? active) : active;
+            ctx.variant === 'bold'
+                ? /* istanbul ignore next -- every Trigger renders a [data-tabs-label]; the `?? active` fallback is unreachable here. */
+                  (active.querySelector<HTMLElement>('[data-tabs-label]') ?? active)
+                : active;
         const rootRect = root.getBoundingClientRect();
         const rect = target.getBoundingClientRect();
         if (isVertical) {
@@ -111,6 +115,7 @@
     // Page the viewport by ~75% on a prev/next button press.
     function pageScroll(dir: -1 | 1) {
         const root = ref;
+        /* istanbul ignore if -- defensive: a scroll affordance only exists once `ref` is bound, so it's never null here. */
         if (!root) return;
         const behavior = reduced() ? 'auto' : 'smooth';
         if (isVertical) root.scrollBy({ top: dir * root.clientHeight * 0.75, behavior });
@@ -125,6 +130,7 @@
         void ctx.size;
         void ctx.orientation;
         const root = ref;
+        /* istanbul ignore if -- defensive: this effect runs after mount, by which point bits-ui has bound `ref`. */
         if (!root) return;
         const raf = requestAnimationFrame(() => {
             measure();
@@ -162,8 +168,8 @@
             data-slot="indicator"
             data-ready={ready || undefined}
             aria-hidden="true"
-            style:--tabs-indicator-pos="{pos}px"
-            style:--tabs-indicator-len="{len}px"
+            style:--tabs-indicator-pos={`${pos}px`}
+            style:--tabs-indicator-len={`${len}px`}
         ></span>
     </BitsTabs.List>
 {/snippet}
