@@ -28,3 +28,4 @@ audit/
 /.claude/scheduled_tasks.lock
 __screenshots__/
 .vitest-attachments/
+/.npmrc
