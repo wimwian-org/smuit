@@ -1,0 +1,9 @@
+/*
+ * Copyright (c) 2026 Anand Panchapakesan
+ * Licensed under the MIT License.
+ */
+/* Test theme entry: Tailwind + the generated flat theme (@smuit/theme), mirroring
+   the playground's app.css, so component browser tests render with tokens and
+   utilities in scope. */
+@import 'tailwindcss';
+@import '@smuit/theme';

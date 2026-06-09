@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 //
-// Keep the GENERATED flat theme (packages/theme/src/theme/output.css) in sync
+// Keep the GENERATED flat theme (packages/theme/src/output.css) in sync
 // with its source (input.css) and the generator (theme-gen.ts). When the output
 // is stale it is deleted and regenerated from scratch.
 //
@@ -18,9 +18,9 @@
 import { readFileSync, writeFileSync, rmSync, existsSync, watch } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate, minify } from '../packages/theme/src/theme/theme-gen.ts';
+import { generate, minify } from '../packages/theme/src/theme-gen.ts';
 
-const THEME = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages', 'theme', 'src', 'theme');
+const THEME = join(dirname(fileURLToPath(import.meta.url)), '..', 'packages', 'theme', 'src');
 const INPUT = join(THEME, 'input.css');
 const OUTPUT = join(THEME, 'output.css');
 const GENERATOR = join(THEME, 'theme-gen.ts');

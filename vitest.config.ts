@@ -12,14 +12,14 @@ export default defineConfig({
         include: [
             'components/**/[a-z]*.test.ts',
             'components/**/*.variants.test.ts',
-            'packages/theme/src/theme/*.test.ts',
+            'packages/theme/src/*.test.ts',
         ],
         passWithNoTests: true,
         coverage: {
             provider: 'v8',
             reportsDirectory: 'coverage',
             reporter: ['text', 'json-summary', 'html', 'lcov'],
-            include: ['components/**/*.ts', 'packages/theme/src/theme/theme-gen.ts'],
+            include: ['components/**/*.ts', 'packages/theme/src/theme-gen.ts'],
             exclude: [
                 'components/**/*.{test,spec}.ts',
                 'components/**/*.svelte.ts',
