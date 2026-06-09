@@ -5,7 +5,7 @@
     "description": "Interactive component sandbox for smuit development",
     "type": "module",
     "scripts": {
-        "theme": "node ../../packages/theme/src/theme/build-theme.ts",
+        "theme": "node ../../packages/theme/src/build-theme.ts",
         "dev": "pnpm run theme && rm -rf node_modules/.vite && vite dev --force",
         "build": "pnpm run theme && vite build",
         "preview": "vite preview",
