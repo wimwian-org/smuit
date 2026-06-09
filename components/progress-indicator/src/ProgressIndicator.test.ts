@@ -6,6 +6,7 @@
 import { afterEach, expect, test } from 'vitest';
 import { page } from '@vitest/browser/context';
 import { render } from 'vitest-browser-svelte';
+import { createRawSnippet } from 'svelte';
 import ProgressIndicator from './ProgressIndicator.svelte';
 import RefHarness from './progress-ref.test.svelte';
 
@@ -120,4 +121,81 @@ test('binds ref to the underlying root <div>', () => {
     render(RefHarness, { onRef: (el) => (captured = el) });
     expect(captured).toBeInstanceOf(HTMLDivElement);
     expect((captured as unknown as HTMLDivElement).classList.contains('progress')).toBe(true);
+});
+
+// ── circular shape ─────────────────────────────────────────────────────────────
+const field = () => document.querySelector('[data-slot="field"]') as HTMLElement | null;
+const valueText = () => document.querySelector('[data-slot="value"]') as HTMLElement | null;
+
+test('shape=circular renders an SVG ring progressbar with the determinate arc', () => {
+    render(ProgressIndicator, { shape: 'circular', value: 0.5 });
+    const el = bar();
+    expect(el.dataset.shape).toBe('circular');
+    expect(el.getAttribute('role')).toBe('progressbar');
+    expect(el.querySelector('svg')).toBeTruthy();
+    // pathLength=100, so the offset reveals fraction of the ring: 100·(1−0.5)=50.
+    const arc = el.querySelector('.progress-bar') as SVGCircleElement;
+    expect(arc.getAttribute('stroke-dasharray')).toBe('100');
+    expect(arc.getAttribute('stroke-dashoffset')).toBe('50');
+    expect(el.getAttribute('aria-valuenow')).toBe('0.5');
+});
+
+test('circular indeterminate omits the dash offset (CSS drives the spin)', () => {
+    render(ProgressIndicator, { shape: 'circular', indeterminate: true });
+    const arc = bar().querySelector('.progress-bar') as SVGCircleElement;
+    expect(arc.hasAttribute('stroke-dashoffset')).toBe(false);
+    expect(bar().hasAttribute('data-indeterminate')).toBe(true);
+});
+
+// ── linear buffer ──────────────────────────────────────────────────────────────
+test('buffer renders the buffer fill + dotted track and sets --progress-buffer', () => {
+    render(ProgressIndicator, { value: 0.3, buffer: 0.6 });
+    const el = bar();
+    expect(el.style.getPropertyValue('--progress-buffer')).toBe('0.6');
+    expect(el.querySelector('[data-slot="buffer"]')).toBeTruthy();
+    expect(el.querySelector('[data-slot="dots"]')).toBeTruthy();
+});
+
+test('buffer is ignored while indeterminate', () => {
+    render(ProgressIndicator, { indeterminate: true, buffer: 0.6 });
+    expect(bar().querySelector('[data-slot="buffer"]')).toBeNull();
+    expect(bar().style.getPropertyValue('--progress-buffer')).toBe('');
+});
+
+// ── four-colour ────────────────────────────────────────────────────────────────
+test('fourColor sets data-four-color only while indeterminate', () => {
+    render(ProgressIndicator, { indeterminate: true, fourColor: true });
+    expect(bar().hasAttribute('data-four-color')).toBe(true);
+    document.body.innerHTML = '';
+    render(ProgressIndicator, { value: 0.5, fourColor: true });
+    expect(bar().hasAttribute('data-four-color')).toBe(false);
+});
+
+// ── label / value readout ──────────────────────────────────────────────────────
+test('showValue renders a % readout in a linear caption', () => {
+    render(ProgressIndicator, { value: 0.42, showValue: true });
+    expect(field()).toBeTruthy();
+    expect(valueText()?.textContent).toBe('42%');
+    // the progressbar still lives inside the field
+    expect(field()?.querySelector('[role="progressbar"]')).toBeTruthy();
+});
+
+test('showValue is suppressed while indeterminate', () => {
+    render(ProgressIndicator, { indeterminate: true, showValue: true });
+    expect(valueText()).toBeNull();
+});
+
+test('circular showValue centres the readout inside the ring (no field wrapper)', () => {
+    render(ProgressIndicator, { shape: 'circular', value: 0.7, showValue: true });
+    expect(field()).toBeNull();
+    expect(valueText()?.textContent).toBe('70%');
+});
+
+test('label snippet renders a caption and wraps the bar in a field', () => {
+    render(ProgressIndicator, {
+        value: 0.5,
+        label: createRawSnippet(() => ({ render: () => '<span>Uploading</span>' })),
+    });
+    expect(field()).toBeTruthy();
+    expect(document.querySelector('[data-slot="label"]')?.textContent).toContain('Uploading');
 });

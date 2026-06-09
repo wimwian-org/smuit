@@ -5,4 +5,9 @@
  */
 export { default as ProgressIndicator } from './ProgressIndicator.svelte';
 export { progressIndicator, type ProgressIndicatorVariants } from './progress-indicator.variants';
-export type { ProgressIndicatorProps, ProgressIndicatorTint, ProgressIndicatorSize } from './types';
+export type {
+    ProgressIndicatorProps,
+    ProgressIndicatorTint,
+    ProgressIndicatorSize,
+    ProgressIndicatorShape,
+} from './types';

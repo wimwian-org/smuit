@@ -11,16 +11,20 @@
 
     // A live determinate value the user can scrub.
     let value = $state(0.6);
+    // Buffer demo: value trails the buffer.
+    let buffered = $state(0.35);
+    let bufferAhead = $state(0.65);
 </script>
 
 <div style="display: flex; flex-direction: column; gap: 2.5rem; max-width: 52rem">
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Progress Indicator</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/progress-indicator</code> · v1 (MVP) — Material Design 3
-            <strong>linear</strong> progress in <strong>determinate</strong> and
-            <strong>indeterminate</strong> modes, retintable, in three track heights. Circular, four-color, and buffer are
-            deferred.
+            <code>@smuit/progress-indicator</code> — Material Design 3 progress in
+            <strong>linear</strong> and <strong>circular</strong> shapes,
+            <strong>determinate</strong> and <strong>indeterminate</strong> modes, retintable, in three sizes — now with
+            a <strong>buffer</strong> channel, a <strong>four-colour</strong> spinner, and an optional
+            <strong>label / value</strong> readout.
         </p>
     </header>
 
@@ -89,6 +93,73 @@
                     <ProgressIndicator indeterminate {tint} aria-label="{tint} indeterminate" />
                 </div>
             {/each}
+        </div>
+    </section>
+
+    <!-- ── Circular ────────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Circular <span class="demo-hint">— ring shape, determinate + indeterminate</span></h2>
+        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap">
+            {#each sizes as size (size)}
+                <ProgressIndicator shape="circular" {size} value={0.65} showValue aria-label="{size} circular, 65%" />
+            {/each}
+            <ProgressIndicator shape="circular" indeterminate aria-label="Circular indeterminate" />
+            <ProgressIndicator
+                shape="circular"
+                indeterminate
+                tint="success"
+                aria-label="Circular indeterminate success"
+            />
+        </div>
+    </section>
+
+    <!-- ── Four-colour ─────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Four-colour <span class="demo-hint">— indeterminate cycles four accents</span></h2>
+        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; max-width: 32rem">
+            <ProgressIndicator shape="circular" size="lg" indeterminate fourColor aria-label="Four-colour spinner" />
+            <div style="flex: 1; min-width: 16rem">
+                <ProgressIndicator indeterminate fourColor aria-label="Four-colour linear" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Buffer ──────────────────────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Buffer <span class="demo-hint">— value + a buffered channel with a dotted track</span></h2>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 28rem">
+            <ProgressIndicator
+                value={buffered}
+                buffer={bufferAhead}
+                size="lg"
+                aria-label="Buffering, {Math.round(buffered * 100)}%"
+            />
+            <label style="display: flex; align-items: center; gap: 0.75rem; color: var(--page-fg)">
+                <span class="demo-cap" style="margin: 0; min-width: 4ch">value</span>
+                <input type="range" min="0" max="1" step="0.01" bind:value={buffered} style="flex: 1" />
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.75rem; color: var(--page-fg)">
+                <span class="demo-cap" style="margin: 0; min-width: 4ch">buffer</span>
+                <input type="range" min="0" max="1" step="0.01" bind:value={bufferAhead} style="flex: 1" />
+            </label>
+        </div>
+    </section>
+
+    <!-- ── Label / value readout ───────────────────────────────────── -->
+    <section>
+        <h2 class="demo-h2">Label &amp; value <span class="demo-hint">— built-in caption + percentage</span></h2>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 28rem">
+            <ProgressIndicator value={0.4} showValue aria-label="Uploading">
+                {#snippet label()}Uploading…{/snippet}
+            </ProgressIndicator>
+            <div style="display: flex; align-items: center; gap: 2rem">
+                <ProgressIndicator shape="circular" size="lg" value={0.72} showValue tint="success">
+                    {#snippet label()}Sync{/snippet}
+                </ProgressIndicator>
+                <ProgressIndicator value={0.88} showValue tint="error">
+                    {#snippet label()}Disk usage{/snippet}
+                </ProgressIndicator>
+            </div>
         </div>
     </section>
 </div>
