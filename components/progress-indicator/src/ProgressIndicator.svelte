@@ -1,5 +1,5 @@
 <!--
-  @smuit/progress-indicator
+  @wimwian-org/progress-indicator
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
@@ -15,7 +15,7 @@
     <ProgressIndicator value={0.3} buffer={0.6} />            ← linear w/ buffer
 -->
 <script lang="ts">
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import './progress-indicator.css';
     import { progressIndicator } from './progress-indicator.variants';
     import { twMerge } from 'tailwind-merge';

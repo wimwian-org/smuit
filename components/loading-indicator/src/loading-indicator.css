@@ -1,9 +1,9 @@
 /*
- * @smuit/loading-indicator
+ * @wimwian-org/loading-indicator
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 /*
  * Geometry + colour that tailwind-variants can't express cleanly: the container

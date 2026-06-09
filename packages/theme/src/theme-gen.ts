@@ -207,7 +207,7 @@ const indent = (block: string, n: number): string =>
 const DANGER = `/* ============================================================================
  *   ⚠  GENERATED FILE — DO NOT EDIT  ⚠
  *
- *   @smuit/theme — flat distributable theme. Every value is baked to a literal:
+ *   @wimwian-org/theme — flat distributable theme. Every value is baked to a literal:
  *   colours as oklch(), type as rem, shadows as full box-shadow strings. No
  *   color-mix(), no contrast-color(), no light-dark().
  *
@@ -218,7 +218,7 @@ const DANGER = `/* =============================================================
  *
  *   To change the theme, edit input.css (hues, fonts, ramp knobs) and rebuild:
  *
- *       pnpm --filter @smuit/theme build:theme
+ *       pnpm --filter @wimwian-org/theme build:theme
  *
  *   Light is the default. Dark applies via [data-theme='dark'] OR the OS
  *   preference (prefers-color-scheme: dark), unless [data-theme='light'] is

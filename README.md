@@ -2,7 +2,7 @@
 
 > Material Design 3 components for Svelte.
 
-**smuit** is a pnpm monorepo housing a Material Design 3 design system and a Svelte 5 component library. It ships a CSS-only theme package implementing MD3 color roles and tokens, ~50 independently versioned component packages under the `@smuit/*` npm scope, and a SvelteKit playground for developing and demoing every token and component.
+**smuit** is a pnpm monorepo housing a Material Design 3 design system and a Svelte 5 component library. It ships a CSS-only theme package implementing MD3 color roles and tokens, ~50 independently versioned component packages under the `@wimwian-org/*` npm scope, and a SvelteKit playground for developing and demoing every token and component.
 
 Everything is built on Svelte 5 runes, Tailwind CSS v4 (`@theme` + `@utility`), and an oklch design-token system faithful to Material Design 3's color system, typography scale, shape tokens, and elevation model — with first-class light/dark theming.
 
@@ -31,7 +31,7 @@ Everything is built on Svelte 5 runes, Tailwind CSS v4 (`@theme` + `@utility`), 
 - **Material Design 3 fidelity.** Components follow MD3 design philosophy — color roles, shape tokens, typescale, and elevation — rather than inventing a parallel system. If MD3 specifies it, smuit implements it.
 - **Headless-first accessibility.** Interactive components are built on battle-tested headless primitives (bits-ui, Melt UI, etc.) for correct focus management, keyboard behaviour, and ARIA semantics. smuit adds MD3 theming and structure on top.
 - **Token-driven theming.** MD3 color roles (`primary`, `secondary`, `tertiary`, `error`, surface roles) are implemented with an oklch palette and a CSS space-toggle (`--L` / `--D`) — no JS theme switch, no flash.
-- **Independently published.** Each component is its own `@smuit/*` package with its own version and changelog, depending only on `@smuit/theme`. Consumers install only what they use.
+- **Independently published.** Each component is its own `@wimwian-org/*` package with its own version and changelog, depending only on `@wimwian-org/theme`. Consumers install only what they use.
 - **Svelte 5 native.** Runes (`$state`, `$derived`, `$props`, snippets) throughout — no legacy stores or `export let`.
 
 ---
@@ -41,16 +41,16 @@ Everything is built on Svelte 5 runes, Tailwind CSS v4 (`@theme` + `@utility`), 
 ```
 smuit/
 ├── apps/
-│   └── playground/      (@smuit/playground) — SvelteKit dev sandbox, NOT published
+│   └── playground/      (@wimwian-org/playground) — SvelteKit dev sandbox, NOT published
 ├── packages/
-│   └── theme/           (@smuit/theme) — CSS design tokens + Tailwind v4 theme, published
-├── components/          — component packages, each published as @smuit/<name>
+│   └── theme/           (@wimwian-org/theme) — CSS design tokens + Tailwind v4 theme, published
+├── components/          — component packages, each published as @wimwian-org/<name>
 ├── .claude/             — project guidance docs (see Documentation Map)
 ├── bin/wt               — git-flow + worktree helper
 └── scripts/             — build/metadata/release utilities
 ```
 
-**Dependency direction:** `apps/` → `components/` → `packages/`. No reverse dependencies. A component depends only on `@smuit/theme` (peer) and its headless primitive; it never reaches back into the playground.
+**Dependency direction:** `apps/` → `components/` → `packages/`. No reverse dependencies. A component depends only on `@wimwian-org/theme` (peer) and its headless primitive; it never reaches back into the playground.
 
 ---
 
@@ -63,7 +63,7 @@ Requires **Node** + **pnpm** (`^11.4.0` — the repo auto-downloads it via `devE
 pnpm install
 
 # Run the playground dev sandbox
-pnpm --filter @smuit/playground dev
+pnpm --filter @wimwian-org/playground dev
 
 # Type-check, lint, format
 pnpm check
@@ -74,17 +74,17 @@ pnpm format
 ### Consuming a component (downstream)
 
 ```bash
-pnpm add @smuit/button @smuit/theme
+pnpm add @wimwian-org/button @wimwian-org/theme
 ```
 
 ```css
 /* app.css — import the theme once at the root */
-@import '@smuit/theme';
+@import '@wimwian-org/theme';
 ```
 
 ```svelte
 <script>
-    import { Button } from '@smuit/button';
+    import { Button } from '@wimwian-org/button';
 </script>
 
 <Button variant="filled">Click me</Button>
@@ -94,13 +94,13 @@ pnpm add @smuit/button @smuit/theme
 
 ## Packages
 
-| Package              | Path                | Published | Description                                                    |
-| -------------------- | ------------------- | --------- | -------------------------------------------------------------- |
-| `@smuit/theme`       | `packages/theme`    | ✅        | CSS-only MD3 design tokens, oklch palettes, Tailwind v4 theme. |
-| `@smuit/<component>` | `components/<name>` | ✅        | One package per component, following MD3 specifications.       |
-| `@smuit/playground`  | `apps/playground`   | ❌        | SvelteKit sandbox — demos every token and component. Dev-only. |
+| Package                    | Path                | Published | Description                                                    |
+| -------------------------- | ------------------- | --------- | -------------------------------------------------------------- |
+| `@wimwian-org/theme`       | `packages/theme`    | ✅        | CSS-only MD3 design tokens, oklch palettes, Tailwind v4 theme. |
+| `@wimwian-org/<component>` | `components/<name>` | ✅        | One package per component, following MD3 specifications.       |
+| `@wimwian-org/playground`  | `apps/playground`   | ❌        | SvelteKit sandbox — demos every token and component. Dev-only. |
 
-### `@smuit/theme`
+### `@wimwian-org/theme`
 
 A pure-CSS package (no Svelte, no JS): a single **flat** stylesheet — `output.css`,
 generated from `input.css` — with every MD3 color role, oklch palette, tint
@@ -108,18 +108,18 @@ generated from `input.css` — with every MD3 color role, oklch palette, tint
 runtime `color-mix()` / `light-dark()`). Import it once at your app root:
 
 ```css
-@import '@smuit/theme'; /* the flat theme — resolves to output.css */
+@import '@wimwian-org/theme'; /* the flat theme — resolves to output.css */
 ```
 
-The same file is also reachable as `@smuit/theme/flat`.
+The same file is also reachable as `@wimwian-org/theme/flat`.
 
 ### Component package anatomy
 
-Each component follows the same layout (example: `@smuit/button`):
+Each component follows the same layout (example: `@wimwian-org/button`):
 
 ```
 components/button/
-├── package.json           — @smuit/button; peer: @smuit/theme, svelte, tailwindcss
+├── package.json           — @wimwian-org/button; peer: @wimwian-org/theme, svelte, tailwindcss
 ├── README.md              — per-component usage
 ├── CHANGELOG.md           — changesets-generated
 ├── tsconfig.json
@@ -136,14 +136,14 @@ components/button/
 
 ## Components
 
-MD3 components live in `components/`, each published as `@smuit/<name>`:
+MD3 components live in `components/`, each published as `@wimwian-org/<name>`:
 
 `app-bar` · `avatar` · `badge` · `bottom-app-bar` · `bottom-sheet` · `button` · `card` · `checkbox` · `chip` · `date-picker` · `dialog` · `divider` · `fab` · `icon-button` · `list` · `menu` · `navigation-bar` · `navigation-drawer` · `navigation-rail` · `progress` · `radio-group` · `search` · `select` · `slider` · `snackbar` · `switch` · `tabs` · `text-field` · `time-picker` · `tooltip`
 
 ### Adding a component
 
 ```bash
-/create-bit    # wrap a headless primitive into a new @smuit/* package
+/create-bit    # wrap a headless primitive into a new @wimwian-org/* package
 /create-mui    # rebuild an SMUI/Material Design 3 component to smuit conventions
 /create-shadcn # adapt a shadcn-svelte component to smuit tokens
 ```
@@ -171,19 +171,19 @@ smuit maps Material Design 3's color system onto oklch palettes:
 
 Commands are workspace-scoped — run from the repo root, or target a workspace with `--filter`.
 
-| Command                                 | Does                                                  |
-| --------------------------------------- | ----------------------------------------------------- |
-| `pnpm format`                           | Prettier write (all workspaces)                       |
-| `pnpm lint`                             | ESLint (all workspaces)                               |
-| `pnpm check`                            | `svelte-check` across the workspace                   |
-| `pnpm commit`                           | Commitizen prompt — conventional commit message       |
-| `pnpm changeset`                        | Author a changeset by hand                            |
-| `pnpm test`                             | Vitest (node mode)                                    |
-| `pnpm test:browser`                     | Vitest (browser mode, Playwright)                     |
-| `pnpm test:all`                         | Both node and browser test suites                     |
-| `pnpm coverage`                         | Full coverage run + regenerate playground status JSON |
-| `pnpm --filter @smuit/playground dev`   | Vite dev server                                       |
-| `pnpm --filter @smuit/playground build` | Static build                                          |
+| Command                                       | Does                                                  |
+| --------------------------------------------- | ----------------------------------------------------- |
+| `pnpm format`                                 | Prettier write (all workspaces)                       |
+| `pnpm lint`                                   | ESLint (all workspaces)                               |
+| `pnpm check`                                  | `svelte-check` across the workspace                   |
+| `pnpm commit`                                 | Commitizen prompt — conventional commit message       |
+| `pnpm changeset`                              | Author a changeset by hand                            |
+| `pnpm test`                                   | Vitest (node mode)                                    |
+| `pnpm test:browser`                           | Vitest (browser mode, Playwright)                     |
+| `pnpm test:all`                               | Both node and browser test suites                     |
+| `pnpm coverage`                               | Full coverage run + regenerate playground status JSON |
+| `pnpm --filter @wimwian-org/playground dev`   | Vite dev server                                       |
+| `pnpm --filter @wimwian-org/playground build` | Static build                                          |
 
 Conventions live in `.claude/` — code style ([`karpathy.md`](.claude/karpathy.md)), Svelte 5 patterns ([`svelte.md`](.claude/svelte.md)), CSS authoring ([`css-authoring.md`](.claude/css-authoring.md)), variants ([`variants.md`](.claude/variants.md)), and the headless-wrapping pattern ([`bits.md`](.claude/bits.md)).
 
@@ -221,7 +221,7 @@ Full model: [`.claude/gitflow.md`](.claude/gitflow.md). We use **git flow** with
 - [ ] `pnpm check` — types pass
 - [ ] `pnpm lint` — no errors
 - [ ] `pnpm test:all` — both suites pass
-- [ ] `pnpm --filter @smuit/playground build` — playground builds clean
+- [ ] `pnpm --filter @wimwian-org/playground build` — playground builds clean
 - [ ] AA contrast (4.5:1) in light and dark for any new token/component
 - [ ] All commits conventional; a changeset exists for any consumer-visible change
 
@@ -273,7 +273,7 @@ Developed with [Claude Code](https://claude.com/claude-code). Guidance lives in 
 - **[SMUI](https://sveltematerialui.com)** (Hunter Perrin) — Svelte Material UI, one of the earliest and most comprehensive Material implementations in Svelte; a direct reference and benchmark.
 - **[shadcn-svelte](https://www.shadcn-svelte.com)** (Huntabyte) — the Svelte port of shadcn/ui. Its copy-paste model, component anatomy, and token conventions directly influenced smuit's structure.
 - **[svar-svelte](https://github.com/svar-widgets/svar-svelte)** — component patterns and composition techniques that informed smuit's approach to complex widget behaviour.
-- **[Tailwind CSS](https://tailwindcss.com)** (Tailwind Labs) — the utility-first CSS framework powering `@smuit/theme`'s `@theme` blocks, `@utility` classes, and the design-token cascade.
+- **[Tailwind CSS](https://tailwindcss.com)** (Tailwind Labs) — the utility-first CSS framework powering `@wimwian-org/theme`'s `@theme` blocks, `@utility` classes, and the design-token cascade.
 - The broader Svelte OSS community — countless open-source components, patterns, and experiments on GitHub that shaped how smuit approaches Svelte 5 component authoring.
 
 ---

@@ -26,7 +26,7 @@ export default defineConfig({
 Once bits exist in `components/`, switch to:
 
 - **Component tests** (`pnpm test`) — Vitest in **browser mode**, driven by `vitest-browser-svelte`, running in real Chromium via Playwright. Per-file isolation.
-- **E2E tests** (`pnpm --filter @smuit/playground test:e2e`) — Playwright against the built playground. Full user flows across multiple routes.
+- **E2E tests** (`pnpm --filter @wimwian-org/playground test:e2e`) — Playwright against the built playground. Full user flows across multiple routes.
 
 Coverage collected by `@vitest/coverage-v8`. HTML + LCOV outputs.
 
@@ -66,7 +66,7 @@ export default defineConfig({
 
 ```typescript
 // test-setup.ts
-import '@smuit/theme';
+import '@wimwian-org/theme';
 ```
 
 Importing the theme in setup ensures component tests render with design tokens applied.
@@ -205,7 +205,7 @@ test('button variants match baseline', async ({ page }) => {
 });
 ```
 
-Snapshots live next to the test, `__screenshots__/button.png`. Update with `pnpm --filter @smuit/playground test:e2e --update-snapshots`.
+Snapshots live next to the test, `__screenshots__/button.png`. Update with `pnpm --filter @wimwian-org/playground test:e2e --update-snapshots`.
 
 ## 7. Coverage
 
@@ -231,7 +231,7 @@ GitHub Actions runs the matrix on every PR:
 - run: pnpm check
 - run: pnpm lint
 - run: pnpm test --run
-- run: pnpm --filter @smuit/playground build
+- run: pnpm --filter @wimwian-org/playground build
 ```
 
 Full file in [.claude/distribution.md](distribution.md).

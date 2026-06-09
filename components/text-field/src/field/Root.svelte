@@ -1,5 +1,5 @@
 <!--
-  @smuit/text-field
+  @wimwian-org/text-field
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
@@ -15,9 +15,9 @@
 </script>
 
 <script lang="ts">
-    // @smuit/theme is a peerDependency; importing it here lets the bit render
+    // @wimwian-org/theme is a peerDependency; importing it here lets the bit render
     // with design tokens even when the host app hasn't imported the theme.
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import '../text-field.css';
     import { textField } from '../text-field.variants';
     import { twMerge } from 'tailwind-merge';
@@ -75,7 +75,7 @@
     // svelte-ignore state_referenced_locally
     if (suggestions.length > MAX_SUGGESTIONS) {
         throw new Error(
-            `@smuit/text-field: ${suggestions.length} suggestions exceeds the build-time cap MAX_SUGGESTIONS ` +
+            `@wimwian-org/text-field: ${suggestions.length} suggestions exceeds the build-time cap MAX_SUGGESTIONS ` +
                 `(${MAX_SUGGESTIONS}). Autosuggest is for short lists — use a Select or search for long ones.`,
         );
     }

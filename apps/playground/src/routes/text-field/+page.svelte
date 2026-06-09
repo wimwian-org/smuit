@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { TextField, TextArea, Field } from '@smuit/text-field';
+    import { TextField, TextArea, Field } from '@wimwian-org/text-field';
 
     let bound = $state('Ada Lovelace');
     let counted = $state('Hello');
@@ -27,8 +27,8 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Text Field</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/text-field</code> · v1 (MVP) — filled · outlined, floating label, prefix/suffix + icons, and a character
-            counter. Validation, multiline, and alternate input types are deferred.
+            <code>@wimwian-org/text-field</code> · v1 (MVP) — filled · outlined, floating label, prefix/suffix + icons, and
+            a character counter. Validation, multiline, and alternate input types are deferred.
         </p>
     </header>
 

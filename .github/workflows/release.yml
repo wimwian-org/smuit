@@ -1,13 +1,12 @@
 name: Release
 
-# Publishes any @smuit/* package whose version is not yet on npm (private
-# packages — the root and the playground — are skipped automatically).
+# Publishes any @wimwian-org/* package whose version is not yet on GitHub
+# Packages (private packages — the root and the playground — are skipped).
 #
-# Auth: npm Trusted Publishing via OIDC — no long-lived token. The job mints a
-# short-lived OIDC token (`id-token: write`) that npm exchanges for publish
-# rights, and pnpm rewrites the `workspace:*` deps on publish. This requires
-# each package to have a Trusted Publisher configured on npmjs.com pointing at
-# this repo + workflow file (`.github/workflows/release.yml`).
+# Registry: GitHub Packages (npm.pkg.github.com). Each package's
+# `publishConfig.registry` points there; auth uses the automatic GITHUB_TOKEN
+# (no npm 2FA, no long-lived secret). pnpm rewrites the workspace:* deps on
+# publish.
 #
 # Triggers:
 #   - push to `master` — the repo's release promotion (master only advances on
@@ -23,8 +22,8 @@ jobs:
     publish:
         runs-on: ubuntu-latest
         permissions:
-            id-token: write # mint the OIDC token for trusted publishing
             contents: read
+            packages: write # GITHUB_TOKEN may publish to the org's packages
         steps:
             - uses: actions/checkout@v4
               with:
@@ -43,7 +42,10 @@ jobs:
             - name: Build component packages
               run: pnpm package
 
-            # No token: pnpm fetches an OIDC token (and provenance) for trusted
-            # publishing, which takes precedence over any static credential.
-            - name: Publish to npm (OIDC trusted publishing)
-              run: pnpm -r publish --no-git-checks --access public
+            - name: Publish to GitHub Packages
+              run: |
+                  echo "@wimwian-org:registry=https://npm.pkg.github.com" > ~/.npmrc
+                  echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+                  pnpm -r publish --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

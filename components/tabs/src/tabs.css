@@ -1,9 +1,9 @@
 /*
- * @smuit/tabs
+ * @wimwian-org/tabs
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 /*
  * Token-driven + state styling that tailwind-variants can't express cleanly: the

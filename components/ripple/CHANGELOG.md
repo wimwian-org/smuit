@@ -1,4 +1,4 @@
-# @smuit/ripple
+# @wimwian-org/ripple
 
 ## 0.0.1
 

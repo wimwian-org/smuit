@@ -1,12 +1,12 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
     import { flagContrast } from '$lib/contrast';
-    import { ripple, rippleVariants } from '@smuit/ripple';
-    import { TextField, TextArea } from '@smuit/text-field';
+    import { ripple, rippleVariants } from '@wimwian-org/ripple';
+    import { TextField, TextArea } from '@wimwian-org/text-field';
 
     type PaletteName = 'mono' | 'primary' | 'secondary' | 'tertiary' | 'error' | 'warning' | 'success';
 
@@ -223,7 +223,7 @@
                 margin-bottom: 0.75rem;
             "
             >
-                @smuit/theme/flat · {active}
+                @wimwian-org/theme/flat · {active}
             </p>
 
             <h1
@@ -414,10 +414,10 @@
         </form>
     </section>
 
-    <!-- ── Ripple (@smuit/ripple) — 5 variants ────────────────────── -->
+    <!-- ── Ripple (@wimwian-org/ripple) — 5 variants ────────────────────── -->
     <section>
         <h2 style="color: {sFg}; font-size: var(--text-heading-md); font-weight: 600; margin-bottom: 0.25rem">
-            Ripple · @smuit/ripple
+            Ripple · @wimwian-org/ripple
         </h2>
         <p style="color: {sFg}; opacity: 0.6; font-size: var(--text-body-sm); margin-bottom: 1rem">
             MUI-style touch ripple — click each button. Variant sets the expansion duration.

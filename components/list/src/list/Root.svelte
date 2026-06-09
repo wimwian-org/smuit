@@ -1,5 +1,5 @@
 <!--
-  @smuit/list
+  @wimwian-org/list
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
@@ -12,9 +12,9 @@
   children.
 -->
 <script lang="ts">
-    // @smuit/theme is a peerDependency; importing it here lets the bit render
+    // @wimwian-org/theme is a peerDependency; importing it here lets the bit render
     // with design tokens even when the host app hasn't imported the theme.
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import '../list.css';
     import { list } from '../list.variants';
     import { twMerge } from 'tailwind-merge';

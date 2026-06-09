@@ -1,15 +1,15 @@
 /*
- * @smuit/playground
+ * @wimwian-org/playground
  * Copyright (c) 2026 wimwian
  * Licensed under the MIT License.
  */
 /*
  * Playground stylesheet — drives the sandbox from the GENERATED flat theme
- * (@smuit/theme = packages/theme/src/output.css). Tailwind must be imported
+ * (@wimwian-org/theme = packages/theme/src/output.css). Tailwind must be imported
  * first so it can process the flat theme's @theme block and emit utilities.
  */
 @import 'tailwindcss';
-@import '@smuit/theme/flat';
+@import '@wimwian-org/theme/flat';
 
 /*
  * Scan the workspace component packages so Tailwind emits the utility classes

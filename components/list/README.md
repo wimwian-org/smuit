@@ -1,4 +1,4 @@
-# @smuit/list
+# @wimwian-org/list
 
 Material Design 3–style **list** for Svelte 5, built on the smuit design tokens. A composable
 `List.Root` / `List.Item` / `List.Subheader` set in two M3 design styles — **Baseline** (flat,
@@ -15,16 +15,16 @@ navigation, and sticky section **subheaders**. Themed and dark-mode aware out of
 ## Install
 
 ```sh
-pnpm add @smuit/list
+pnpm add @wimwian-org/list
 ```
 
-`@smuit/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies.
+`@wimwian-org/theme`, `svelte@^5`, and `tailwindcss@^4` are peer dependencies.
 
 ## Usage
 
 ```svelte
 <script>
-    import { List } from '@smuit/list';
+    import { List } from '@wimwian-org/list';
 </script>
 
 <!-- Baseline (default), with a divider between rows -->
@@ -165,7 +165,7 @@ The design spec this component implements was synthesised from two references:
   and Expressive design styles).
 - [**Material Web** list](https://github.com/material-components/material-web/blob/main/docs/components/list.md).
 
-`@smuit/list` is an **independent implementation** on smuit's own design tokens and Svelte 5
+`@wimwian-org/list` is an **independent implementation** on smuit's own design tokens and Svelte 5
 conventions. It does not depend on, bundle, or copy code from either project — they informed the
 anatomy, behaviour, and accessibility model only.
 

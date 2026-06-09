@@ -5,9 +5,9 @@ argument-hint: One or more component names (e.g. "Button", "Card, Textfield") or
 
 # Create MUI
 
-You are helping the developer add one or more components to **sui** by **referring to** a specific [**Svelte Material UI (SMUI)**](https://sveltematerialui.com) component as the blueprint, then building a native `@smuit/<name>` bit that adapts it to this project's design tokens, Svelte 5 runes, `tailwind-variants` conventions, tests, demo route, and release-ready commit.
+You are helping the developer add one or more components to **sui** by **referring to** a specific [**Svelte Material UI (SMUI)**](https://sveltematerialui.com) component as the blueprint, then building a native `@wimwian-org/<name>` bit that adapts it to this project's design tokens, Svelte 5 runes, `tailwind-variants` conventions, tests, demo route, and release-ready commit.
 
-**This is "refer to", not "wholesale rewrite", and not "depend on".** The model is exactly how [`@smuit/data-grid`](../../components/data-grid/) relates to [SVAR](https://svar.dev): SVAR's column model and feature set were the **reference**, and `@smuit/data-grid` is an **independent implementation** on sui tokens that neither bundles nor copies SVAR. Do the same here — treat the named SMUI component (e.g. **MaterialInput**, **TimePicker**) as the authoritative source for anatomy, API surface, behaviour, and accessibility, then express that on sui's tokens and conventions. Don't reinvent Material from first principles (that's a wholesale rewrite), and don't add `@smui/*` / `@material/*` as a dependency (that's depending). **Credit the reference you resolved** — the SMUI component, or the Material Design 3 spec when SMUI ships none — in the component's README, the way data-grid credits SVAR.
+**This is "refer to", not "wholesale rewrite", and not "depend on".** The model is exactly how [`@wimwian-org/data-grid`](../../components/data-grid/) relates to [SVAR](https://svar.dev): SVAR's column model and feature set were the **reference**, and `@wimwian-org/data-grid` is an **independent implementation** on sui tokens that neither bundles nor copies SVAR. Do the same here — treat the named SMUI component (e.g. **MaterialInput**, **TimePicker**) as the authoritative source for anatomy, API surface, behaviour, and accessibility, then express that on sui's tokens and conventions. Don't reinvent Material from first principles (that's a wholesale rewrite), and don't add `@smui/*` / `@material/*` as a dependency (that's depending). **Credit the reference you resolved** — the SMUI component, or the Material Design 3 spec when SMUI ships none — in the component's README, the way data-grid credits SVAR.
 
 The workflow has seven phases. Use `TodoWrite` to track them all upfront. When the user requests **several** components, run phases 1–4 once to scope the whole batch, then repeat phases 5–7 per component (each component is its own `components/<name>/` package on its own `feature/<slug>` branch).
 
@@ -15,10 +15,10 @@ Initial request: $ARGUMENTS
 
 ## Core Principles
 
-- **Refer to the SMUI component; don't depend on it, don't reinvent it.** SMUI is built on Material Components for the Web (MDC) — SCSS/Sass theming, `@material/*` packages, and a ripple engine. That stack is fundamentally incompatible with this project's Tailwind v4 + oklch design-token system, so it can't be wrapped directly. **Never add `@smui/*` or `@material/*` as dependencies.** Equally, don't ignore SMUI and rebuild Material from memory — the named SMUI component **is** the spec. Read its markup, props, behaviour, and a11y, then re-express them on sui tokens. (Same posture as `@smuit/data-grid` ↔ SVAR.)
+- **Refer to the SMUI component; don't depend on it, don't reinvent it.** SMUI is built on Material Components for the Web (MDC) — SCSS/Sass theming, `@material/*` packages, and a ripple engine. That stack is fundamentally incompatible with this project's Tailwind v4 + oklch design-token system, so it can't be wrapped directly. **Never add `@smui/*` or `@material/*` as dependencies.** Equally, don't ignore SMUI and rebuild Material from memory — the named SMUI component **is** the spec. Read its markup, props, behaviour, and a11y, then re-express them on sui tokens. (Same posture as `@wimwian-org/data-grid` ↔ SVAR.)
 - **Resolve the reference in order: SMUI → Material 3 → ask.** SMUI doesn't cover every Material component (e.g. it ships **no time picker**). If SMUI doesn't publish the requested component, fall back to the **[Material Design 3 spec](https://m3.material.io)** (same design language); if it's in **neither**, **STOP and ask the user for a reference link** rather than inventing it. See the [Reference resolution guard](#-reference-resolution-guard-smui--material-3--ask). Then build on sui tokens and a `bits-ui` primitive where one fits. (TimePicker → [M3 time-pickers](https://m3.material.io/components/time-pickers/overview) + `bits-ui` Time Field.)
 - **Adapt the Material language, keep the project's tokens.** Express Material's visual cues — elevation/shadow, shape (corner radius), state layers, typography scale — through the project's existing tokens (`--surface-*`, `--canvas-*`, `--page-*`, `--color-c-*`, `--color-g-*`). See the [Material → token mapping](#material--token-mapping-reference) below and [`.claude/styling.md`](../styling.md).
-- **Credit the reference.** Every component built via this command gets an **Acknowledgements** section in its README crediting the reference it was modelled on — the SMUI component, or the Material Design 3 spec when SMUI has none (mirroring [`@smuit/data-grid`](../../components/data-grid/README.md)'s SVAR credit; see [`@smuit/material-time-picker`](../../components/material-time-picker/README.md) for the M3 case). Phase 7 enforces this.
+- **Credit the reference.** Every component built via this command gets an **Acknowledgements** section in its README crediting the reference it was modelled on — the SMUI component, or the Material Design 3 spec when SMUI has none (mirroring [`@wimwian-org/data-grid`](../../components/data-grid/README.md)'s SVAR credit; see [`@wimwian-org/material-time-picker`](../../components/material-time-picker/README.md) for the M3 case). Phase 7 enforces this.
 - **Wrap a `bits-ui` primitive when one exists for the behaviour.** Material's interactive components (Dialog, Menu, Select, Checkbox, Switch, Slider, Tabs, Tooltip, …) have headless `bits-ui` equivalents that already own focus management, keyboard nav, and ARIA. Wrap those rather than reimplementing behaviour — exactly like [`/create-bit`](./create-bit.md). For purely presentational Material components (Card, Paper, Badge, Linear/Circular Progress chrome), build a plain Svelte component keeping the bit file conventions.
 - **`tailwind-variants`, not ad-hoc strings.** Variant/size/tint composition lives in a `<name>.variants.ts` `tv()` config; the `.svelte` file composes it via `twMerge(<name>({ ... }), className)`. See [`.claude/variants.md`](../variants.md) and an existing component such as [`components/switch/`](../../components/switch/).
 - **Tokens, not literals.** All colours read `--color-c-*` (retintable per tint) or `--color-g-*` (always neutral). No `bg-blue-500`, no `#6200ee` (Material purple), no MDC Sass variables in the output. See [`.claude/css-authoring.md`](../css-authoring.md).
@@ -51,7 +51,7 @@ Before any design or code, you MUST have an authoritative reference for the requ
 2. **SMUI does NOT publish it** → fall back to the **Material Design 3 spec**: `https://m3.material.io/components/<name>/overview`. Confirm the page exists and documents the component (e.g. TimePicker → [m3 time-pickers](https://m3.material.io/components/time-pickers/overview)).
 3. **Not in SMUI and not in Material 3** → **STOP and ask the user for a reference link** (a demo, spec, or design URL). Do **not** invent the component's anatomy/behaviour from memory. Quote what you checked (SMUI nav + demo + `packages/`, and the M3 `/components/<name>/` path) and wait for the user's link before continuing to Phase 2.
 
-Record which rung resolved the reference; carry it into Phase 2 and the Phase 7 summary. (This is the create-mui analogue of how `@smuit/data-grid` named SVAR as its reference — every component must cite a concrete source.)
+Record which rung resolved the reference; carry it into Phase 2 and the Phase 7 summary. (This is the create-mui analogue of how `@wimwian-org/data-grid` named SVAR as its reference — every component must cite a concrete source.)
 
 ---
 
@@ -63,7 +63,7 @@ Before proposing architecture, re-read these in order:
 2. [`.claude/component.md`](../component.md) — bit standards: prop design, accessibility checklist, file structure.
 3. [`.claude/variants.md`](../variants.md) — `tailwind-variants` `tv()` slot/variant configuration.
 4. [`.claude/styling.md`](../styling.md) — design tokens, `--L`/`--D` toggle, elevation tokens.
-5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@smuit/theme"`, `@layer components`, semantic class naming.
+5. [`.claude/css-authoring.md`](../css-authoring.md) — `@reference "@wimwian-org/theme"`, `@layer components`, semantic class naming.
 6. [`.claude/testing.md`](../testing.md) — Vitest browser-mode (`vitest-browser-svelte`, `@vitest/browser/context`).
 7. A representative existing component — [`components/switch/`](../../components/switch/) (bits-ui wrapper) or [`components/badge/`](../../components/badge/) (polymorphic presentational). These are the canonical templates for file shape, prop typing, variants, and CSS.
 
@@ -88,7 +88,7 @@ Authoritative Material/MDC → project translation. Consult during Phase 3, appl
 | state layer (hover/focus/press overlay)     | hover background ramp (`hover:bg-c-700`) + `focus-visible` outline                    | No translucent ink overlay; ramp the token instead     |
 | ripple                                      | _omit_ — `focus-visible:outline-c-500 outline-2 outline-offset-2` + hover ramp        | Ripple is not part of this design system               |
 | shape / corner radius (`$shape-radius`)     | `rounded-md` (or `rounded`, `rounded-full` per component)                             | Fixed Tailwind radii                                   |
-| typography (Roboto scale, `mdc-typography`) | project typography utilities (`@smuit/theme/typography`) — keep or map nearest        | See [`.claude/styling.md`](../styling.md)              |
+| typography (Roboto scale, `mdc-typography`) | project typography utilities (`@wimwian-org/theme/typography`) — keep or map nearest  | See [`.claude/styling.md`](../styling.md)              |
 | disabled (38% opacity convention)           | project disabled treatment — `data-disabled` hook + dimmed token, **not** raw opacity | Mirror an existing component's disabled rules          |
 
 > **Dark mode is automatic.** The project's `--page-*`, `--canvas-*`, `--surface-*`, `--color-g-*`, and `--color-c-*` tokens all flip via the internal `--L`/`--D` space-toggle bound to `html[data-theme]`. **Never** add a `.dark` selector, a `@media (prefers-color-scheme: dark)` block, or Material's own dark-theme mixins. See [`.claude/styling.md`](../styling.md) § "Theme Registers".
@@ -106,7 +106,7 @@ Authoritative Material/MDC → project translation. Consult during Phase 3, appl
 3. For each, determine names:
     - PascalCase for the component (`Button`, `Card`, `Textfield`).
     - kebab-case for the package, paths, route, and branch (`button`, `card`, `textfield`).
-4. **Check it doesn't already exist** at `components/<kebab-name>/`. If it does, stop and tell the user — use the standard feature-branch flow to modify it instead. (Note: many Material components overlap with existing `@smuit/*` bits — Button, Card, Checkbox, Switch, Slider, Dialog, Tooltip, etc. already exist. Flag overlaps early.)
+4. **Check it doesn't already exist** at `components/<kebab-name>/`. If it does, stop and tell the user — use the standard feature-branch flow to modify it instead. (Note: many Material components overlap with existing `@wimwian-org/*` bits — Button, Card, Checkbox, Switch, Slider, Dialog, Tooltip, etc. already exist. Flag overlaps early.)
 
 ---
 
@@ -203,20 +203,20 @@ If the user says "your call", recommend based on the closest existing `@sui` com
     Do not skip the `cd`. All subsequent writes happen inside the worktree.
 
 2. **Scaffold the package** at `components/<kebab-name>/`, mirroring an existing component:
-    - **`package.json`** — name `@smuit/<name>`, `"type": "module"`, `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`, `"publishConfig": { "access": "public" }`, MIT license/author. `dependencies`: `tailwind-merge`, `tailwind-variants`, and `bits-ui` **only if** wrapping a primitive. `peerDependencies`: `@smuit/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`. `devDependencies` mirror an existing package. Copy [`components/switch/package.json`](../../components/switch/package.json) and edit. **No `@smui/*` or `@material/*`.**
+    - **`package.json`** — name `@wimwian-org/<name>`, `"type": "module"`, `"exports": { ".": "./src/index.ts" }`, `"files": ["src"]`, `"publishConfig": { "access": "public" }`, MIT license/author. `dependencies`: `tailwind-merge`, `tailwind-variants`, and `bits-ui` **only if** wrapping a primitive. `peerDependencies`: `@wimwian-org/theme: workspace:*`, `svelte: ^5.0.0`, `tailwindcss: ^4.0.0`. `devDependencies` mirror an existing package. Copy [`components/switch/package.json`](../../components/switch/package.json) and edit. **No `@smui/*` or `@material/*`.**
     - **`tsconfig.json`** — copy from a sibling component.
-    - **`README.md`**, **`LICENSE`**, **`CHANGELOG.md`** (empty/initial) — match siblings. The README **must** end with an **Acknowledgements** section crediting the reference it was modelled on — the SMUI component (link its demo), or the Material Design 3 spec (link the `m3.material.io` page) when SMUI ships none — stating that `@smuit/<name>` is an independent implementation that doesn't depend on or copy SMUI / MDC / `@material/*` — mirror [`@smuit/data-grid`](../../components/data-grid/README.md)'s SVAR credit (or [`@smuit/material-time-picker`](../../components/material-time-picker/README.md) for the M3 case) exactly.
-    - **`src/` files** (each begins with the `@smuit/<name>` MIT license header comment block, as in existing files):
-        - **`<Component>.svelte`** — import order: backing `bits-ui` import (if any) → `import '@smuit/theme'` → `import './<name>.css'` → `import { <name> } from './<name>.variants'` → `import { twMerge } from 'tailwind-merge'` → `import type { Props } from './types'`. Destructure `$props()` with `variant`/`tint`/`size` defaults, state flags, `class: className = ''`, `children`, `ref = $bindable<HTMLElement | null>(null)`, `...restProps`. Compose: `let cls = $derived(twMerge(<name>({ variant, size, tint }), String(className ?? '')))`. Put `class={cls}`, `bind:ref`, `data-*` state hooks, `{...restProps}` on the root. Render `{@render children?.()}`. Convert any SMUI Svelte-4 syntax (`on:click`, `$$props`, `createEventDispatcher`) to Svelte 5 runes/props.
+    - **`README.md`**, **`LICENSE`**, **`CHANGELOG.md`** (empty/initial) — match siblings. The README **must** end with an **Acknowledgements** section crediting the reference it was modelled on — the SMUI component (link its demo), or the Material Design 3 spec (link the `m3.material.io` page) when SMUI ships none — stating that `@wimwian-org/<name>` is an independent implementation that doesn't depend on or copy SMUI / MDC / `@material/*` — mirror [`@wimwian-org/data-grid`](../../components/data-grid/README.md)'s SVAR credit (or [`@wimwian-org/material-time-picker`](../../components/material-time-picker/README.md) for the M3 case) exactly.
+    - **`src/` files** (each begins with the `@wimwian-org/<name>` MIT license header comment block, as in existing files):
+        - **`<Component>.svelte`** — import order: backing `bits-ui` import (if any) → `import '@wimwian-org/theme'` → `import './<name>.css'` → `import { <name> } from './<name>.variants'` → `import { twMerge } from 'tailwind-merge'` → `import type { Props } from './types'`. Destructure `$props()` with `variant`/`tint`/`size` defaults, state flags, `class: className = ''`, `children`, `ref = $bindable<HTMLElement | null>(null)`, `...restProps`. Compose: `let cls = $derived(twMerge(<name>({ variant, size, tint }), String(className ?? '')))`. Put `class={cls}`, `bind:ref`, `data-*` state hooks, `{...restProps}` on the root. Render `{@render children?.()}`. Convert any SMUI Svelte-4 syntax (`on:click`, `$$props`, `createEventDispatcher`) to Svelte 5 runes/props.
         - **`<name>.variants.ts`** — `tv()` config exporting the `<name>` const and `<Name>Variants = VariantProps<typeof <name>>` type. Base class is a short semantic prefix (e.g. `sw`, `bdg`); variants map to component classes; `tint` maps to the tint utility names; set `defaultVariants`.
-        - **`<name>.css`** — `@reference "@smuit/theme";` then all rules inside `@layer components { … }`. **Tokens-first**: declare a token block of `--…` values at the top of the base class, then reference them via `var()` below. All colours via `--color-c-*` / `--color-g-*` / elevation tokens. No hex/rgb, no `.dark` selector.
+        - **`<name>.css`** — `@reference "@wimwian-org/theme";` then all rules inside `@layer components { … }`. **Tokens-first**: declare a token block of `--…` values at the top of the base class, then reference them via `var()` below. All colours via `--color-c-*` / `--color-g-*` / elevation tokens. No hex/rgb, no `.dark` selector.
         - **`types.ts`** — `Props` derived from the variants (`<Name>Variant`/`<Name>Tint`/`<Name>Size` via `NonNullable<<Name>Variants[...]>`) combined with the element or `bits-ui` Root props (e.g. `Primitive.RootProps & OwnProps` for a wrapper, or `HTMLAttributes<HTMLElement> & OwnProps` for presentational). Export the axis types.
         - **`index.ts`** — license header; re-export the default component, the `<name>` variants const + `<Name>Variants` type, and the `Props`/axis types (see [`components/badge/src/index.ts`](../../components/badge/src/index.ts)).
         - **`<Component>.test.ts`** — Vitest **browser-mode**: `import { page } from '@vitest/browser/context'`, `import { render } from 'vitest-browser-svelte'`. Cover: renders with defaults; each `variant`/`tint`/`size` applies the expected class; `disabled` (and other states); event forwarding; `ref` binds; plus any behaviour delegated to bits-ui (role, `data-state`, keyboard).
         - **`<name>.variants.test.ts`** — assert the `tv()` config returns the expected class strings per variant combination.
 
 3. **Create the demo route** at `apps/playground/src/routes/<kebab-name>/+page.svelte`:
-    - Import the component from `@smuit/<name>`.
+    - Import the component from `@wimwian-org/<name>`.
     - Render the full variant × tint × size × state matrix agreed in Phase 4.
     - Add label chips matching the existing demo pages (see [`components/badge/`](../../components/badge/) demo for the pattern).
 
@@ -246,9 +246,9 @@ If the user says "your call", recommend based on the closest existing `@sui` com
     ```bash
     pnpm check                                   # svelte-check (workspace)
     pnpm lint                                    # eslint
-    pnpm --filter @smuit/<name> check              # the component's own types
+    pnpm --filter @wimwian-org/<name> check              # the component's own types
     pnpm test:browser                            # browser-mode component tests
-    pnpm --filter @smuit/playground build          # demo site builds
+    pnpm --filter @wimwian-org/playground build          # demo site builds
     ```
 
     Any failure: stop, fix, re-run. Do not commit red. (See [`CLAUDE.md`](../../CLAUDE.md) § "Before Shipping".)
@@ -261,7 +261,7 @@ If the user says "your call", recommend based on the closest existing `@sui` com
     @material/* imports, MDC Sass variables, hardcoded Material hex (#6200ee,
     #03dac6, etc.), ripple JS, .dark selectors, raw opacity for disabled. Verify
     every colour reads --color-c-*/--color-g-*, elevation uses the project shadow
-    tokens, the CSS uses @reference "@smuit/theme" + @layer components with a
+    tokens, the CSS uses @reference "@wimwian-org/theme" + @layer components with a
     tokens-first block, and variant composition goes through tailwind-variants.
     Confirm the Material anatomy (parts, shape, elevation intent) is faithfully
     reproduced with project tokens.
@@ -280,12 +280,12 @@ If the user says "your call", recommend based on the closest existing `@sui` com
     Agent 3 (Svelte 5 + conventions):
     Review for Svelte 4 remnants (on:*, $$props, $$restProps, $$slots, $:,
     createEventDispatcher) and confirm $props()/$state/$derived/$bindable(null).
-    Verify the package.json shape (exports, files, peerDeps @smuit/theme workspace:*,
+    Verify the package.json shape (exports, files, peerDeps @wimwian-org/theme workspace:*,
     no @smui/* deps), index.ts re-exports component+variants+types, types.ts
     extends the right base, and the *.test.ts + *.variants.test.ts cover every axis.
     ```
 
-3. **Visually verify in both themes.** Run `pnpm --filter @smuit/playground dev`, open `/<kebab-name>`, and check: all variants render in light + dark, focus indicator visible on keyboard tab, tint retinting works (`.primary` shifts the colour), and no Material-purple pixels remain.
+3. **Visually verify in both themes.** Run `pnpm --filter @wimwian-org/playground dev`, open `/<kebab-name>`, and check: all variants render in light + dark, focus indicator visible on keyboard tab, tint retinting works (`.primary` shifts the colour), and no Material-purple pixels remain.
 
 4. **Present consolidated findings.** Ask: fix now, fix later, or proceed.
 
@@ -353,7 +353,7 @@ If the user says "your call", recommend based on the closest existing `@sui` com
 
 ## When NOT to use this command
 
-- **The component already exists in `components/`** — most Material staples (Button, Card, Checkbox, Switch, Slider, Dialog, Tooltip, Progress, Menu, Select, Tabs…) are already `@smuit/*` bits. Modify the existing one via the standard feature-branch flow.
+- **The component already exists in `components/`** — most Material staples (Button, Card, Checkbox, Switch, Slider, Dialog, Tooltip, Progress, Menu, Select, Tabs…) are already `@wimwian-org/*` bits. Modify the existing one via the standard feature-branch flow.
 - **You want to wrap a `bits-ui` primitive from scratch with no Material reference** — use [`/create-bit`](./create-bit.md).
 - **You want to adapt a shadcn-svelte component** — use [`/create-shadcn`](./create-shadcn.md).
 - **You want a verbatim Material look-and-feel including ripple and MDC theming** — that contradicts this design system. This command refers to SMUI and re-expresses it on project tokens; if true MDC fidelity is required, SMUI should be consumed directly in a separate app, not added here.
@@ -363,7 +363,7 @@ If the user says "your call", recommend based on the closest existing `@sui` com
 
 ## Notes on SMUI internals
 
-- **SMUI wraps MDC (Material Components for the Web).** Its theming is SCSS/Sass (`@material/theme`, `@material/typography`) compiled at build time — there is no runtime token system to map. Treat SMUI as a **design + behaviour reference**, then express the result with `@smuit/theme` tokens.
+- **SMUI wraps MDC (Material Components for the Web).** Its theming is SCSS/Sass (`@material/theme`, `@material/typography`) compiled at build time — there is no runtime token system to map. Treat SMUI as a **design + behaviour reference**, then express the result with `@wimwian-org/theme` tokens.
 - **SMUI components are heavily compound** (e.g. `Textfield` pairs with `HelperText`, `Icon`, `CharacterCounter`; `List` with `Item`, `Graphic`, `Meta`). Decide in Phase 4 which sub-parts this project needs — don't blindly mirror every MDC sub-component.
 - **SMUI uses `use:` actions and a ripple store.** Replace `use:Ripple` and MDC actions with project conventions: bits-ui behaviour for interactivity, CSS state hooks (`data-state`, `data-disabled`) for styling.
 - **SMUI may still ship Svelte-4-era syntax** (`on:click`, `createEventDispatcher`, `$$restProps`). Convert all of it to Svelte 5 runes and prop callbacks during Phase 5.

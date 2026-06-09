@@ -84,7 +84,7 @@ Bits style themselves through three layers:
 
 1. **Inline Tailwind classes** for one-off layout.
 2. **A component CSS file** beside the component, in `@layer components`, using `@apply` against design tokens.
-3. **Tint utilities** from `@smuit/theme` (`tints.css`) that retint `--color-c-*` per element.
+3. **Tint utilities** from `@wimwian-org/theme` (`tints.css`) that retint `--color-c-*` per element.
 
 ### Rules
 
@@ -200,7 +200,7 @@ The demo route doubles as a manual visual-regression baseline and as a target fo
 - [ ] `pnpm check` — types pass
 - [ ] `pnpm lint` — clean
 - [ ] `pnpm test` — all variants covered, all pass
-- [ ] `pnpm --filter @smuit/playground build` — playground builds clean
+- [ ] `pnpm --filter @wimwian-org/playground build` — playground builds clean
 - [ ] Accessibility verified (keyboard, contrast, ARIA)
 - [ ] Works in both light and dark modes
 - [ ] `pnpm changeset` — described change for consumers

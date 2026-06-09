@@ -6,7 +6,7 @@ This library ships a small, opinionated design system built on three pillars:
 2. **oklch() color palettes** with tapered chroma curves to stay in-gamut.
 3. **A `--L` / `--D` space-toggle** for theming — pure CSS, no JS shim, no `light-dark()` fallback dance.
 
-All tokens live in `packages/theme/src/`. Per-component CSS files `@reference "@smuit/theme"` so `@apply` resolves without re-emitting the bundle.
+All tokens live in `packages/theme/src/`. Per-component CSS files `@reference "@wimwian-org/theme"` so `@apply` resolves without re-emitting the bundle.
 
 ## 1. File Layout
 
@@ -19,7 +19,7 @@ packages/theme/src/
 └── typography.css   # @utility heading-*, subtitle-*, body-*, code-*, svg-*, elevation-*
 ```
 
-`apps/playground/src/routes/+layout.svelte` imports `@smuit/theme` once. Each future bit's own `.css` file `@reference`s `"@smuit/theme"` and adds component rules in `@layer components`.
+`apps/playground/src/routes/+layout.svelte` imports `@wimwian-org/theme` once. Each future bit's own `.css` file `@reference`s `"@wimwian-org/theme"` and adds component rules in `@layer components`.
 
 ## 2. Theme Registers — the `--L` / `--D` trick
 
@@ -176,7 +176,7 @@ Each bit has its own CSS file beside it (in the `components/` workspace):
 
 ```css
 /* components/button/src/button.css */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 @layer components {
     .btn {
@@ -191,7 +191,7 @@ Each bit has its own CSS file beside it (in the `components/` workspace):
 
 Rules:
 
-- **`@reference "@smuit/theme"`** so `@apply` finds tokens. `@reference` does **not** re-emit the imported stylesheet.
+- **`@reference "@wimwian-org/theme"`** so `@apply` finds tokens. `@reference` does **not** re-emit the imported stylesheet.
 - **Always `@layer components`** so consumer utilities still win.
 - **Read tokens, not literals.** Never `@apply bg-blue-500`.
 - **Variants ride on `--color-c-*`.** Switching tint should change the look without rewriting variant classes.

@@ -1,5 +1,5 @@
 {
-    "name": "@smuit/loading-indicator",
+    "name": "@wimwian-org/loading-indicator",
     "version": "0.2.0",
     "description": "Material Design 3 Expressive loading indicator for Svelte 5 — an indeterminate, shape-morphing active indicator in uncontained and contained variants, on smuit design tokens.",
     "type": "module",
@@ -42,7 +42,7 @@
     "license": "MIT",
     "publishConfig": {
         "access": "public",
-        "registry": "https://registry.npmjs.org/"
+        "registry": "https://npm.pkg.github.com"
     },
     "repository": {
         "type": "git",
@@ -54,12 +54,12 @@
         "tailwind-variants": "^3.2.2"
     },
     "peerDependencies": {
-        "@smuit/theme": "workspace:*",
+        "@wimwian-org/theme": "workspace:*",
         "svelte": "^5.0.0",
         "tailwindcss": "^4.0.0"
     },
     "devDependencies": {
-        "@smuit/theme": "workspace:*",
+        "@wimwian-org/theme": "workspace:*",
         "@sveltejs/package": "^2.3.0",
         "svelte": "^5.55.10"
     }

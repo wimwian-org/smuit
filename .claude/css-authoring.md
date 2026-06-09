@@ -26,7 +26,7 @@ utilities you'd otherwise pile onto the tag.
 
 ```css
 /* card.css */
-@reference "@smuit/theme";
+@reference "@wimwian-org/theme";
 
 @layer components {
     .card-root {

@@ -26,23 +26,23 @@ See [README.md](README.md) for the project overview and consumer-facing document
 ```
 smuit/
 ├── apps/
-│   └── playground/      (@smuit/playground) — SvelteKit dev sandbox, NOT published
+│   └── playground/      (@wimwian-org/playground) — SvelteKit dev sandbox, NOT published
 ├── packages/
-│   └── theme/           (@smuit/theme) — CSS design tokens + Tailwind v4 theme, published
-├── components/          — ~50 bit component packages, each published as @smuit/<name>
+│   └── theme/           (@wimwian-org/theme) — CSS design tokens + Tailwind v4 theme, published
+├── components/          — ~50 bit component packages, each published as @wimwian-org/<name>
 ├── bin/wt               — worktree helper (see gitflow.md)
 └── scripts/             — coverage/status/metadata scripts; migration utilities
 ```
 
 Dependency direction: `apps/` → `components/` → `packages/`. No reverse dependencies.
 
-`@smuit/theme` entry points:
+`@wimwian-org/theme` entry points:
 
 ```css
-@import '@smuit/theme'; /* full bundle */
-@import '@smuit/theme/tokens'; /* CSS custom properties only */
-@import '@smuit/theme/tints'; /* tint @utility classes only */
-@import '@smuit/theme/typography'; /* typography @utility classes only */
+@import '@wimwian-org/theme'; /* full bundle */
+@import '@wimwian-org/theme/tokens'; /* CSS custom properties only */
+@import '@wimwian-org/theme/tints'; /* tint @utility classes only */
+@import '@wimwian-org/theme/typography'; /* typography @utility classes only */
 ```
 
 ---
@@ -51,19 +51,19 @@ Dependency direction: `apps/` → `components/` → `packages/`. No reverse depe
 
 Run from the repo root, or target a workspace with `--filter`.
 
-| Command                                 | Does                                                  |
-| --------------------------------------- | ----------------------------------------------------- |
-| `pnpm format`                           | Prettier write (all workspaces)                       |
-| `pnpm lint`                             | ESLint (all workspaces)                               |
-| `pnpm check`                            | `svelte-check` (picks up playground)                  |
-| `pnpm commit`                           | Commitizen prompt — conventional commit message       |
-| `pnpm changeset`                        | Author a changeset                                    |
-| `pnpm test`                             | Vitest (node mode)                                    |
-| `pnpm test:browser`                     | Vitest (browser mode, Playwright)                     |
-| `pnpm test:all`                         | Both suites                                           |
-| `pnpm coverage`                         | Full coverage run + regenerate playground status JSON |
-| `pnpm --filter @smuit/playground dev`   | Vite dev server                                       |
-| `pnpm --filter @smuit/playground build` | Static build                                          |
+| Command                                       | Does                                                  |
+| --------------------------------------------- | ----------------------------------------------------- |
+| `pnpm format`                                 | Prettier write (all workspaces)                       |
+| `pnpm lint`                                   | ESLint (all workspaces)                               |
+| `pnpm check`                                  | `svelte-check` (picks up playground)                  |
+| `pnpm commit`                                 | Commitizen prompt — conventional commit message       |
+| `pnpm changeset`                              | Author a changeset                                    |
+| `pnpm test`                                   | Vitest (node mode)                                    |
+| `pnpm test:browser`                           | Vitest (browser mode, Playwright)                     |
+| `pnpm test:all`                               | Both suites                                           |
+| `pnpm coverage`                               | Full coverage run + regenerate playground status JSON |
+| `pnpm --filter @wimwian-org/playground dev`   | Vite dev server                                       |
+| `pnpm --filter @wimwian-org/playground build` | Static build                                          |
 
 ---
 
@@ -111,7 +111,7 @@ Example classes: `bg-primary-500`, `text-error-700`, `bg-c-600`, `text-c-0`, `bo
 - [ ] `pnpm check` — types pass
 - [ ] `pnpm lint` — no errors
 - [ ] `pnpm test:all` — both suites pass
-- [ ] `pnpm --filter @smuit/playground build` — playground builds clean
+- [ ] `pnpm --filter @wimwian-org/playground build` — playground builds clean
 - [ ] AA contrast (4.5:1) in both light and dark for any new token or component
 - [ ] All commits are conventional (`pnpm commit` if unsure)
 - [ ] A changeset exists for any consumer-visible change (`pnpm changeset`)

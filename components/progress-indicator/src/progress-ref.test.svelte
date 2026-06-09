@@ -1,5 +1,5 @@
 <!--
-  @smuit/progress-indicator
+  @wimwian-org/progress-indicator
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->

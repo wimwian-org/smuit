@@ -4,13 +4,13 @@ This is a pnpm monorepo. Published packages live under `packages/` (and eventual
 
 ## Current published packages
 
-| Package        | Path              | Description                           |
-| -------------- | ----------------- | ------------------------------------- |
-| `@smuit/theme` | `packages/theme/` | CSS design tokens + Tailwind v4 theme |
+| Package              | Path              | Description                           |
+| -------------------- | ----------------- | ------------------------------------- |
+| `@wimwian-org/theme` | `packages/theme/` | CSS design tokens + Tailwind v4 theme |
 
 Bit components in `components/` are planned but not yet scaffolded.
 
-## 1. `@smuit/theme` distribution
+## 1. `@wimwian-org/theme` distribution
 
 CSS-only package — no Svelte, no JS bundler step. Distribution is direct CSS source:
 
@@ -61,7 +61,7 @@ Canonical `package.json` shape for a bit:
 
 ```json
 {
-    "name": "@smuit/button",
+    "name": "@wimwian-org/button",
     "version": "0.0.0",
     "type": "module",
     "files": ["dist", "!dist/**/*.test.*"],
@@ -214,7 +214,7 @@ jobs:
             - run: pnpm check
             - run: pnpm lint
             - run: pnpm test --run
-            - run: pnpm --filter @smuit/playground build
+            - run: pnpm --filter @wimwian-org/playground build
 
     changeset-consumed:
         if: github.event_name == 'pull_request' && github.base_ref == 'master'
@@ -278,7 +278,7 @@ Semver:
 
 - **Patch** — bug fixes, internal refactors, doc updates that touch published files.
 - **Minor** — new bits, new variants, new tokens, additive props.
-- **Major** — renames, removed props, breaking token changes (the `--color-c-*` / `@smuit/theme` API surface).
+- **Major** — renames, removed props, breaking token changes (the `--color-c-*` / `@wimwian-org/theme` API surface).
 
 Pre-1.0 (`0.x.y`): minor = breaking change, patch = everything else.
 

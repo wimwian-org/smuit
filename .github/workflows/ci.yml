@@ -31,10 +31,10 @@ jobs:
             - name: Unit tests (node)
               run: pnpm test --run
 
-            # The playground imports the @smuit/* components by their published
+            # The playground imports the @wimwian-org/* components by their published
             # `exports` (→ dist), so their dist must exist before it builds.
             - name: Build component packages
               run: pnpm package
 
             - name: Playground builds
-              run: pnpm --filter @smuit/playground build
+              run: pnpm --filter @wimwian-org/playground build

@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { Tabs } from '@smuit/tabs';
+    import { Tabs } from '@wimwian-org/tabs';
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary', 'error', 'warning', 'success'] as const;
 
@@ -66,7 +66,7 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Tabs</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/tabs</code> — Material Design 3 <strong>bold</strong> and
+            <code>@wimwian-org/tabs</code> — Material Design 3 <strong>bold</strong> and
             <strong>subtle</strong> variants, sm/md sizes, tints, inline + <strong>stacked</strong> leading icons,
             <strong>badges</strong>, <strong>vertical</strong> orientation, <strong>overflow scrolling</strong>, and an
             <strong>animated sliding indicator</strong> (snaps under reduced-motion), backed by <code>bits-ui</code>.

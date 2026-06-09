@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 Anand Panchapakesan
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { MaskedField } from '@smuit/text-field';
+    import { MaskedField } from '@wimwian-org/text-field';
 
     let phone = $state('');
     let phoneRaw = $state('');
@@ -17,7 +17,7 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Masked Field</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/text-field</code> · <code>MaskedField</code> — a pattern-masked field on the text-field
+            <code>@wimwian-org/text-field</code> · <code>MaskedField</code> — a pattern-masked field on the text-field
             foundation. A <code>mask</code> template formats the value as you type and binds the formatted
             <code>value</code> plus, optionally, the raw <code>unmasked</code> characters. Tokens:
             <code>#</code> digit · <code>A</code> letter · <code>*</code> alphanumeric ·

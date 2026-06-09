@@ -1,5 +1,5 @@
 <!--
-  @smuit/text-field
+  @wimwian-org/text-field
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->

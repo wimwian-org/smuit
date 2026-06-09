@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { List } from '@smuit/list';
+    import { List } from '@wimwian-org/list';
 
     const tints = ['neutral', 'primary', 'secondary', 'tertiary'] as const;
     let clicked = $state('—');
@@ -38,7 +38,7 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">List</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/list</code> — Material Design 3 <strong>Baseline</strong> and
+            <code>@wimwian-org/list</code> — Material Design 3 <strong>Baseline</strong> and
             <strong>Expressive</strong> variants, one/two/three-line rows, leading/trailing slots, static · button ·
             link items, single/multiple <strong>selection</strong> (checkbox · radio · switch), <strong>roving</strong>
             arrow-key navigation, and sticky <strong>subheaders</strong>.

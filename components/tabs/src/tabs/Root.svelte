@@ -1,5 +1,5 @@
 <!--
-  @smuit/tabs
+  @wimwian-org/tabs
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
@@ -13,9 +13,9 @@
 -->
 <script lang="ts">
     import { Tabs as BitsTabs } from 'bits-ui';
-    // @smuit/theme is a peerDependency; importing it here lets the bit render
+    // @wimwian-org/theme is a peerDependency; importing it here lets the bit render
     // with design tokens even when the host app hasn't imported the theme.
-    import '@smuit/theme';
+    import '@wimwian-org/theme';
     import '../tabs.css';
     import { tabs } from '../tabs.variants';
     import { twMerge } from 'tailwind-merge';

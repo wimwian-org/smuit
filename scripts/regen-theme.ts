@@ -12,7 +12,7 @@
 //                                           file changes (use alongside dev)
 //
 // Note: this only governs the FLAT theme. The runtime theme (tailwind.css, used
-// by `@smuit/theme`) is hand-authored, not generated — keep its base colours in
+// by `@wimwian-org/theme`) is hand-authored, not generated — keep its base colours in
 // step with input.css yourself.
 
 import { readFileSync, writeFileSync, rmSync, existsSync, watch } from 'node:fs';

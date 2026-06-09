@@ -25,7 +25,7 @@
 /*
  * Author the design here, then regenerate the distributable flat stylesheet:
  *
- *   pnpm --filter @smuit/theme build:theme
+ *   pnpm --filter @wimwian-org/theme build:theme
  *
  * The generator (build-theme.ts) bakes every tonal step, scale, surface token,
  * and the type / elevation / shadow ramps into concrete values — no runtime

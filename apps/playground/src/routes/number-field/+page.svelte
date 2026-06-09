@@ -1,10 +1,10 @@
 <!--
-  @smuit/playground
+  @wimwian-org/playground
   Copyright (c) 2026 wimwian
   Licensed under the MIT License.
 -->
 <script lang="ts">
-    import { NumberField } from '@smuit/text-field';
+    import { NumberField } from '@wimwian-org/text-field';
 
     let qty = $state<number | null>(1234);
     let price = $state<number | null>(1999.95);
@@ -25,10 +25,10 @@
     <header>
         <h1 style="font-size: var(--text-display-sm); font-weight: 700; color: var(--page-fg)">Number Field</h1>
         <p style="color: var(--page-fg); opacity: 0.7; font-size: var(--text-body-md); margin-top: 0.5rem">
-            <code>@smuit/text-field</code> · <code>NumberField</code> — a numeric field on the text-field foundation.
-            Masks to a numeric alphabet (decimal, or hex/binary via a <code>0x</code>/<code>0b</code> prefix), binds a
-            parsed <code>number | null</code>, right-aligns by default, and validates <code>min</code>/<code>max</code> plus
-            an async server callback on blur. Thousands grouping is opt-in and locale-aware.
+            <code>@wimwian-org/text-field</code> · <code>NumberField</code> — a numeric field on the text-field
+            foundation. Masks to a numeric alphabet (decimal, or hex/binary via a <code>0x</code>/<code>0b</code>
+            prefix), binds a parsed <code>number | null</code>, right-aligns by default, and validates
+            <code>min</code>/<code>max</code> plus an async server callback on blur. Thousands grouping is opt-in and locale-aware.
         </p>
     </header>
 
