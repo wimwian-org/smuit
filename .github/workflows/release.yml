@@ -3,15 +3,16 @@ name: Release
 # Publishes any @smuit/* package whose version is not yet on npm (private
 # packages — the root and the playground — are skipped automatically).
 #
+# Auth: npm Trusted Publishing via OIDC — no long-lived token. The job mints a
+# short-lived OIDC token (`id-token: write`) that npm exchanges for publish
+# rights, and pnpm rewrites the `workspace:*` deps on publish. This requires
+# each package to have a Trusted Publisher configured on npmjs.com pointing at
+# this repo + workflow file (`.github/workflows/release.yml`).
+#
 # Triggers:
 #   - push to `master` — the repo's release promotion (master only advances on
 #     a release), so a master push publishes whatever was just versioned.
 #   - manual dispatch — run it from the Actions tab or `gh workflow run`.
-#
-# Auth: the NPM_TOKEN secret lives in the `Secrets` environment, whose
-# deployment-branch policy restricts it to protected branches (dev/master), so
-# the job declares `environment: Secrets` and only runs from those refs. The
-# token must be an npm Automation (or 2FA-bypass granular) token.
 
 on:
     workflow_dispatch:
@@ -21,7 +22,9 @@ on:
 jobs:
     publish:
         runs-on: ubuntu-latest
-        environment: Secrets
+        permissions:
+            id-token: write # mint the OIDC token for trusted publishing
+            contents: read
         steps:
             - uses: actions/checkout@v4
               with:
@@ -40,9 +43,7 @@ jobs:
             - name: Build component packages
               run: pnpm package
 
-            - name: Publish to npm
-              run: |
-                  echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-                  pnpm -r publish --no-git-checks --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            # No token: pnpm fetches an OIDC token (and provenance) for trusted
+            # publishing, which takes precedence over any static credential.
+            - name: Publish to npm (OIDC trusted publishing)
+              run: pnpm -r publish --no-git-checks --access public
