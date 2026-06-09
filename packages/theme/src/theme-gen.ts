@@ -251,6 +251,9 @@ export function generate(source: string): string {
     const FONT_MONO = conf(source, 'font-mono', 'ui-monospace, monospace');
     const FONT_RATIO = Number(conf(source, 'font-ratio', '1.2'));
     const LINE_HEIGHT_MD = Number(conf(source, 'line-height-md', '1.5'));
+    // Default font-weight baked onto every type utility (medium); overridable per
+    // element with font-semibold / font-bold.
+    const TYPE_WEIGHT_DEFAULT = Number(conf(source, 'font-weight-default', '500'));
 
     const TYPE_RAMPS = parseTypeRamps(source, FONT_RATIO);
 
@@ -321,6 +324,9 @@ export function generate(source: string): string {
                 const lh = round(clamp(LINE_HEIGHT_MD - o * 0.06, 1.1, 1.8), 3);
                 lines.push(decl(`--text-${ramp.role}-${label}`, `${size}rem`));
                 lines.push(decl(`--text-${ramp.role}-${label}--line-height`, `${lh}`));
+                // Medium (500) by default for every type utility; consumers opt up
+                // to font-semibold / font-bold, which override this weight.
+                lines.push(decl(`--text-${ramp.role}-${label}--font-weight`, `${TYPE_WEIGHT_DEFAULT}`));
             }
             blocks.push(lines.join('\n'));
         }

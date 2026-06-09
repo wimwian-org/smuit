@@ -92,6 +92,7 @@
 
     --font-ratio: 1.2; /* default modular ratio between adjacent steps */
     --line-height-md: 1.5; /* unitless line-height at md (tightens as size grows) */
+    --font-weight-default: 500; /* medium on every type utility; override with font-semibold/bold */
 
     /* ── Elevation + shadow variant ───────────────────────────────────────────
      * One shared variant drives both --elevation-<label> (dp) and --shadow-<label>.
