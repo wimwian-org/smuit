@@ -37,20 +37,25 @@ and custom shape sequences are deferred.
 | **Motion**    | `prefers-reduced-motion: reduce` fallback — morph + spin stop; the indicator rests on a single static shape.                         |
 | **A11y**      | `role="progressbar"` + `aria-label` (default "Loading"), **indeterminate** (no `aria-valuenow`), `aria-busy`; the SVG art is hidden. |
 
+### Landed in v1.1
+
+| Area                        | What shipped                                                                                         |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Determinate mode**        | A `progress` (0→1, clamped) prop; a sweep arc tracks the value and the root exposes `aria-valuenow`. |
+| **Completion hand-off**     | `complete` (or `progress >= 1`) settles into a drawn, success-tinted checkmark; clears `aria-busy`.  |
+| **Custom shape sequence**   | A `shapes: string[]` prop overrides the curated morph set; `LOADING_INDICATOR_SHAPES` is exported.   |
+| **Container shape options** | A `containerShape` prop — `rounded` (default) / `squircle` / `cookie`, via scaled CSS masks.         |
+
 ### Deferred — next
 
 | Area                          | Why it waits                                                                                                           |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **Determinate mode**          | A `progress` (0→1) prop where shape morph / sweep tracks progress; v1 is indeterminate-only.                           |
 | **True spring-physics morph** | The exact AndroidX seven-shape spring sequence (stiffness/damping tokens, M3 easing); v1 uses a curated SVG `d` morph. |
-| **Custom shape sequence**     | A `shapes` / `polygons` prop to supply a custom morph set; v1 ships one curated Material shape sequence.               |
-| **Completion hand-off**       | Morph-to-checkmark / success state when loading finishes.                                                              |
-| **Container shape options**   | Configurable container shape (squircle / cookie variants); v1 ships one rounded container.                             |
 
-> v1 ships a fully-themed, accessible, indeterminate loading indicator in uncontained + contained
-> variants, three sizes, retintable, with a reduced-motion fallback. Held back is the **determinate
-> progress mode**, the **exact spring-physics morph**, **custom shape sequences**, and the
-> **completion hand-off**; later releases layer those onto this base.
+> v1 shipped a fully-themed, accessible, indeterminate loading indicator (uncontained + contained,
+> three sizes, retintable, reduced-motion fallback). v1.1 layered on the **determinate progress
+> mode**, **completion hand-off**, **custom shape sequences**, and **container shape options**. Only
+> the **exact spring-physics morph** remains deferred — the curated SVG `d` morph stands in for it.
 
 ---
 

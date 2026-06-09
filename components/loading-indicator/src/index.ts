@@ -5,9 +5,11 @@
  */
 export { default as LoadingIndicator } from './LoadingIndicator.svelte';
 export { loadingIndicator, type LoadingIndicatorVariants } from './loading-indicator.variants';
+export { LOADING_INDICATOR_SHAPES, DEFAULT_SHAPE_SEQUENCE } from './loading-indicator.shapes';
 export type {
     LoadingIndicatorProps,
     LoadingIndicatorVariant,
     LoadingIndicatorSize,
     LoadingIndicatorTint,
+    LoadingIndicatorContainerShape,
 } from './types';
