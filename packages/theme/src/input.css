@@ -48,16 +48,16 @@
 @theme {
     /* ── Base hues ───────────────────────────────────────────────── */
     --color-mono: oklch(0.5 0 0);
-    --color-primary: oklch(0.65 0.23 34);
+    --color-primary: oklch(0.68 0.15 237);
     --color-secondary: oklch(0.421 0.193 328.4);
-    --color-tertiary: oklch(0.68 0.15 237);
+    --color-tertiary: oklch(0.65 0.23 34);
     --color-error: oklch(0.56 0.21 21);
     --color-warning: oklch(0.93 0.18 103);
     --color-success: oklch(0.74 0.25 142);
 
     /* ── Fonts ───────────────────────────────────────────────────── */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', monospace;
+    --font-sans: 'Inter';
+    --font-mono: 'JetBrains Mono';
 }
 
 /*
