@@ -1,5 +1,17 @@
 # @smuit/playground
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [[`5b163c4`](https://github.com/wimwian-org/smuit/commit/5b163c4e9ea58814f9d422662d260622c8fefd1e), [`88f1067`](https://github.com/wimwian-org/smuit/commit/88f1067168d8d4c2062bffcb593d79f525bfcac9), [`9a68d37`](https://github.com/wimwian-org/smuit/commit/9a68d374103d86dc16172c14e2e2ac54287b8631), [`eace46b`](https://github.com/wimwian-org/smuit/commit/eace46b957644ac2b3ecb87fbd5046b662988373), [`4cc47d9`](https://github.com/wimwian-org/smuit/commit/4cc47d991e0b871c73ae047ab9616145d930c2f6), [`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd)]:
+    - @smuit/tabs@0.2.0
+    - @smuit/list@0.2.0
+    - @smuit/loading-indicator@0.2.0
+    - @smuit/text-field@0.3.0
+    - @smuit/progress-indicator@0.2.0
+    - @smuit/theme@0.1.3
+
 ## 0.1.4
 
 ### Patch Changes

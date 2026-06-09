@@ -1,6 +1,6 @@
 {
     "name": "@smuit/loading-indicator",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Material Design 3 Expressive loading indicator for Svelte 5 — an indeterminate, shape-morphing active indicator in uncontained and contained variants, on smuit design tokens.",
     "type": "module",
     "files": [

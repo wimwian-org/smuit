@@ -1,5 +1,24 @@
 # @smuit/progress-indicator
 
+## 0.2.0
+
+### Minor Changes
+
+- [#16](https://github.com/wimwian-org/smuit/pull/16) [`4cc47d9`](https://github.com/wimwian-org/smuit/commit/4cc47d991e0b871c73ae047ab9616145d930c2f6) Thanks [@wimwian](https://github.com/wimwian)! - Ship the deferred features:
+    - **Circular** shape (`shape="circular"`) — an SVG ring on the same `value`/`max`
+      model, sized per `size`, determinate + indeterminate.
+    - **Buffer** (linear) — a secondary `buffer` channel with a faint fill and a
+      dotted track beyond it.
+    - **Four-colour** indeterminate (`fourColor`) — the animated indicator cycles
+      through four accents (linear bar + circular ring).
+    - **Label / value readout** — a built-in `label` caption and an inline `showValue`
+      percentage (centred inside the ring for circular).
+
+### Patch Changes
+
+- Updated dependencies [[`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd)]:
+    - @smuit/theme@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

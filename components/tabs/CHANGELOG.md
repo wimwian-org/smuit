@@ -1,5 +1,16 @@
 # @smuit/tabs
 
+## 0.2.0
+
+### Minor Changes
+
+- [#20](https://github.com/wimwian-org/smuit/pull/20) [`5b163c4`](https://github.com/wimwian-org/smuit/commit/5b163c4e9ea58814f9d422662d260622c8fefd1e) Thanks [@wimwian](https://github.com/wimwian)! - add vertical orientation, stacked icons, badges, and overflow scrolling
+
+### Patch Changes
+
+- Updated dependencies [[`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd)]:
+    - @smuit/theme@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

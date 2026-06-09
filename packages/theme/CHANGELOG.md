@@ -1,5 +1,11 @@
 # @smuit/theme
 
+## 0.1.3
+
+### Patch Changes
+
+- [#19](https://github.com/wimwian-org/smuit/pull/19) [`d76d084`](https://github.com/wimwian-org/smuit/commit/d76d0849fc242807b115ab73c722c8a2db7961fd) Thanks [@wimwian](https://github.com/wimwian)! - Darken the `solid` surface role to step **700/300** (light/dark) and shift `solid-hover` to **750/250**, for bolder solid fills. `toneOf` now computes intermediate steps on demand, so the 9-step RAG palettes (error/warning/success) resolve the 250/750 tones too.
+
 ## 0.1.2
 
 ### Patch Changes
