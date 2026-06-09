@@ -1,5 +1,18 @@
 # @smuit/playground
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+    - @smuit/theme@0.1.2
+    - @smuit/text-field@0.2.2
+    - @smuit/list@0.1.2
+    - @smuit/tabs@0.1.2
+    - @smuit/loading-indicator@0.1.2
+    - @smuit/progress-indicator@0.1.2
+    - @smuit/ripple@0.0.1
+
 ## 0.1.3
 
 ### Patch Changes

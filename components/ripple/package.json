@@ -1,6 +1,6 @@
 {
     "name": "@smuit/ripple",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "Material UI–style touch ripple for Svelte 5 — a use:ripple action and <Ripple> component with xs · sm · md · lg · xl variants.",
     "type": "module",
     "files": [
@@ -42,7 +42,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/smuit/smuit.git",
+        "url": "https://github.com/wimwian-org/smuit.git",
         "directory": "components/ripple"
     },
     "peerDependencies": {
