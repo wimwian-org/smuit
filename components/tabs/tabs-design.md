@@ -24,6 +24,10 @@ activation mode, panel association). Reconciliation in [§9](#9-source-reconcili
 
 ## MVP Scope (v1)
 
+> **Status (v0.3).** The four items in the **Deferred — next** table below except dynamic tabs —
+> overflow scrolling, vertical orientation, stacked icons, and badges — **shipped in v0.3**. This
+> section is kept as the original design record; see the README for the current scope.
+
 The first release is a **two-variant, horizontal tab set** — **bold** (M3 Primary: top-level,
 bolder, optional inline leading icon) and **subtle** (M3 Secondary: nested, quieter) — built as a
 compound `Tabs.Root` / `Tabs.List` / `Tabs.Trigger` / `Tabs.Content` wrapping the headless
@@ -51,13 +55,13 @@ orientation, stacked icons, and badges are deferred.
 
 ### Deferred — next
 
-| Area                           | Why it waits                                                                                               |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| **Overflow / scrollable bars** | Material Web's `scrollToTab()` + scroll-affordance buttons for tab bars that exceed their container width. |
-| **Vertical orientation**       | bits-ui supports `orientation="vertical"`; v1 styles horizontal only (the indicator + layout differ).      |
-| **Stacked icon layout**        | bold tabs with the icon **above** the label (M3 stacked tab); v1 ships inline leading icons only.          |
-| **Badge / count on a tab**     | A numeric/dot badge on a trigger.                                                                          |
-| **Dynamic tabs**               | Closeable / addable tabs and their keyboard/focus reconciliation.                                          |
+| Area                           | Status                                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| **Overflow / scrollable bars** | **Shipped v0.3** — `Tabs.List scrollable` adds a scroll viewport + prev/next affordances that keep the active tab in view. |
+| **Vertical orientation**       | **Shipped v0.3** — `orientation="vertical"`; the indicator, track, and roving axis follow bits-ui's `data-orientation`.    |
+| **Stacked icon layout**        | **Shipped v0.3** — `iconLayout="stacked"` seats the icon above the label (M3 stacked tab) on a taller row.                 |
+| **Badge / count on a tab**     | **Shipped v0.3** — a `badge` snippet on `Tabs.Trigger` (a count chip; an empty snippet renders a dot).                     |
+| **Dynamic tabs**               | _Deferred._ Closeable / addable tabs and their keyboard/focus reconciliation.                                              |
 
 > v1 ships a fully-themed, accessible two-variant horizontal tab set with sm/md sizes, inline
 > leading icons, tint retinting, automatic/manual activation, and an **animated sliding indicator

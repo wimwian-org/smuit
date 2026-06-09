@@ -9,10 +9,11 @@
  * Token-driven + state styling that tailwind-variants can't express cleanly: the
  * tint accent, the inactive→active label colour (keyed off bits-ui's
  * `data-state`), the per-variant typography, the sliding active indicator (shape,
- * transition, reduced-motion fallback, pre-measure visibility), the bottom track,
- * the focus-visible outline, the disabled dimming, and icon sizing. Every value
- * reads one of the component tokens declared on `.tabs`, which in turn read the
- * smuit `--color-*` / `--surface-*` design tokens — no literals.
+ * orientation axis, transition, reduced-motion fallback, pre-measure visibility),
+ * the track, the focus-visible outline, the disabled dimming, icon sizing, the
+ * badge chip, and the overflow-scroll affordance buttons. Every value reads one of
+ * the component tokens declared on `.tabs`, which in turn read the smuit
+ * `--color-*` / `--surface-*` design tokens — no literals.
  */
 @layer components {
     .tabs {
@@ -27,6 +28,9 @@
         --tabs-accent: var(--color-g-900);
         --tabs-hover: color-mix(in srgb, var(--tabs-accent) 8%, transparent);
         --tabs-press: color-mix(in srgb, var(--tabs-accent) 16%, transparent);
+        /* Badge chip — a quiet accent-tinted container by default. */
+        --tabs-badge-bg: color-mix(in srgb, var(--tabs-accent) 14%, transparent);
+        --tabs-badge-fg: var(--tabs-accent);
         /* Indicator geometry (overridden per variant below). */
         --tabs-indicator-h: 3px;
         --tabs-indicator-radius: 9999px;
@@ -59,9 +63,14 @@
         --tabs-indicator-radius: 0;
     }
 
-    /* ── List + bottom track ─────────────────────────────────────────── */
-    .tabs-list {
+    /* ── List + track ────────────────────────────────────────────────── */
+    /* Horizontal: track along the bottom edge. Vertical: along the inline-end
+       edge (where the vertical indicator rides). */
+    .tabs[data-orientation='horizontal'] .tabs-list {
         border-bottom: 1px solid var(--tabs-track);
+    }
+    .tabs[data-orientation='vertical'] .tabs-list {
+        border-inline-end: 1px solid var(--tabs-track);
     }
 
     /* ── Trigger ─────────────────────────────────────────────────────── */
@@ -104,23 +113,54 @@
         height: 1.25em;
     }
 
-    /* ── Sliding active indicator ────────────────────────────────────── */
-    /* Tabs.List feeds the measured geometry in as `--tabs-indicator-x` /
-       `--tabs-indicator-w` custom properties; this rule owns the shape, colour,
-       position, and slide transition. */
-    .tabs-indicator {
-        bottom: 0;
-        left: 0;
-        transform: translateX(var(--tabs-indicator-x, 0px));
-        width: var(--tabs-indicator-w, 0px);
-        height: var(--tabs-indicator-h);
-        border-radius: var(--tabs-indicator-radius);
+    /* ── Badge chip / dot ────────────────────────────────────────────── */
+    /* A count chip after the label; an empty badge collapses to a dot. */
+    .tabs-badge {
+        min-width: 1.25rem;
+        height: 1.25rem;
+        padding-inline: 0.375rem;
+        border-radius: 9999px;
+        font-size: var(--text-label-sm);
+        font-weight: 600;
+        line-height: 1;
+        background: var(--tabs-badge-bg);
+        color: var(--tabs-badge-fg);
+    }
+    .tabs-badge:empty {
+        min-width: 0.5rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        padding: 0;
         background: var(--tabs-accent);
+    }
+
+    /* ── Sliding active indicator ────────────────────────────────────── */
+    /* Tabs.List feeds the measured main-axis geometry in as
+       `--tabs-indicator-pos` / `--tabs-indicator-len`; this rule owns the shape,
+       colour, axis, position, and slide transition. */
+    .tabs-indicator {
+        background: var(--tabs-accent);
+        border-radius: var(--tabs-indicator-radius);
         opacity: 0; /* hidden until first measured — no SSR flash */
         transition:
             transform 250ms ease,
             width 250ms ease,
+            height 250ms ease,
             opacity 150ms ease;
+    }
+    .tabs[data-orientation='horizontal'] .tabs-indicator {
+        bottom: 0;
+        left: 0;
+        height: var(--tabs-indicator-h);
+        width: var(--tabs-indicator-len, 0px);
+        transform: translateX(var(--tabs-indicator-pos, 0px));
+    }
+    .tabs[data-orientation='vertical'] .tabs-indicator {
+        inset-inline-end: 0;
+        top: 0;
+        width: var(--tabs-indicator-h);
+        height: var(--tabs-indicator-len, 0px);
+        transform: translateY(var(--tabs-indicator-pos, 0px));
     }
     .tabs-indicator[data-ready] {
         opacity: 1;
@@ -132,9 +172,81 @@
         }
     }
 
+    /* ── Overflow scrolling (Tabs.List scrollable) ───────────────────── */
+    /* The list becomes a scroll viewport along the active axis; its scrollbar is
+       hidden (the affordance buttons + dragging stand in). Triggers don't shrink,
+       so the row genuinely overflows. */
+    .tabs-list-scroll {
+        scrollbar-width: none;
+    }
+    .tabs-list-scroll::-webkit-scrollbar {
+        display: none;
+    }
+    .tabs[data-orientation='horizontal'] .tabs-list-scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    .tabs[data-orientation='vertical'] .tabs-list-scroll {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .tabs-list-scroll .tabs-trigger {
+        flex-shrink: 0;
+    }
+
+    /* Scroll affordance buttons — sit outside the tablist (not role="tab"), carry
+       the track across their span, and hide entirely while the row fits. */
+    .tabs-scroll-btn {
+        color: var(--tabs-inactive);
+        border: 0;
+        appearance: none;
+        outline: none;
+        padding-inline: 0.25rem;
+    }
+    .tabs[data-orientation='horizontal'] .tabs-scroll-btn {
+        width: 2rem;
+        border-bottom: 1px solid var(--tabs-track);
+    }
+    .tabs[data-orientation='vertical'] .tabs-scroll-btn {
+        height: 2rem;
+        border-inline-end: 1px solid var(--tabs-track);
+    }
+    .tabs-scroll-btn:disabled {
+        color: var(--tabs-disabled);
+        cursor: default;
+    }
+    .tabs-scroll-btn:focus-visible {
+        outline: 2px solid var(--tabs-accent);
+        outline-offset: -2px;
+        border-radius: 0.25rem;
+    }
+    .tabs-scroll-btn :where(svg) {
+        width: 1.25em;
+        height: 1.25em;
+    }
+    /* Hide both affordances when the row isn't overflowing. */
+    .tabs-list-wrap:not([data-overflow]) .tabs-scroll-btn {
+        display: none;
+    }
+    /* Point the chevron the right way per axis + direction (base SVG points →). */
+    .tabs-list-wrap[data-orientation='horizontal'] .tabs-scroll-btn[data-dir='prev'] :where(svg) {
+        transform: rotate(180deg);
+    }
+    .tabs-list-wrap[data-orientation='vertical'] .tabs-scroll-btn[data-dir='prev'] :where(svg) {
+        transform: rotate(-90deg);
+    }
+    .tabs-list-wrap[data-orientation='vertical'] .tabs-scroll-btn[data-dir='next'] :where(svg) {
+        transform: rotate(90deg);
+    }
+
     /* ── Content panel ───────────────────────────────────────────────── */
     .tabs-content {
         padding-block-start: 1rem;
         outline: none;
+    }
+    /* Vertical: the panel sits beside the list, so pad the inline-start instead. */
+    .tabs[data-orientation='vertical'] .tabs-content {
+        padding-block-start: 0;
+        padding-inline-start: 1rem;
     }
 }
