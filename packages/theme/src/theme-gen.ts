@@ -249,6 +249,13 @@ export function generate(source: string): string {
 
     const FONT_SANS = conf(source, 'font-sans', 'ui-sans-serif, system-ui, sans-serif');
     const FONT_MONO = conf(source, 'font-mono', 'ui-monospace, monospace');
+
+    // Transfer the source's `@import url(...)` rules (e.g. the Google Fonts the
+    // theme declares in --font-sans/--font-mono) verbatim into the output. They
+    // must lead the file — CSS requires @import before any style rule. Match the
+    // whole `url(...)` so a URL containing `;` (variable-axis tuples) isn't cut
+    // short at the first semicolon.
+    const IMPORTS = [...source.matchAll(/@import\s+url\([^)]*\)[^;]*;/gi)].map((m) => m[0].trim());
     const FONT_RATIO = Number(conf(source, 'font-ratio', '1.2'));
     const LINE_HEIGHT_MD = Number(conf(source, 'line-height-md', '1.5'));
     // Default font-weight baked onto every type utility (medium); overridable per
@@ -474,6 +481,8 @@ export function generate(source: string): string {
     return [
         DANGER,
         ``,
+        // @import must precede every style rule — emit the transferred font imports first.
+        ...(IMPORTS.length ? [IMPORTS.join('\n'), ``] : []),
         `/* color-scheme keeps native form controls / scrollbars in step with the theme */`,
         `:root { color-scheme: light; }`,
         `[data-theme='light'] { color-scheme: light; }`,
