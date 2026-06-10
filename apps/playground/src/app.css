@@ -4,12 +4,12 @@
  * Licensed under the MIT License.
  */
 /*
- * Playground stylesheet — drives the sandbox from the GENERATED flat theme
- * (@wimwian-org/theme = packages/theme/src/output.css). Tailwind must be imported
- * first so it can process the flat theme's @theme block and emit utilities.
+ * Playground stylesheet. The <Theme /> component (in +layout.svelte) renders the
+ * font preconnects; this file is the Tailwind entry — it imports the theme CSS
+ * (so Tailwind sees the @theme tokens) and registers the playground's content
+ * scan so utilities for the linked component packages get emitted.
  */
-@import 'tailwindcss';
-@import '@wimwian-org/theme/flat';
+@import '@wimwian-org/theme/css';
 
 /*
  * Scan the workspace component packages so Tailwind emits the utility classes

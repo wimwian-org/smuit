@@ -6,6 +6,11 @@
     "exports": {
         ".": "./src/output.css",
         "./flat": "./src/output.css",
+        "./css": "./src/theme.css",
+        "./svelte": {
+            "svelte": "./src/Theme.svelte",
+            "default": "./src/Theme.svelte"
+        },
         "./package.json": "./package.json"
     },
     "scripts": {
@@ -42,10 +47,14 @@
         "tailwindcss": "^4.3.0"
     },
     "peerDependencies": {
-        "tailwindcss": "^4.0.0"
+        "tailwindcss": "^4.0.0",
+        "svelte": "^5.0.0"
     },
     "peerDependenciesMeta": {
         "tailwindcss": {
+            "optional": true
+        },
+        "svelte": {
             "optional": true
         }
     }

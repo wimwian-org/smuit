@@ -46,10 +46,11 @@
  *   success   — positive / confirm     (RAG)   (9 steps, 100…900)
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+/* Fonts (Noto Sans Display / Google Sans Code / Noto Sans Mono) are loaded by
+ * the consuming app — e.g. a <link> in its HTML head — NOT via @import here. A
+ * remote @import inside this theme becomes illegal once the theme is bundled
+ * after Tailwind (CSS requires @import to lead the file). This theme only names
+ * the families in the --font-* tokens below. */
 
 @theme {
     /* ── Base hues ───────────────────────────────────────────────── */
