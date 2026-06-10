@@ -4,8 +4,10 @@
   Licensed under the MIT License.
 -->
 <!--
-  Field.Caption — the row below the field that holds the supporting text and the
-  character counter.
+  Field.Area — the multiline content region (.tf-input-area), the textarea
+  sibling of Field.Line. Cleanly separated so the single-line row stays a fixed
+  baseline with no multiline qualifiers: the textarea's growth and top-room live
+  here, while the variant surface stays shared on .tf-container.
 -->
 <script lang="ts">
     import { textField } from '../text-field.variants';
@@ -19,4 +21,4 @@
     );
 </script>
 
-<div class={styles.supportLine()} data-slot="support-line">{@render children()}</div>
+<div class={styles.inputArea()} data-slot="input-area">{@render children()}</div>

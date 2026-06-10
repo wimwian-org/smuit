@@ -13,43 +13,33 @@
  * read the smuit `--color-*` / `--page-*` design tokens — no literals.
  */
 @layer components {
+    /* Base Tokens */
     .tf {
-        /* Tokens-first — everything below resolves through these. */
-        --tf-pad-x: 0.875rem;
-        /* Sized to the content, not a fixed 56px: the input line (text-base,
-           1.5rem) + the floated-label region above it + the bottom padding. */
-        --tf-height: 2.75rem;
+        --tf-pad-x: 14px;
+        --tf-height: 44px;
+        /* The single-line content row's baseline box — the input's line-box. */
+        --tf-line-h: 1.5rem;
         --tf-label-rest: 1rem;
-        /* Focus accent + floated-label colour. Driven by the per-tint semantic
-           surface tokens below (not the `--color-c-*` content scale), so the
-           tint works under both the runtime and the flat theme without relying
-           on a tint utility class. Default = primary. */
-        --tf-accent: var(--surface-primary-accent);
-        --tf-label-color: var(--color-g-600);
-        --tf-label-float-color: var(--surface-primary-accent);
+        --tf-accent: var(--color-primary);
+        --tf-label-color: var(--color-g-650);
+        --tf-label-float-color: var(--color-primary);
         --tf-label-disabled-color: var(--color-g-400);
         --tf-placeholder-color: var(--color-g-400);
-        /* --tf-notch-bg: the backdrop the outlined floated label paints over the
-           top border. NOT declared here so an ancestor can set it to its own
-           surface (e.g. a tinted card); the notch rule falls back to --page-bg. */
     }
 
     /* ── Tint → focus accent (theme-independent semantic tokens) ─────── */
     .tf[data-tint='secondary'] {
-        --tf-accent: var(--surface-secondary-accent);
+        --tf-accent: var(--color-secondary);
         --tf-label-float-color: var(--surface-secondary-accent);
     }
     .tf[data-tint='tertiary'] {
         --tf-accent: var(--surface-tertiary-accent);
         --tf-label-float-color: var(--surface-tertiary-accent);
     }
-    /* Neutral: a theme-flipping grey from the ground scale. */
     .tf[data-tint='neutral'] {
         --tf-accent: var(--color-g-700);
         --tf-label-float-color: var(--color-g-700);
     }
-    /* Error: a fixed error colour for the accent + label, regardless of tint.
-       Declared after the tints so it wins for a tinted field in the error state. */
     .tf[data-error] {
         --tf-accent: var(--surface-error-accent);
         --tf-label-color: var(--surface-error-accent);
@@ -58,12 +48,14 @@
 
     /* ── Container geometry ─────────────────────────────────────────── */
     .tf-container {
+        /* This is for md size */
         min-height: var(--tf-height);
         --tf-label-left: var(--tf-pad-x);
     }
     .tf-container[data-size='sm'] {
         /* text-sm input line (1.25rem) + label region + padding. */
         --tf-height: 2.5rem;
+        --tf-line-h: 1.25rem;
         --tf-label-rest: 0.875rem;
     }
     /* Shift the label start past a leading icon (icon box + container gap). */
@@ -75,11 +67,6 @@
        `calc(--tf-pad-x + 1.75rem)` stays a valid length. */
     .tf-container[data-variant='standard'] {
         --tf-pad-x: 0px;
-    }
-    /* Filled / standard (single-line): the input is bottom-aligned (items-end),
-       leaving the top free for the floated label. */
-    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline]) {
-        padding-bottom: 0.225rem;
     }
     /* Filled / standard: 8px taller than the shared height, with a 4px gap above
        and below the input (padding-block 4px → +8px). */
@@ -98,7 +85,7 @@
        with room above for the floated label. */
     .tf-container[data-multiline] {
         min-height: 0;
-        padding-block: 0.75rem 0.3125rem;
+        padding-block: 0.75rem 0.25rem;
     }
     /* Filled textarea: 8px more top fill so the floated label is covered by the
        fill with a gap above the first line of text. */
@@ -124,6 +111,15 @@
        border so the two underline colours don't show at once. */
     .tf-container:is([data-variant='filled'], [data-variant='standard']):focus-within {
         border-bottom-color: transparent;
+    }
+
+    /* ── Content row (single line) — the fixed baseline box ─────────── */
+    /* Every variant aligns this one row (the container's items-* places it), so
+       the adornments and the input share a single baseline with no per-variant
+       correction. Height floors at the input's line-box (1.5rem / 1.25rem sm)
+       so a centred icon lands on the input baseline in every variant. */
+    .tf-input-line {
+        min-height: var(--tf-line-h);
     }
 
     /* ── Floating label (container-relative) ────────────────────────── */
@@ -235,13 +231,9 @@
         width: 0.9em;
         height: 0.9em;
     }
-    /* Filled/standard bottom-align their children; size the adornment box to the
-       input line (1.5rem) so the centred icon lands on the input baseline (where
-       outlined — being items-center — already paints it). */
-    .tf-container:is([data-variant='filled'], [data-variant='standard']):not([data-multiline])
-        :is(.tf-leading, .tf-trailing) {
-        height: 1.5rem;
-    }
+    /* (The old filled/standard adornment-height hack is gone: .tf-input-line is
+       the shared 1.5rem baseline box, so centred icons land on the input
+       baseline in every variant without a per-variant correction.) */
     .tf-trailing :where(button) {
         display: inline-flex;
         cursor: pointer;

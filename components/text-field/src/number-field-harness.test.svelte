@@ -7,7 +7,7 @@
      DOM so a test can read the parsed model value back. -->
 <script lang="ts">
     import NumberField from './NumberField.svelte';
-    import type { NumberFieldProps } from './types';
+    import type { NumberFieldProps } from './NumberFieldTypes';
 
     let { value = $bindable<number | null>(null), ...rest }: NumberFieldProps = $props();
 </script>

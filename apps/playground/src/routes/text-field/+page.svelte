@@ -9,6 +9,7 @@
     let bound = $state('Ada Lovelace');
     let counted = $state('Hello');
     let composed = $state('');
+    let adorned = $state('1234567890.00 — long value to demonstrate horizontal scroll');
     let bio = $state('Mathematician & first programmer.');
     let fruit = $state('');
     const fruits = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Date', 'Fig', 'Grape'];
@@ -17,6 +18,10 @@
 
     // Variant-comparison table: each use case rendered as outlined · filled · standard.
     const cmpVariants = [undefined, 'filled', 'standard'] as const;
+    const sizes = ['sm', 'md'] as const;
+    // A supporting string long enough to wrap onto a second line beside the counter.
+    const twoLineSupport =
+        'Guidance that runs long enough to wrap onto a second line, shown beside the live character counter.';
     type CmpCase = {
         uc: string;
         label: string;
@@ -47,6 +52,13 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="7" />
         <path d="m21 21-4.3-4.3" stroke-linecap="round" />
+    </svg>
+{/snippet}
+
+{#snippet card()}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <path d="M2 10h20" stroke-linecap="round" />
     </svg>
 {/snippet}
 
@@ -227,14 +239,72 @@
         <Field.Root bind:value={composed} variant="filled" maxlength={120} fullWidth>
             <Field.Box>
                 <Field.Label>Message</Field.Label>
-                <Field.Adornment side="leading">{@render search()}</Field.Adornment>
-                <Field.Input placeholder="Compose with Field.Root / Box / Label / Adornment / Input…" />
+                <Field.Line>
+                    <Field.Adornment side="leading">{@render search()}</Field.Adornment>
+                    <Field.Input placeholder="Compose with Field.Root / Box / Label / Line / Adornment / Input…" />
+                </Field.Line>
             </Field.Box>
             <Field.Caption>
                 <Field.Supporting>Same parts that back &lt;TextField&gt;.</Field.Supporting>
                 <Field.Counter />
             </Field.Caption>
         </Field.Root>
+    </section>
+
+    <!-- ── Full adornment row (no wrap · input scrolls) ─────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Full adornment row <span class="demo-hint">— svg · text · input · text · svg, no wrap</span>
+        </h2>
+        <Field.Root bind:value={adorned} variant="outlined" fullWidth>
+            <Field.Box>
+                <Field.Label>Amount</Field.Label>
+                <Field.Line>
+                    <Field.Adornment side="leading">{@render card()}</Field.Adornment>
+                    <Field.Adornment side="prefix">$</Field.Adornment>
+                    <Field.Input />
+                    <Field.Adornment side="suffix">USD</Field.Adornment>
+                    <Field.Adornment side="trailing">{@render search()}</Field.Adornment>
+                </Field.Line>
+            </Field.Box>
+            <Field.Caption>
+                <Field.Supporting>The five slots stay on one line; the input scrolls its text.</Field.Supporting>
+            </Field.Caption>
+        </Field.Root>
+    </section>
+
+    <!-- ── Fully populated (every slot) × size × variant ────────────── -->
+    <section>
+        <h2 class="demo-h2">
+            Fully populated
+            <span class="demo-hint"
+                >— leading/trailing icons + prefix/suffix, 2-line support text & counter, per size × variant</span
+            >
+        </h2>
+        <div class="cmp">
+            <span class="cmp-head">Size</span>
+            <span class="cmp-head">Outlined</span>
+            <span class="cmp-head">Filled</span>
+            <span class="cmp-head">Standard</span>
+            {#each sizes as s (s)}
+                <span class="cmp-uc">{s}</span>
+                {#each cmpVariants as v (v ?? 'outlined')}
+                    <TextField
+                        label="Amount"
+                        variant={v}
+                        size={s}
+                        value="1250.00"
+                        prefix="$"
+                        suffix="USD"
+                        maxlength={40}
+                        supportingText={twoLineSupport}
+                    >
+                        {#snippet leadingIcon()}{@render card()}{/snippet}
+                        {#snippet trailingIcon()}{@render search()}{/snippet}
+                    </TextField>
+                {/each}
+            {/each}
+        </div>
     </section>
 
     <!-- ── Controlled ───────────────────────────────────────────────── -->

@@ -13,7 +13,7 @@
 -->
 <script lang="ts">
     import * as Field from './field';
-    import type { Props } from './types';
+    import type { Props } from './TextFieldTypes';
 
     let {
         label,
@@ -70,11 +70,13 @@
 >
     <Field.Box>
         <Field.Label>{label}</Field.Label>
-        {#if leadingIcon}<Field.Adornment side="leading">{@render leadingIcon()}</Field.Adornment>{/if}
-        {#if prefix}<Field.Adornment side="prefix">{prefix}</Field.Adornment>{/if}
-        <Field.Input {placeholder} {onfocus} {onblur} bind:ref {...restProps} />
-        {#if suffix}<Field.Adornment side="suffix">{suffix}</Field.Adornment>{/if}
-        {#if trailingIcon}<Field.Adornment side="trailing">{@render trailingIcon()}</Field.Adornment>{/if}
+        <Field.Line>
+            {#if leadingIcon}<Field.Adornment side="leading">{@render leadingIcon()}</Field.Adornment>{/if}
+            {#if prefix}<Field.Adornment side="prefix">{prefix}</Field.Adornment>{/if}
+            <Field.Input {placeholder} {onfocus} {onblur} bind:ref {...restProps} />
+            {#if suffix}<Field.Adornment side="suffix">{suffix}</Field.Adornment>{/if}
+            {#if trailingIcon}<Field.Adornment side="trailing">{@render trailingIcon()}</Field.Adornment>{/if}
+        </Field.Line>
     </Field.Box>
     <Field.Suggestions />
     {#if hasBottom}

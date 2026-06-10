@@ -4,8 +4,11 @@
   Licensed under the MIT License.
 -->
 <!--
-  Field.Caption — the row below the field that holds the supporting text and the
-  character counter.
+  Field.Line — the single-line content row (.tf-input-line). Holds the
+  adornments and the <input> on one fixed baseline. It is variant-invariant:
+  every variant (outlined / filled / standard) reuses it unchanged — the
+  variant surface and the line's placement live on .tf-container. Sibling of
+  Field.Label (the label is positioned against the container, not the line).
 -->
 <script lang="ts">
     import { textField } from '../text-field.variants';
@@ -19,4 +22,4 @@
     );
 </script>
 
-<div class={styles.supportLine()} data-slot="support-line">{@render children()}</div>
+<div class={styles.inputLine()} data-slot="input-line">{@render children()}</div>

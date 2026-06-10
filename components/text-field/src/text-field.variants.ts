@@ -22,16 +22,23 @@ import { tv, type VariantProps } from 'tailwind-variants';
  */
 export const textField = tv({
     slots: {
-        root: 'tf relative flex flex-col gap-0.75 text-left',
+        root: 'tf tf-wrapper relative flex flex-col gap-0.75 text-left',
         container:
-            'tf-container relative flex w-full items-center gap-2 transition-[background-color,border-color,box-shadow,transform] duration-150',
+            'tf-container relative flex w-full items-center transition-[background-color,border-color,box-shadow,transform] duration-150',
+        // The single-line content row — leading·prefix·input·suffix·trailing on
+        // one fixed baseline. Variant-invariant: it never reads `[data-variant]`,
+        // so every variant reuses it untouched (the variant lives on .tf-container).
+        inputLine: 'tf-input-line flex min-w-0 flex-1 items-center gap-2',
+        // The textarea content region — the multiline sibling of .tf-input-line.
+        // Also variant-invariant; owns its own top-room / growth, see CSS.
+        inputArea: 'tf-input-area flex min-w-0 flex-1',
         label: 'tf-label pointer-events-none absolute max-w-full origin-left truncate transition-all duration-150 ease-out',
         input: 'tf-input min-w-0 flex-1 border-0 bg-transparent p-0 text-base text-g-900 outline-none',
         leading: 'tf-leading flex shrink-0 items-center text-g-600',
         trailing: 'tf-trailing flex shrink-0 items-center text-g-600',
         prefix: 'tf-prefix shrink-0 select-none text-base text-g-500',
         suffix: 'tf-suffix shrink-0 select-none text-base text-g-500',
-        bottom: 'tf-bottom flex items-start justify-between gap-3 px-1',
+        supportLine: 'tf-support-line flex items-start justify-between gap-3 px-1',
         supporting: 'tf-supporting text-xs text-g-600',
         counter: 'tf-counter shrink-0 text-xs text-g-600 tabular-nums',
         popup: 'tf-popup absolute inset-x-0 top-full z-20 mt-0.5 max-h-60 overflow-auto rounded-md border border-g-300 bg-[var(--page-bg)] py-0.5 shadow-lg',
