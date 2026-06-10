@@ -4,6 +4,7 @@
   Licensed under the MIT License.
 -->
 <script lang="ts">
+    import Theme from '@wimwian-org/theme/svelte';
     import '../app.css';
     import { page } from '$app/state';
 
@@ -24,6 +25,8 @@
         setTheme(theme === 'light' ? 'dark' : 'light');
     }
 </script>
+
+<Theme />
 
 <div class="min-h-screen" style="background: var(--page-bg); color: var(--page-fg)">
     <header

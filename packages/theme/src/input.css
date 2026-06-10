@@ -45,6 +45,13 @@
  *   warning   — caution                (RAG)   (9 steps, 100…900)
  *   success   — positive / confirm     (RAG)   (9 steps, 100…900)
  */
+
+/* Fonts (Noto Sans Display / Google Sans Code / Noto Sans Mono) are loaded by
+ * the consuming app — e.g. a <link> in its HTML head — NOT via @import here. A
+ * remote @import inside this theme becomes illegal once the theme is bundled
+ * after Tailwind (CSS requires @import to lead the file). This theme only names
+ * the families in the --font-* tokens below. */
+
 @theme {
     /* ── Base hues ───────────────────────────────────────────────── */
     --color-mono: oklch(0.5 0 0);
@@ -56,8 +63,8 @@
     --color-success: oklch(0.74 0.25 142);
 
     /* ── Fonts ───────────────────────────────────────────────────── */
-    --font-sans: 'Inter';
-    --font-mono: 'JetBrains Mono';
+    --font-sans: 'Noto Sans Display', Inter, sans-serif;
+    --font-mono: 'Noto Sans Mono', 'Google Sans Code', monospace;
 }
 
 /*
@@ -94,9 +101,6 @@
     --line-height-md: 1.5; /* unitless line-height at md (tightens as size grows) */
     --font-weight-default: 500; /* medium on every type utility; override with font-semibold/bold */
 
-    /* ── Elevation + shadow variant ───────────────────────────────────────────
-     * One shared variant drives both --elevation-<label> (dp) and --shadow-<label>.
-     */
     --variant-elevation: 7; /* 3 | 5 | 7 */
     --elevation-md: 14; /* dp at md */
     --elevation-ratio: 1.8; /* multiplier between adjacent elevation steps */

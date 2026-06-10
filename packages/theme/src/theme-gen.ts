@@ -56,8 +56,8 @@ export const mirror = (n: number): number => 1000 - n;
 // ── Colour recipe knobs ──────────────────────────────────────────────────────
 export const weightFor = (n: number): number => Math.abs(n - 500) / 500;
 
-export const BG_STEP = { brand: 100, rag: 200 };
-export const SOLID_FG = { brand: { light: 50, dark: 950 }, rag: { light: 100, dark: 900 } };
+export const BG_STEP = { brand: 150, rag: 300 };
+export const SOLID_FG = { brand: { light: 150, dark: 850 }, rag: { light: 200, dark: 800 } };
 
 export const FG_POLE = 0.8;
 export const BORDER_POLE = 0.55;
@@ -197,6 +197,7 @@ export function parseTypeRamps(source: string, defaultRatio: number): TypeRamp[]
 // ── Emit helpers (pure formatting) ───────────────────────────────────────────
 const pad = (s: string, n: number): string => (s.length >= n ? s : s + ' '.repeat(n - s.length));
 const decl = (prop: string, value: string, width = 0): string => `    ${pad(`${prop}:`, width)} ${value};`;
+
 /** Indent every non-blank line of a block by `n` spaces (for nesting in @media). */
 const indent = (block: string, n: number): string =>
     block
@@ -249,6 +250,13 @@ export function generate(source: string): string {
 
     const FONT_SANS = conf(source, 'font-sans', 'ui-sans-serif, system-ui, sans-serif');
     const FONT_MONO = conf(source, 'font-mono', 'ui-monospace, monospace');
+
+    // Transfer the source's `@import url(...)` rules (e.g. the Google Fonts the
+    // theme declares in --font-sans/--font-mono) verbatim into the output. They
+    // must lead the file — CSS requires @import before any style rule. Match the
+    // whole `url(...)` so a URL containing `;` (variable-axis tuples) isn't cut
+    // short at the first semicolon.
+    const IMPORTS = [...source.matchAll(/@import\s+url\([^)]*\)[^;]*;/gi)].map((m) => m[0].trim());
     const FONT_RATIO = Number(conf(source, 'font-ratio', '1.2'));
     const LINE_HEIGHT_MD = Number(conf(source, 'line-height-md', '1.5'));
     // Default font-weight baked onto every type utility (medium); overridable per
@@ -284,7 +292,7 @@ export function generate(source: string): string {
         const rag = isRag(name);
         const bgStep = rag ? BG_STEP.rag : BG_STEP.brand;
         const bg = toneOf(name, dark ? mirror(bgStep) : bgStep);
-        const accent = toneOf(name, 500);
+        const accent = toneOf(name, 600);
         const sfg = rag ? SOLID_FG.rag : SOLID_FG.brand;
         return {
             bg: fmt(bg),
@@ -328,8 +336,6 @@ export function generate(source: string): string {
                 const lh = round(clamp(LINE_HEIGHT_MD - o * 0.06, 1.1, 1.8), 3);
                 lines.push(decl(`--text-${ramp.role}-${label}`, `${size}rem`));
                 lines.push(decl(`--text-${ramp.role}-${label}--line-height`, `${lh}`));
-                // Medium (500) by default for every type utility; consumers opt up
-                // to font-semibold / font-bold, which override this weight.
                 lines.push(decl(`--text-${ramp.role}-${label}--font-weight`, `${TYPE_WEIGHT_DEFAULT}`));
             }
             blocks.push(lines.join('\n'));
@@ -474,6 +480,8 @@ export function generate(source: string): string {
     return [
         DANGER,
         ``,
+        // @import must precede every style rule — emit the transferred font imports first.
+        ...(IMPORTS.length ? [IMPORTS.join('\n'), ``] : []),
         `/* color-scheme keeps native form controls / scrollbars in step with the theme */`,
         `:root { color-scheme: light; }`,
         `[data-theme='light'] { color-scheme: light; }`,
