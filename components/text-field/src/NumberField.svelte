@@ -16,7 +16,7 @@
 <script lang="ts">
     import { tick, untrack } from 'svelte';
     import TextField from './TextField.svelte';
-    import type { NumberFieldProps } from './types';
+    import type { NumberFieldProps } from './NumberFieldTypes';
     import {
         detectBase,
         localeSeparators,

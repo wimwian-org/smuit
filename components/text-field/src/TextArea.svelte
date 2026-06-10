@@ -12,7 +12,7 @@
 -->
 <script lang="ts">
     import * as Field from './field';
-    import type { TextAreaProps } from './types';
+    import type { TextAreaProps } from './TextAreaTypes';
 
     let {
         label,
@@ -66,7 +66,9 @@
 >
     <Field.Box>
         <Field.Label>{label}</Field.Label>
-        <Field.Textarea {placeholder} {rows} {autosize} {onfocus} {onblur} bind:ref {...restProps} />
+        <Field.Area>
+            <Field.Textarea {placeholder} {rows} {autosize} {onfocus} {onblur} bind:ref {...restProps} />
+        </Field.Area>
     </Field.Box>
     {#if hasBottom}
         <Field.Caption>

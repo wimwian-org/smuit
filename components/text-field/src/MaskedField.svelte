@@ -15,7 +15,7 @@
 <script lang="ts">
     import { tick, untrack } from 'svelte';
     import TextField from './TextField.svelte';
-    import type { MaskedFieldProps } from './types';
+    import type { MaskedFieldProps } from './MaskedFieldTypes';
     import { applyMask, unmaskedCountBefore, caretAfterMask, isDigitOnlyMask } from './mask';
 
     let {

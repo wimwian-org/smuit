@@ -5,6 +5,8 @@
  */
 export { default as Root } from './Root.svelte';
 export { default as Box } from './Box.svelte';
+export { default as Line } from './Line.svelte';
+export { default as Area } from './Area.svelte';
 export { default as Label } from './Label.svelte';
 export { default as Adornment } from './Adornment.svelte';
 export { default as Input } from './Input.svelte';

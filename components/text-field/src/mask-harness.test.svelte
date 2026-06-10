@@ -7,7 +7,7 @@
      the DOM so a test can read both back. -->
 <script lang="ts">
     import MaskedField from './MaskedField.svelte';
-    import type { MaskedFieldProps } from './types';
+    import type { MaskedFieldProps } from './MaskedFieldTypes';
 
     let { value = $bindable(''), unmasked = $bindable(''), ...rest }: MaskedFieldProps = $props();
 </script>

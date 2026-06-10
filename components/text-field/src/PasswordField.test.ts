@@ -94,5 +94,5 @@ test('renders a caption (supporting text + counter) when supportingText / maxlen
 
 test('renders the caption for an error with errorText (no supportingText / maxlength)', () => {
     render(PasswordField, { label: 'Password', error: true, errorText: 'Too weak' });
-    expect(document.querySelector('.tf-bottom')).toBeTruthy();
+    expect(document.querySelector('.tf-support-line')).toBeTruthy();
 });

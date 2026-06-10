@@ -61,11 +61,13 @@ context to the parts beneath it.
 <Field.Root bind:value={email} variant="filled" maxlength={120}>
     <Field.Box>
         <Field.Label>Email</Field.Label>
-        <Field.Adornment side="leading"><MailIcon /></Field.Adornment>
-        <Field.Input placeholder="you@example.com" />
-        <Field.Adornment side="trailing">
-            <button type="button" aria-label="Clear">×</button>
-        </Field.Adornment>
+        <Field.Line>
+            <Field.Adornment side="leading"><MailIcon /></Field.Adornment>
+            <Field.Input placeholder="you@example.com" />
+            <Field.Adornment side="trailing">
+                <button type="button" aria-label="Clear">×</button>
+            </Field.Adornment>
+        </Field.Line>
     </Field.Box>
     <Field.Caption>
         <Field.Supporting>We never share it.</Field.Supporting>
@@ -74,7 +76,13 @@ context to the parts beneath it.
 </Field.Root>
 ```
 
+`Field.Box` is the surface (it owns the variant); inside it `Field.Label` sits beside the content
+node. The content node is **`Field.Line`** for a single-line field (the adornments + `Field.Input`
+on one baseline) or **`Field.Area`** for a textarea (wrapping `Field.Textarea`) — keeping the
+variant on `Field.Box` and the content row variant-free, so every variant reuses the same line.
+
 Parts: **`Field.Root`** (shell + context), **`Field.Box`** (the surface), **`Field.Label`**,
+**`Field.Line`** (single-line content row) / **`Field.Area`** (textarea content region),
 **`Field.Adornment`** (`side="leading" | "trailing" | "prefix" | "suffix"`), **`Field.Input`**,
 **`Field.Textarea`**, **`Field.Caption`** (the row below), **`Field.Supporting`**, **`Field.Counter`**,
 **`Field.Suggestions`** (the autosuggest listbox). The same parts back `<TextArea>`.
